@@ -45,6 +45,16 @@
 
     ;;  Init keyboard controls
     (GLFW/glfwSetKeyCallback window controls/key-callback)
+    
+    (GL/createCapabilities)
+    (-> [-0.5 -0.5 0.0 0.5 -0.5 0.0 0.0 0.5 0.0]
+      (window/create-vertices-buffer)
+      (window/vertex-setup)
+    )
+
+    ;;(GL20/glEnableVertexAttribArray 0)
+
+
 
     ;;  Start game loop
     (loop [curr (.getTime (new java.util.Date))
@@ -65,7 +75,7 @@
         (swap! lag #(- % 0.1))
       )
 
-      ;;  (render (/ lag 0.1))
+      ;; (render (/ lag 0.1))
       (window/render window)
 
       (if (zero? (GLFW/glfwWindowShouldClose window))
