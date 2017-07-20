@@ -1,4 +1,6 @@
 (ns test-lwjgl.window
+  (:require [test-lwjgl.shader-program :as program]
+            [test-lwjgl.shader :as shader])
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.glfw GLFW GLFWKeyCallback)
            (org.lwjgl.system MemoryUtil)
@@ -30,21 +32,11 @@
   (float (rand-int n))
 )
 
-;; (slurp "src/test_lwjgl/shaders/default.vert")
-
-(defn shader-compile [source shader-type]
-  ;; Load a shader file at source (ex: "~/opengl/shader.vert")
-  ;; Create a shader object of shader-type (ex: GL20/GL_VERTEX_SHADER...)
-  ;; Compile it
-  (let [shader-id  (GL20/glCreateShader shader-type)
-        shader-str (slurp source)]
-
-    (GL20/glShaderSource shader-id shader-str)
-    (GL20/glCompileShader shader-id)
-  )
-)
 
 (defn create-vertices-buffer [vertices]
+  ;; Store the vertices vector into a FloatBuffer to make it available for OpenGL.
+  ;; .put write the data, .flip set the position of the FloatBuffer to 0 (that is,
+  ;; we say that we've finished writing datas).
   (let [vertices (float-array vertices)]
     (-> (BufferUtils/createFloatBuffer (count vertices))
       (.put vertices)
@@ -54,18 +46,48 @@
 )
 
 (defn vertex-setup [vertices-buffer]
-  (let [VBO (GL15/glGenBuffers)
-        vertex-id (shader-compile "src/test_lwjgl/shaders/default.vert" GL20/GL_VERTEX_SHADER)
-        fragment-id (shader-compile "src/test_lwjgl/shaders/default.frag" GL20/GL_FRAGMENT_SHADER)
-        program-id (GL20/glCreateProgram)]
+  (let [vao-id (GL30/glGenVertexArrays)
+        VBO (GL15/glGenBuffers)
+        VCO (GL15/glGenBuffers)
+        color (create-vertices-buffer [0.5 0.5 0.5])
+        vertex-id (shader/create "src/test_lwjgl/shaders/default.vert" GL20/GL_VERTEX_SHADER)
+        fragment-id (shader/create "src/test_lwjgl/shaders/default.frag" GL20/GL_FRAGMENT_SHADER)
+        program-id (program/create)]
+    (println (str "program:" program-id))
+    (println (str "vert:" vertex-id))
+
+    (program/attach-shader program-id vertex-id)
+    (program/attach-shader program-id fragment-id)
+
+    (program/link program-id)
+    (program/detach-shader vertex-id program-id)
+    (program/detach-shader fragment-id program-id)
+
+    ;; To remove for production
+    (program/validate program-id)
+
+    (GL20/glDeleteShader vertex-id)
+    (GL20/glDeleteShader fragment-id)
+
+    (program/bind program-id)
+
+    ;; Vert
     (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER VBO) 
     (GL15/glBufferData GL15/GL_ARRAY_BUFFER vertices-buffer GL15/GL_STATIC_DRAW)
-    (GL20/glVertexAttribPointer 0 3 GL11/GL_FLOAT GL11/GL_FALSE 0 0)
+    (GL20/glVertexAttribPointer 0 3 GL11/GL_FLOAT false 0 0)
     (GL20/glEnableVertexAttribArray 0)
-    (GL20/glAttachShader program-id vertex-id)
-    (GL20/glAttachShader program-id fragment-id)
-    (GL20/glLinkProgram program-id)
-    (GL20/glUseProgram program-id)
+    (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER 0) 
+    ;; Frag
+    ;;(GL15/glBindBuffer GL15/GL_ARRAY_BUFFER VCO) 
+    ;;(GL15/glBufferData GL15/GL_ARRAY_BUFFER color GL15/GL_STATIC_DRAW)
+    ;;(GL20/glVertexAttribPointer 0 3 GL11/GL_FLOAT false 0 0)
+    ;;(GL20/glEnableVertexAttribArray 0)
+    ;;(GL15/glBindBuffer GL15/GL_ARRAY_BUFFER 0) 
+
+
+
+    (GL30/glBindVertexArray vao-id)
+    (GL20/glEnableVertexAttribArray 0)
   )
 )
 
@@ -96,17 +118,14 @@
 
 
 (defn render [w]
-  (GL/createCapabilities)
-  (GL11/glClearColor (randcc 2) (randcc 2) (randcc 2) 1.0)
+
+  ;;(GL11/glClearColor (randcc 2) (randcc 2) (randcc 2) 1.0)
   (GL11/glClear GL11/GL_COLOR_BUFFER_BIT)
 
-  (-> [-0.5 -0.5 0.0 0.5 -0.5 0.0 0.0 0.5 0.0]
-    (create-vertices-buffer)
-    (vertex-setup)
-  )
-
   (GL11/glDrawArrays GL11/GL_TRIANGLES 0 3)
+
+  (GL30/glBindVertexArray 0)
   (GLFW/glfwSwapBuffers w)
-  )
+)
 
 

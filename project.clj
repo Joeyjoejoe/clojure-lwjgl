@@ -8,5 +8,4 @@
                  [org.slf4j/slf4j-log4j12 "1.7.12"]
                  [org.lwjgl/lwjgl "3.0.0b"]
                  [org.lwjgl/lwjgl-platform "3.0.0b" :classifier "natives-linux"]]
-                 
   :main test-lwjgl.core) 
