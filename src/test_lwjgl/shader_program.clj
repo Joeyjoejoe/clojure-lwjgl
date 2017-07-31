@@ -7,7 +7,7 @@
       (= 0 program-id) (throw (Exception. "Could not create shader program"))
       :else program-id)))
 
-(defn attach-shader [shader-id program-id]
+(defn attach-shader [program-id shader-id]
   (GL20/glAttachShader program-id shader-id))
 
 (defn link [program-id]

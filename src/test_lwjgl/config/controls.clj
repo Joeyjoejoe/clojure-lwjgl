@@ -35,7 +35,5 @@
 (def key-callback (proxy [GLFWKeyCallback] []
   (invoke [win key scancode action mods]
     (let [key-actions (key-bindings key)]
-      (if (not (nil? key-actions)) ((key-actions action) win))
-    )
-  )                 
-))
+      (if (not (nil? key-actions)) 
+        ((key-actions action) win))))))
