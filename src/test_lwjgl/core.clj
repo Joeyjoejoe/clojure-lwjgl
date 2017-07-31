@@ -2,6 +2,7 @@
   (:require [test-lwjgl.window :as window]
             [test-lwjgl.images :as images]
             [test-lwjgl.config.controls :as controls]
+            [test-lwjgl.buffers :as buffer]
             [clojure.tools.logging :as log]))
   
 ;;  Import les classes nécessaires
@@ -40,6 +41,7 @@
   [] 
   
   
+   (def globals (atom {:program-id 0 :triangle-color 0}))
     ;;  Create window
     (def window (window/create {:width 1280 :height 960 :title "My Shitty Game"}))
 
@@ -47,14 +49,16 @@
     (GLFW/glfwSetKeyCallback window controls/key-callback)
     
     (GL/createCapabilities)
-    (-> [-0.5 -0.5 0.0 0.5 -0.5 0.0 0.0 0.5 0.0]
-      (window/create-vertices-buffer)
-      (window/vertex-setup)
+    (println "OpenGL version:" (GL11/glGetString GL11/GL_VERSION))
+    (-> [-0.5 -0.5 1.0
+          0.5 -0.5 1.0 
+          0.5 0.5 1.0 
+          -0.5 -0.5 1.0
+          -0.5 0.5 1.0 
+          0.5 0.5 1.0]
+      (buffer/create)
+      (window/vertex-setup globals)
     )
-
-    ;;(GL20/glEnableVertexAttribArray 0)
-
-
 
     ;;  Start game loop
     (loop [curr (.getTime (new java.util.Date))
@@ -76,7 +80,7 @@
       )
 
       ;; (render (/ lag 0.1))
-      (window/render window)
+      (window/render window globals)
 
       (if (zero? (GLFW/glfwWindowShouldClose window))
         (recur (.getTime (new java.util.Date)) curr lag)
