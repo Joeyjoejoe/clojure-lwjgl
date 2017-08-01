@@ -1,45 +1,15 @@
 (ns test-lwjgl.core
   (:require [test-lwjgl.window :as window]
-            [test-lwjgl.images :as images]
             [test-lwjgl.config.controls :as controls]
             [test-lwjgl.buffers :as buffer]
-            [clojure.tools.logging :as log]))
-  
-;;  Import les classes nécessaires
-;;  (import (org.lwjgl.glfw GLFW) (org.lwjgl.system MemoryUtil))
-;;
-;;  Initialize GLFW pour pouvoir utiliser les classe/methodes
-;;  (GLFW/glfwInit)
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  
-;;
-;;  Cree une nouvelle fenetre 
-;;  (def window (GLFW/glfwCreateWindow 100 100 "dsqds" (MemoryUtil/NULL) (MemoryUtil/NULL)))
-;;  (GLFW/glfwSetWindowSize window 900 600)
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  
-;;
-;;  Set Current context (window) for opengl
-;;  (GLFW/glfwMakeContextCurrent window)
-;;  (GLFW/glfwGetCurrentContext)
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;;  Set a mouse pointer
-;;  (GLFW/glfwSetCursor window (GLFW/glfwCreateStandardCursor GLFW/GLFW_CROSSHAIR_CURSOR))
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;;  Destroy the window
-;;  (GLFW/glfwDestroyWindow window)
-(import (org.lwjgl.glfw GLFW GLFWKeyCallback) 
-        (org.lwjgl.system MemoryUtil)
-        (org.lwjgl.opengl GL11 GL20 GLCapabilities GL))
+            [clojure.tools.logging :as log])
+  (:import (org.lwjgl.glfw GLFW GLFWKeyCallback) 
+           (org.lwjgl.system MemoryUtil)
+           (org.lwjgl.opengl GL11 GL20 GLCapabilities GL)))
 
 (defn -main 
   "Start the game"
   [] 
-  
   
    (def globals (atom {:program-id 0 :triangle-color 0 :vao-id 0}))
     ;;  Create window
@@ -57,9 +27,6 @@
                            {:coordinates [-0.5 -0.5 1.0]}
                            {:coordinates [-0.5 0.5 1.0]} 
                            {:coordinates [0.5 0.5 1.0]}] globals)
-     ;; (buffer/create)
-     ;; (window/vertex-setup globals)
-    
 
     ;;  Start game loop
     (loop [curr (.getTime (new java.util.Date))
@@ -69,7 +36,6 @@
       (swap! lag #(+ % (- curr prev)))
     
       ;;  (handle-inputs)
-      (GLFW/glfwPollEvents)
 
       ;;  (log/info "previous: " (new java.util.Date prev))
       ;;  (log/info "current: " (new java.util.Date curr))

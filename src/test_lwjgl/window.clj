@@ -1,4 +1,5 @@
 (ns test-lwjgl.window
+  (:use [test-lwjgl.utility])
   (:require [test-lwjgl.shader-program :as program]
             [test-lwjgl.buffers :as buffer]
             [test-lwjgl.shader :as shader])
@@ -23,10 +24,6 @@
     (GLFW/glfwShowWindow window)
     window
   )
-)
-
-(defn randcc [n]
-  (float (rand-int n))
 )
 
 (defn vertex-setup [vertices globals]
@@ -69,6 +66,7 @@
   (GL11/glDrawArrays GL11/GL_TRIANGLES 0 6)
 
   (GLFW/glfwSwapBuffers w)
+  (GLFW/glfwPollEvents)
 )
 
 
