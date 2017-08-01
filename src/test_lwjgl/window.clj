@@ -29,49 +29,32 @@
   (float (rand-int n))
 )
 
-(defn vertex-setup [vertices-buffer globals]
-  (let [vao-id (GL30/glBindVertexArray (GL30/glGenVertexArrays))
-      ;;  vco (GL15/glGenBuffers)
-     ;;   color (create-vertices-buffer [0.5 0.5 0.5])
+(defn vertex-setup [vertices globals]
+  (println "Start vertex setup")
+  (let [vao-id (GL30/glGenVertexArrays)
+        _ (GL30/glBindVertexArray vao-id)
         vertex-id (shader/create "src/test_lwjgl/shaders/default.vert" GL20/GL_VERTEX_SHADER)
         fragment-id (shader/create "src/test_lwjgl/shaders/default.frag" GL20/GL_FRAGMENT_SHADER)
-        program-id (program/create)
-        ]
-    (println (str "program:" program-id))
-    (println (str "vert:" vertex-id))
-    (println (str "frag:" fragment-id))
-    (println vertices-buffer)
-
-    (buffer/vertex-buffer-object vertices-buffer)
-    ;; Vert
-    ;;(GL15/glBindBuffer GL15/GL_ARRAY_BUFFER 0) 
-    ;; Frag
-   ;; (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER vco) 
-   ;; (GL15/glBufferData GL15/GL_ARRAY_BUFFER color GL15/GL_STATIC_DRAW)
-   ;; (GL20/glVertexAttribPointer 0 3 GL11/GL_FLOAT false 0 0)
-   ;; (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER 0) 
-
-   
+        program-id (program/create)]
 
 
     (program/attach-shader program-id vertex-id)
     (program/attach-shader program-id fragment-id)
-
     (program/link program-id)
-   ;; (program/detach-shader vertex-id program-id)
-   ;; (program/detach-shader fragment-id program-id)
+
+    (GL20/glDeleteShader vertex-id)
+    (GL20/glDeleteShader fragment-id)
 
     ;; To remove for production
     (program/validate program-id)
 
-   ;; (GL20/glDeleteShader vertex-id)
-   ;; (GL20/glDeleteShader fragment-id)
+    (buffer/handle-datas vertices)
 
-    (program/bind program-id)
+    ;; You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
+    (GL30/glBindVertexArray 0) 
 
-    (GL20/glEnableVertexAttribArray 0)
     (def triangle-color (GL20/glGetUniformLocation program-id "triangleColor"))
-    (swap! globals assoc :program-id program-id :triangle-color triangle-color)
+    (swap! globals assoc :program-id program-id :triangle-color triangle-color :vao-id vao-id)
   )
 )
 
@@ -80,6 +63,8 @@
   (GL11/glClearColor 0.0 0.0 0.0 1.0)
   (GL11/glClear GL11/GL_COLOR_BUFFER_BIT)
 
+  (program/bind (:program-id @globals))
+  (GL30/glBindVertexArray (:vao-id @globals)) 
   (GL20/glUniform3f (:triangle-color @globals) (randcc 2) (randcc 2) (randcc 2))
   (GL11/glDrawArrays GL11/GL_TRIANGLES 0 6)
 
