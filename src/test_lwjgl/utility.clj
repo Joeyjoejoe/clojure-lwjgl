@@ -9,5 +9,3 @@
   "Returns randomly 1.0 or 0.0"
   (float (rand-int n))
 )
-
-
