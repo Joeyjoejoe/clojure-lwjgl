@@ -5,17 +5,22 @@
            (org.lwjgl.opengl GL11 GL15 GL20)))
 
 
-(defn create [datas]
-  ;; Store the vertices vector into a FloatBuffer to make it available for OpenGL.
-  ;; .put write the data, .flip set the position of the FloatBuffer to 0 (that is,
-  ;; we say that we've finished writing datas).
+(defn create-float-buffer [datas]
+  "Create an float array buffer from datas"
   (let [datas (float-array datas)]
     (-> (BufferUtils/createFloatBuffer (count datas))
       (.put datas)
       (.flip))))
 
+(defn create-int-buffer [datas]
+  "Create an integer array buffer from datas"
+  (let [datas (int-array datas)]
+    (-> (BufferUtils/createIntBuffer (count datas))
+      (.put datas)
+      (.flip))))
 
-(defn handle-datas [datas]
+
+(defn create-vbo [datas]
    (let [coordinates (vec (mapcat #(select-values %1 [:coordinates]) datas))
          colors (vec (mapcat #(select-values % [:color]) datas))
          size 3
@@ -25,7 +30,7 @@
          data-type GL11/GL_FLOAT
          normalize-datas? false
          formated-datas (vec (mapcat concat coordinates colors))
-         vertices-buffer (create formated-datas)
+         vertices-buffer (create-float-buffer formated-datas)
          vbo-id (GL15/glGenBuffers)]
 
     (println (str "Handling data..."))
@@ -48,3 +53,9 @@
     (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER 0)))
 
 
+(defn create-ebo [indices]
+  (let [ebo-id (GL15/glGenBuffers)
+	indices-buffer (create-int-buffer indices)]
+  (GL15/glBindBuffer GL15/GL_ELEMENT_ARRAY_BUFFER ebo-id) 
+  (GL15/glBufferData GL15/GL_ELEMENT_ARRAY_BUFFER indices-buffer GL15/GL_STATIC_DRAW)
+))

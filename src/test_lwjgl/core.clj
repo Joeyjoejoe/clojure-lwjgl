@@ -11,7 +11,7 @@
   "Start the game"
   [] 
   
-   (def globals (atom {:program-id 0 :triangle-color 0 :vao-id 0}))
+   (def globals (atom {:program-id 0 :triangle-color 0 :vao-id 0 :indices-count 0}))
     ;;  Create window
     (def window (window/create {:width 1280 :height 960 :title "My Shitty Game"}))
 
@@ -23,10 +23,13 @@
 
     (window/vertex-setup [{:coordinates [-0.5 -0.5 1.0]}
                            {:coordinates [0.5 -0.5 1.0]} 
-                           {:coordinates [0.5 0.5 1.0]} 
-                           {:coordinates [-0.5 -0.5 1.0]}
                            {:coordinates [-0.5 0.5 1.0]} 
-                           {:coordinates [0.5 0.5 1.0]}] globals)
+                           {:coordinates [0.5 0.5 1.0]}
+                           {:coordinates [0.8 0.0 1.0]}] 
+			   
+			 [0 1 2
+			  2 3 1
+			  1 3 4] globals)
 
     ;;  Start game loop
     (loop [curr (.getTime (new java.util.Date))

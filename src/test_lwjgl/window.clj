@@ -26,7 +26,10 @@
   )
 )
 
-(defn vertex-setup [vertices globals]
+(defn vertex-setup [vertices indices globals]
+
+  ;; TODO should return the number of elements to draw
+
   (println "Start vertex setup")
   (let [vao-id (GL30/glGenVertexArrays)
         _ (GL30/glBindVertexArray vao-id)
@@ -45,13 +48,15 @@
     ;; To remove for production
     (program/validate program-id)
 
-    (buffer/handle-datas vertices)
+    (buffer/create-vbo vertices)
+    (buffer/create-ebo indices)
 
     ;; You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     (GL30/glBindVertexArray 0) 
 
     (def triangle-color (GL20/glGetUniformLocation program-id "triangleColor"))
-    (swap! globals assoc :program-id program-id :triangle-color triangle-color :vao-id vao-id)
+    (swap! globals assoc :program-id program-id :triangle-color triangle-color :vao-id vao-id :indices-count (count indices))
+    (GL11/glPolygonMode GL11/GL_FRONT_AND_BACK GL11/GL_LINE)
   )
 )
 
@@ -63,7 +68,7 @@
   (program/bind (:program-id @globals))
   (GL30/glBindVertexArray (:vao-id @globals)) 
   (GL20/glUniform3f (:triangle-color @globals) (randcc 2) (randcc 2) (randcc 2))
-  (GL11/glDrawArrays GL11/GL_TRIANGLES 0 6)
+  (GL11/glDrawElements GL11/GL_TRIANGLES (:indices-count @globals) GL11/GL_UNSIGNED_INT 0)
 
   (GLFW/glfwSwapBuffers w)
   (GLFW/glfwPollEvents)
