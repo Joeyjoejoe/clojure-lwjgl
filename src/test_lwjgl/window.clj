@@ -13,8 +13,9 @@
     (GLFW/glfwInit)
     (GLFW/glfwDefaultWindowHints)
     (GLFW/glfwWindowHint GLFW/GLFW_VISIBLE GLFW/GLFW_FALSE)
-
     (GLFW/glfwWindowHint GLFW/GLFW_RESIZABLE GL11/GL_TRUE)
+
+    ;; Cross plateform compatiblity for OpenGL and GLSL (declaration order matters)
     (GLFW/glfwWindowHint GLFW/GLFW_CONTEXT_VERSION_MAJOR 3)
     (GLFW/glfwWindowHint GLFW/GLFW_CONTEXT_VERSION_MINOR 2)
     (GLFW/glfwWindowHint GLFW/GLFW_OPENGL_PROFILE GLFW/GLFW_OPENGL_CORE_PROFILE)
@@ -56,9 +57,9 @@
     ;; You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     (GL30/glBindVertexArray 0) 
 
-    (def triangle-color (GL20/glGetUniformLocation program-id "triangleColor"))
+    (def triangle-color (GL20/glGetUniformLocation program-id "uniformColor"))
     (swap! globals assoc :program-id program-id :triangle-color triangle-color :vao-id vao-id :indices-count (count indices))
-    (GL11/glPolygonMode GL11/GL_FRONT_AND_BACK GL11/GL_LINE)
+    ;;(GL11/glPolygonMode GL11/GL_FRONT_AND_BACK GL11/GL_LINE)
   )
 )
 
@@ -69,7 +70,7 @@
 
   (program/bind (:program-id @globals))
   (GL30/glBindVertexArray (:vao-id @globals)) 
-  (GL20/glUniform3f (:triangle-color @globals) (randcc 2) (randcc 2) (randcc 2))
+  (GL20/glUniform4f (:triangle-color @globals) 0.0 (Math/sin (GLFW/glfwGetTime)) 0.0 1.0)
   (GL11/glDrawElements GL11/GL_TRIANGLES (:indices-count @globals) GL11/GL_UNSIGNED_INT 0)
 
   (GLFW/glfwSwapBuffers w)

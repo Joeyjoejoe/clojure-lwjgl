@@ -26,6 +26,7 @@
          size 3
          stride (* (+ size (count colors)) java.lang.Float/BYTES)
          vertex-position 0
+         color-position 1
          offset 0
          data-type GL11/GL_FLOAT
          normalize-datas? false
@@ -47,8 +48,11 @@
 
     (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER vbo-id) 
     (GL15/glBufferData GL15/GL_ARRAY_BUFFER vertices-buffer GL15/GL_STATIC_DRAW)
-    (GL20/glVertexAttribPointer vertex-position size data-type normalize-datas? 12 offset)
+    (GL20/glVertexAttribPointer vertex-position size data-type normalize-datas? 24 0)
     (GL20/glEnableVertexAttribArray 0)
+    
+    (GL20/glVertexAttribPointer color-position size data-type normalize-datas? 24 12)
+    (GL20/glEnableVertexAttribArray 1)
     ;; note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
     (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER 0)))
 
