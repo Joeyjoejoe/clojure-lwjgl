@@ -9,7 +9,9 @@
            (org.lwjgl.system MemoryUtil)
            (org.lwjgl.opengl GL11 GL15 GL20 GL30 GLCapabilities GL)))
 
+
 (defn create [params]
+  "Create the game window and set the OpenGl context where everything will be draw"
   (let [{:keys [title width height]} params]
     (GLFW/glfwInit)
     (GLFW/glfwDefaultWindowHints)
@@ -31,25 +33,20 @@
       (GLFW/glfwShowWindow window)
     
       (println "OpenGL version:" (GL11/glGetString GL11/GL_VERSION))
+      window)))
 
-    window)))
 
 (defn vertex-setup [vertices indices]
-
-  ;; TODO should return the number of elements to draw
-
-  (println "Start vertex setup")
+  "Take a list of vertices (coordinates [x y z] of a pixel and optionaly its color), indices is a list of index from vertices, used to describe triangles."
   (let [vao-id (GL30/glGenVertexArrays)
         _ (GL30/glBindVertexArray vao-id)
         vertex-id (shader/create "src/test_lwjgl/shaders/default.vert" GL20/GL_VERTEX_SHADER)
         fragment-id (shader/create "src/test_lwjgl/shaders/default.frag" GL20/GL_FRAGMENT_SHADER)
         program-id (program/create)]
 
-
     (program/attach-shader program-id vertex-id)
     (program/attach-shader program-id fragment-id)
     (program/link program-id)
-
     (GL20/glDeleteShader vertex-id)
     (GL20/glDeleteShader fragment-id)
 
@@ -58,7 +55,6 @@
 
     (buffer/create-vbo vertices)
     (buffer/create-ebo indices)
-
     ;; You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     (GL30/glBindVertexArray 0) 
 
@@ -72,14 +68,13 @@
       (GL11/glDrawElements GL11/GL_TRIANGLES (count indices) GL11/GL_UNSIGNED_INT 0))))
 
 (defn render [window to-render-functions]
-
+  "Draw everything needed in the GLFW window. to-render-functions is a vector of functions that contains OpenGL instructions to draw shapes from corresponding VAO"
   (GL11/glClearColor 0.0 0.0 0.0 1.0)
   (GL11/glClear GL11/GL_COLOR_BUFFER_BIT)
 
   (doseq [f to-render-functions] (f))
 
   (GLFW/glfwSwapBuffers window)
-  (GLFW/glfwPollEvents)
-)
+  (GLFW/glfwPollEvents))
 
 

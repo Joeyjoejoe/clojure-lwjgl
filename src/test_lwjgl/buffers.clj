@@ -20,6 +20,7 @@
 
 
 (defn create-vbo [datas]
+  "TODO macroize it so the readable datas (DSL?) are processed at compile time, and only remains the OpenGL state update at runtime. vbo-id should be extract from the first let, because he needs an OpenGL context who do not exist at compile time."
    (let [coordinates (vec (mapcat #(select-values %1 [:coordinates]) datas))
          colors (vec (mapcat #(select-values % [:color]) datas))
          vertex-size (count (:coordinates (first datas)))
@@ -58,8 +59,8 @@
 
 
 (defn create-ebo [indices]
+  "Creates an Elements buffer object containing a list of indices corresponding to vbo vertices index. Theses indices are used to define triangles without loading identical points multiple times"
   (let [ebo-id (GL15/glGenBuffers)
 	indices-buffer (create-int-buffer indices)]
   (GL15/glBindBuffer GL15/GL_ELEMENT_ARRAY_BUFFER ebo-id) 
-  (GL15/glBufferData GL15/GL_ELEMENT_ARRAY_BUFFER indices-buffer GL15/GL_STATIC_DRAW)
-))
+  (GL15/glBufferData GL15/GL_ELEMENT_ARRAY_BUFFER indices-buffer GL15/GL_STATIC_DRAW)))
