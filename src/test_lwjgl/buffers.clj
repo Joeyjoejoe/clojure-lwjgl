@@ -1,6 +1,5 @@
 (ns test-lwjgl.buffers
   (:use [test-lwjgl.utility])
-  (:require [test-lwjgl.utility :as program])
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.opengl GL11 GL15 GL20)))
 
@@ -23,11 +22,12 @@
 (defn create-vbo [datas]
    (let [coordinates (vec (mapcat #(select-values %1 [:coordinates]) datas))
          colors (vec (mapcat #(select-values % [:color]) datas))
-         size 3
-         stride (* (+ size (count colors)) java.lang.Float/BYTES)
+         vertex-size (count (:coordinates (first datas)))
+         color-size (count (:color (first datas)))
+         stride (* (+ vertex-size color-size) java.lang.Float/BYTES)
          vertex-position 0
          color-position 1
-         offset 0
+         color-offset (* vertex-size java.lang.Float/BYTES)
          data-type GL11/GL_FLOAT
          normalize-datas? false
          formated-datas (vec (mapcat concat coordinates colors))
@@ -36,10 +36,10 @@
 
     (println (str "Handling data..."))
     (println vbo-id)
-    (println (str "size: " size))
+    (println (str "vertex-size: " vertex-size))
     (println (str "stride: " stride))
     (println (str "vertex-position: " vertex-position))
-    (println (str "offset: " offset))
+    (println (str "color offset: " color-offset))
     (println (str "data-type: " data-type))
     (println (str "normalize-datas? :" normalize-datas?))
     (println (str "formated-datas :" formated-datas))
@@ -48,11 +48,11 @@
 
     (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER vbo-id) 
     (GL15/glBufferData GL15/GL_ARRAY_BUFFER vertices-buffer GL15/GL_STATIC_DRAW)
-    (GL20/glVertexAttribPointer vertex-position size data-type normalize-datas? 24 0)
-    (GL20/glEnableVertexAttribArray 0)
+    (GL20/glVertexAttribPointer vertex-position vertex-size data-type normalize-datas? stride 0)
+    (GL20/glEnableVertexAttribArray vertex-position)
     
-    (GL20/glVertexAttribPointer color-position size data-type normalize-datas? 24 12)
-    (GL20/glEnableVertexAttribArray 1)
+    (GL20/glVertexAttribPointer color-position color-size data-type normalize-datas? stride color-offset)
+    (GL20/glEnableVertexAttribArray color-position)
     ;; note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
     (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER 0)))
 
