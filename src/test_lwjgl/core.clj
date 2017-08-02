@@ -1,6 +1,5 @@
 (ns test-lwjgl.core
   (:require [test-lwjgl.window :as window]
-            [test-lwjgl.config.controls :as controls]
             [test-lwjgl.buffers :as buffer]
             [clojure.tools.logging :as log])
   (:import (org.lwjgl.glfw GLFW GLFWKeyCallback) 
@@ -14,11 +13,6 @@
     ;;  Create window
     (def window (window/create {:width 1280 :height 960 :title "My Shitty Game"}))
 
-    ;;  Init keyboard controls
-    (GLFW/glfwSetKeyCallback window controls/key-callback)
-    
-    (GL/createCapabilities)
-    (println "OpenGL version:" (GL11/glGetString GL11/GL_VERSION))
 
     (def init [(window/vertex-setup [{:coordinates [-0.5 -0.5 1.0] :color [1.0 0.0 0.0]}
                           {:coordinates [0.5 -0.5 1.0] :color [0.0 1.0 0.0]}

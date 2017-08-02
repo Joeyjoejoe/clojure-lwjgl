@@ -1,6 +1,7 @@
 (ns test-lwjgl.window
   (:use [test-lwjgl.utility])
   (:require [test-lwjgl.shader-program :as program]
+            [test-lwjgl.config.controls :as controls]
             [test-lwjgl.buffers :as buffer]
             [test-lwjgl.shader :as shader])
   (:import (org.lwjgl BufferUtils)
@@ -21,13 +22,17 @@
     (GLFW/glfwWindowHint GLFW/GLFW_OPENGL_PROFILE GLFW/GLFW_OPENGL_CORE_PROFILE)
     (GLFW/glfwWindowHint GLFW/GLFW_OPENGL_FORWARD_COMPAT GL11/GL_TRUE)
 
-    (def window (GLFW/glfwCreateWindow width height title (MemoryUtil/NULL) (MemoryUtil/NULL)))
-    (GLFW/glfwSwapInterval 1)
-    (GLFW/glfwMakeContextCurrent window)
-    (GLFW/glfwShowWindow window)
-    window
-  )
-)
+    (let [window (GLFW/glfwCreateWindow width height title (MemoryUtil/NULL) (MemoryUtil/NULL))]
+      (GLFW/glfwSwapInterval 1)
+      (GLFW/glfwMakeContextCurrent window)
+      ;;  Init keyboard controls
+      (GLFW/glfwSetKeyCallback window controls/key-callback)
+      (GL/createCapabilities)
+      (GLFW/glfwShowWindow window)
+    
+      (println "OpenGL version:" (GL11/glGetString GL11/GL_VERSION))
+
+    window)))
 
 (defn vertex-setup [vertices indices]
 
@@ -66,14 +71,14 @@
       (GL20/glUniform4f triangle-color 0.0 (Math/sin (GLFW/glfwGetTime)) 0.0 1.0)
       (GL11/glDrawElements GL11/GL_TRIANGLES (count indices) GL11/GL_UNSIGNED_INT 0))))
 
-(defn render [w to-render-functions]
+(defn render [window to-render-functions]
 
   (GL11/glClearColor 0.0 0.0 0.0 1.0)
   (GL11/glClear GL11/GL_COLOR_BUFFER_BIT)
 
   (doseq [f to-render-functions] (f))
 
-  (GLFW/glfwSwapBuffers w)
+  (GLFW/glfwSwapBuffers window)
   (GLFW/glfwPollEvents)
 )
 
