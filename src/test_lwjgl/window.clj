@@ -29,7 +29,7 @@
   )
 )
 
-(defn vertex-setup [vertices indices globals]
+(defn vertex-setup [vertices indices]
 
   ;; TODO should return the number of elements to draw
 
@@ -58,20 +58,20 @@
     (GL30/glBindVertexArray 0) 
 
     (def triangle-color (GL20/glGetUniformLocation program-id "uniformColor"))
-    (swap! globals assoc :program-id program-id :triangle-color triangle-color :vao-id vao-id :indices-count (count indices))
     ;;(GL11/glPolygonMode GL11/GL_FRONT_AND_BACK GL11/GL_LINE)
-  )
-)
 
-(defn render [w globals]
+    (fn []
+      (program/bind program-id)
+      (GL30/glBindVertexArray vao-id)
+      (GL20/glUniform4f triangle-color 0.0 (Math/sin (GLFW/glfwGetTime)) 0.0 1.0)
+      (GL11/glDrawElements GL11/GL_TRIANGLES (count indices) GL11/GL_UNSIGNED_INT 0))))
+
+(defn render [w to-render-functions]
 
   (GL11/glClearColor 0.0 0.0 0.0 1.0)
   (GL11/glClear GL11/GL_COLOR_BUFFER_BIT)
 
-  (program/bind (:program-id @globals))
-  (GL30/glBindVertexArray (:vao-id @globals)) 
-  (GL20/glUniform4f (:triangle-color @globals) 0.0 (Math/sin (GLFW/glfwGetTime)) 0.0 1.0)
-  (GL11/glDrawElements GL11/GL_TRIANGLES (:indices-count @globals) GL11/GL_UNSIGNED_INT 0)
+  (doseq [f to-render-functions] (f))
 
   (GLFW/glfwSwapBuffers w)
   (GLFW/glfwPollEvents)

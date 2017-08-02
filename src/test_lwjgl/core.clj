@@ -11,7 +11,6 @@
   "Start the game"
   [] 
   
-   (def globals (atom {:program-id 0 :triangle-color 0 :vao-id 0 :indices-count 0}))
     ;;  Create window
     (def window (window/create {:width 1280 :height 960 :title "My Shitty Game"}))
 
@@ -21,18 +20,20 @@
     (GL/createCapabilities)
     (println "OpenGL version:" (GL11/glGetString GL11/GL_VERSION))
 
-    (window/vertex-setup [{:coordinates [-0.5 -0.5 1.0] :color [1.0 0.0 0.0]}
-                           {:coordinates [0.5 -0.5 1.0] :color [0.0 1.0 0.0]} 
-                           {:coordinates [-0.5 0.5 1.0] :color [0.0 0.0 1.0]} 
-                           {:coordinates [0.5 0.5 1.0] :color [0.5 0.0 0.0]}
-                           {:coordinates [0.8 0.0 1.0] :color [1.0 0.0 0.8]}] 
+    (def init [(window/vertex-setup [{:coordinates [-0.5 -0.5 1.0] :color [1.0 0.0 0.0]}
+                          {:coordinates [0.5 -0.5 1.0] :color [0.0 1.0 0.0]}
+                          {:coordinates [-0.5 0.5 1.0] :color [0.0 0.0 1.0]}
+                          {:coordinates [0.5 0.5 1.0] :color [0.5 0.0 0.0]}
+                          {:coordinates [0.8 0.0 1.0] :color [1.0 0.0 0.8]}]
 			   
-			 [0 1 2
-			  2 3 1
-			  1 3 4] globals)
+			                   [0 1 2     ;; First triangle
+			                    2 3 1       ;; Second triangle
+			                    1 3 4])])   ;; Third triangle
+                        
 
     ;;  Start game loop
-    (loop [curr (.getTime (new java.util.Date))
+    (loop [to-render-functions init
+           curr (.getTime (new java.util.Date))
            prev (.getTime (new java.util.Date))
            lag (atom 0.0)]
 
@@ -50,10 +51,10 @@
       )
 
       ;; (render (/ lag 0.1))
-      (window/render window globals)
+      (window/render window to-render-functions)
 
       (if (zero? (GLFW/glfwWindowShouldClose window))
-        (recur (.getTime (new java.util.Date)) curr lag)
+        (recur to-render-functions (.getTime (new java.util.Date)) curr lag)
       )
     )
 
