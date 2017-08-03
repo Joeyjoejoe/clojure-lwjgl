@@ -8,7 +8,7 @@
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.glfw GLFW GLFWKeyCallback)
            (org.lwjgl.system MemoryUtil)
-           (org.lwjgl.opengl GL11 GL15 GL20 GL30 GLCapabilities GL)))
+           (org.lwjgl.opengl GL11 GL13 GL15 GL20 GL30 GLCapabilities GL)))
 
 
 (defn create [params]
@@ -43,12 +43,15 @@
         _ (GL30/glBindVertexArray vao-id)
         vertex-id (shader/create "src/test_lwjgl/shaders/default.vert" GL20/GL_VERTEX_SHADER)
         fragment-id (shader/create "src/test_lwjgl/shaders/default.frag" GL20/GL_FRAGMENT_SHADER)
-	texture-id (textures/setup "src/test_lwjgl/assets/textures/container.jpg")
+	texture1-id (textures/setup "src/test_lwjgl/assets/textures/container.jpg")
+	texture2-id (textures/setup "src/test_lwjgl/assets/textures/awesomeface.png")
         program-id (program/create)]
 
     (program/attach-shader program-id vertex-id)
     (program/attach-shader program-id fragment-id)
     (program/link program-id)
+
+
     (GL20/glDeleteShader vertex-id)
     (GL20/glDeleteShader fragment-id)
 
@@ -63,9 +66,24 @@
     (def triangle-color (GL20/glGetUniformLocation program-id "uniformColor"))
     ;;(GL11/glPolygonMode GL11/GL_FRONT_AND_BACK GL11/GL_LINE)
 
+    ;; Bind Texture to uniform in shader
+    (program/bind program-id)
+    (GL20/glUniform1i (GL20/glGetUniformLocation program-id, "texture1") 0)
+    (GL20/glUniform1i (GL20/glGetUniformLocation program-id, "texture2") 1)
+    (program/unbind)
+
+
     (fn []
       (program/bind program-id)
-      (GL11/glBindTexture GL11/GL_TEXTURE_2D texture-id)
+
+      ;; Texture
+      (GL13/glActiveTexture GL13/GL_TEXTURE0)
+      (GL11/glBindTexture GL11/GL_TEXTURE_2D texture1-id)
+
+      (GL13/glActiveTexture GL13/GL_TEXTURE1)
+      (GL11/glBindTexture GL11/GL_TEXTURE_2D texture2-id)
+
+
       (GL30/glBindVertexArray vao-id)
       (GL20/glUniform4f triangle-color 0.0 (Math/sin (GLFW/glfwGetTime)) 0.0 1.0)
       (GL11/glDrawElements GL11/GL_TRIANGLES (count indices) GL11/GL_UNSIGNED_INT 0))))
