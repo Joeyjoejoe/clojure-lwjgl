@@ -39,17 +39,6 @@
          vertices-buffer (create-float-buffer formated-datas)
          vbo-id (GL15/glGenBuffers)]
 
-    (println (str "Handling data..."))
-    (println vbo-id)
-    (println (str "vertex-size: " vertex-size))
-    (println (str "stride: " stride))
-    (println (str "vertex-position: " vertex-position))
-    (println (str "color offset: " color-offset))
-    (println (str "data-type: " data-type))
-    (println (str "normalize-datas? :" normalize-datas?))
-    (println (str "formated-datas :" formated-datas))
-    (println (str "vertices-buffer :" vertices-buffer))
-
     ;; Describe vertices
     (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER vbo-id) 
     (GL15/glBufferData GL15/GL_ARRAY_BUFFER vertices-buffer GL15/GL_STATIC_DRAW)

@@ -6,9 +6,7 @@
 (defn setup [path]
   (let [tbo-id (GL11/glGenTextures)
 	width (BufferUtils/createIntBuffer 1)
-	_ (println width)
 	height (BufferUtils/createIntBuffer 1)
-	_ (println height)
 	color (BufferUtils/createIntBuffer 1)
 	desired-color-channels 3]
 
@@ -24,9 +22,10 @@
     (STBImage/stbi_set_flip_vertically_on_load GL11/GL_TRUE)
     
     (if-let [texture-data (STBImage/stbi_load path width height color desired-color-channels)]
-    (do	
-	(GL11/glTexImage2D GL11/GL_TEXTURE_2D 0 GL11/GL_RGB (.get width) (.get height) 0 GL11/GL_RGB GL11/GL_UNSIGNED_BYTE texture-data)
-	(GL30/glGenerateMipmap GL11/GL_TEXTURE_2D)
-	(STBImage/stbi_image_free texture-data))
-    (throw (Exception. (str "Texture loading failed: " (STBImage/stbi_failure_reason) " at " path))))
+      (do	
+	      (GL11/glTexImage2D GL11/GL_TEXTURE_2D 0 GL11/GL_RGB (.get width) (.get height) 0 GL11/GL_RGB GL11/GL_UNSIGNED_BYTE texture-data)
+	      (GL30/glGenerateMipmap GL11/GL_TEXTURE_2D)
+	      (STBImage/stbi_image_free texture-data))
+      (throw (Exception. (str "Texture loading failed: " (STBImage/stbi_failure_reason) " at " path))))
+
     tbo-id))
