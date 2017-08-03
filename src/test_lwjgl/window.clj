@@ -2,6 +2,7 @@
   (:use [test-lwjgl.utility])
   (:require [test-lwjgl.shader-program :as program]
             [test-lwjgl.config.controls :as controls]
+            [test-lwjgl.textures :as textures]
             [test-lwjgl.buffers :as buffer]
             [test-lwjgl.shader :as shader])
   (:import (org.lwjgl BufferUtils)
@@ -42,6 +43,7 @@
         _ (GL30/glBindVertexArray vao-id)
         vertex-id (shader/create "src/test_lwjgl/shaders/default.vert" GL20/GL_VERTEX_SHADER)
         fragment-id (shader/create "src/test_lwjgl/shaders/default.frag" GL20/GL_FRAGMENT_SHADER)
+	texture-id (textures/setup "src/test_lwjgl/assets/textures/container.jpg")
         program-id (program/create)]
 
     (program/attach-shader program-id vertex-id)
@@ -63,6 +65,7 @@
 
     (fn []
       (program/bind program-id)
+      (GL11/glBindTexture GL11/GL_TEXTURE_2D texture-id)
       (GL30/glBindVertexArray vao-id)
       (GL20/glUniform4f triangle-color 0.0 (Math/sin (GLFW/glfwGetTime)) 0.0 1.0)
       (GL11/glDrawElements GL11/GL_TRIANGLES (count indices) GL11/GL_UNSIGNED_INT 0))))
