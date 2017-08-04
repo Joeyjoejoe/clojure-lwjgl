@@ -1,6 +1,7 @@
 (ns test-lwjgl.window
   (:use [test-lwjgl.utility])
   (:require [test-lwjgl.shader-program :as program]
+            [test-lwjgl.transformations :as transformation]
             [test-lwjgl.config.controls :as controls]
             [test-lwjgl.textures :as textures]
             [test-lwjgl.buffers :as buffer]
@@ -72,10 +73,11 @@
     (GL20/glUniform1i (GL20/glGetUniformLocation program-id, "texture2") 1)
     (program/unbind)
 
-
-    (fn []
+    (fn [uniform-rotate]
+	
       (program/bind program-id)
-
+      
+      (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "rotate") false (buffer/create-float-buffer uniform-rotate))
       ;; Texture
       (GL13/glActiveTexture GL13/GL_TEXTURE0)
       (GL11/glBindTexture GL11/GL_TEXTURE_2D texture1-id)
@@ -90,10 +92,12 @@
 
 (defn render [window to-render-functions]
   "Draw everything needed in the GLFW window. to-render-functions is a vector of functions that contains OpenGL instructions to draw shapes from corresponding VAO"
+
+
   (GL11/glClearColor 0.0 0.0 0.0 1.0)
   (GL11/glClear GL11/GL_COLOR_BUFFER_BIT)
 
-  (doseq [f to-render-functions] (f))
+  (doseq [f to-render-functions] (f (transformation/rotate-z (GLFW/glfwGetTime))))
 
   (GLFW/glfwSwapBuffers window)
   (GLFW/glfwPollEvents))

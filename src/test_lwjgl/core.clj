@@ -1,14 +1,18 @@
 (ns test-lwjgl.core
   (:require [test-lwjgl.window :as window]
+	    [clojure.core.matrix :as m]
             [test-lwjgl.buffers :as buffer]
+            [test-lwjgl.transformations :as transformation]
             [clojure.tools.logging :as log])
   (:import (org.lwjgl.glfw GLFW GLFWKeyCallback) 
+	   (org.lwjgl BufferUtils)
            (org.lwjgl.system MemoryUtil)
            (org.lwjgl.opengl GL11 GL20 GLCapabilities GL)))
 
 (defn -main [] 
   "Start the game"
-  
+
+
   (def window (window/create {:width 1280 :height 960 :title "My Shitty Game"}))
 
 

@@ -1,4 +1,5 @@
-(ns test-lwjgl.utility)
+(ns test-lwjgl.utility
+  (:require [test-lwjgl.transformations :as transformation]))
 
 ;; Picked from here: http://blog.jayfields.com/2011/01/clojure-select-keys-select-values-and.html
 (defn select-values [map ks]
@@ -7,5 +8,10 @@
 
 (defn randcc [n]
   "Returns randomly 1.0 or 0.0"
-  (float (rand-int n))
-)
+  (float (rand-int n)))
+
+(defn map-key-values [m f key]
+  (into {} (for [[k v] m] 
+    (cond 
+      (= k key) [k (f v)]
+      :else [k v]))))
