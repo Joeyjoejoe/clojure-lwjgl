@@ -78,6 +78,15 @@
       (program/bind program-id)
       
       (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "rotate") false (buffer/create-float-buffer uniform-rotate))
+
+      ;; model matrix
+      (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "model") false (buffer/create-float-buffer (transformation/rotate-x 55.0)))
+      ;; view matrix
+      (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "view") false (buffer/create-float-buffer (transformation/translate-matrix 0.0 0.0 -3.0)))
+      ;; projection matrix (perspective)	
+      (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "projection") false (buffer/create-float-buffer (transformation/perspective-projection 45.0 (/ 1280.0 960.0) 0.1 100.0)))
+
+
       ;; Texture
       (GL13/glActiveTexture GL13/GL_TEXTURE0)
       (GL11/glBindTexture GL11/GL_TEXTURE_2D texture1-id)
