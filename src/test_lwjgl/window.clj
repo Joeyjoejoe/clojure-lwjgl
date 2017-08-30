@@ -101,6 +101,7 @@
       (GL20/glUniform4f triangle-color 0.0 (Math/sin (GLFW/glfwGetTime)) 0.0 1.0)
 
       ;; model matrix
+      ;; draw the same cube multiple times with different transformation to position it in the world	
  (doseq [t [[ 0.0  0.0  0.0 ] 
  [ 2.0  5.0 -15.0]
  [-1.5 -2.2 -2.5 ]
@@ -111,9 +112,8 @@
  [ 1.5  2.0 -2.5 ] 
  [ 1.5  0.2 -1.5 ] 
  [-1.3  1.0 -1.5 ]]] 
-(println t)
-(println "-----")
-      (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "model") false (buffer/create-float-buffer (clojure.core.matrix/as-vector (clojure.core.matrix/mmul (transformation/make "translate-matrix" t true) (transformation/make "rotate-x" [55.0] true)))))
+     
+ (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "model") false (buffer/create-float-buffer (clojure.core.matrix/as-vector (clojure.core.matrix/mmul (transformation/make "translate-matrix" t true) (transformation/make "rotate-x" [55.0] true)))))
 
       (if (= 0 (count indices))
 	;; Draw points without indices
