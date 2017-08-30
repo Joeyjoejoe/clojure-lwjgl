@@ -1,5 +1,4 @@
-(ns test-lwjgl.utility
-  (:require [test-lwjgl.transformations :as transformation]))
+(ns test-lwjgl.utility)
 
 ;; Picked from here: http://blog.jayfields.com/2011/01/clojure-select-keys-select-values-and.html
 (defn select-values [map ks]
@@ -15,3 +14,4 @@
     (cond 
       (= k key) [k (f v)]
       :else [k v]))))
+

@@ -32,6 +32,7 @@
       ;;  Init keyboard controls
       (GLFW/glfwSetKeyCallback window controls/key-callback)
       (GL/createCapabilities)
+      (GL11/glEnable GL11/GL_DEPTH_TEST)
       (GLFW/glfwShowWindow window)
     
       (println "OpenGL version:" (GL11/glGetString GL11/GL_VERSION))
@@ -46,7 +47,8 @@
         fragment-id (shader/create "src/test_lwjgl/shaders/default.frag" GL20/GL_FRAGMENT_SHADER)
 	texture1-id (textures/setup "src/test_lwjgl/assets/textures/container.jpg")
 	texture2-id (textures/setup "src/test_lwjgl/assets/textures/awesomeface.png")
-        program-id (program/create)]
+        program-id (program/create)
+	points-count (if (= 0 (count indices)) (count vertices) (count indices) )]
 
     (program/attach-shader program-id vertex-id)
     (program/attach-shader program-id fragment-id)
@@ -60,7 +62,9 @@
     (program/validate program-id)
 
     (buffer/create-vbo vertices)
-    (buffer/create-ebo indices)
+    
+    (if (< 0 (count indices))
+    (buffer/create-ebo indices))
     ;; You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     (GL30/glBindVertexArray 0) 
 
@@ -77,14 +81,12 @@
 	
       (program/bind program-id)
       
+(println "fdsfdsfds")
       (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "rotate") false (buffer/create-float-buffer uniform-rotate))
-
-      ;; model matrix
-      (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "model") false (buffer/create-float-buffer (transformation/rotate-x 55.0)))
       ;; view matrix
-      (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "view") false (buffer/create-float-buffer (transformation/translate-matrix 0.0 0.0 -3.0)))
+      (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "view") false (buffer/create-float-buffer (transformation/make "translate-matrix" [0.0 0.0 -3.0])))
       ;; projection matrix (perspective)	
-      (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "projection") false (buffer/create-float-buffer (transformation/perspective-projection 45.0 (/ 1280.0 960.0) 0.1 100.0)))
+      (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "projection") false (buffer/create-float-buffer (transformation/make "perspective-projection" [45.0 (/ 1280.0 960.0) 0.1 100.0])))
 
 
       ;; Texture
@@ -97,16 +99,39 @@
 
       (GL30/glBindVertexArray vao-id)
       (GL20/glUniform4f triangle-color 0.0 (Math/sin (GLFW/glfwGetTime)) 0.0 1.0)
-      (GL11/glDrawElements GL11/GL_TRIANGLES (count indices) GL11/GL_UNSIGNED_INT 0))))
+
+      ;; model matrix
+ (doseq [t [[ 0.0  0.0  0.0 ] 
+ [ 2.0  5.0 -15.0]
+ [-1.5 -2.2 -2.5 ]
+ [-3.8 -2.0 -12.3]
+ [ 2.4 -0.4 -3.5 ] 
+ [-1.7  3.0 -7.5 ] 
+ [ 1.3 -2.0 -2.5 ] 
+ [ 1.5  2.0 -2.5 ] 
+ [ 1.5  0.2 -1.5 ] 
+ [-1.3  1.0 -1.5 ]]] 
+(println t)
+(println "-----")
+      (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "model") false (buffer/create-float-buffer (clojure.core.matrix/as-vector (clojure.core.matrix/mmul (transformation/make "translate-matrix" t true) (transformation/make "rotate-x" [55.0] true)))))
+
+      (if (= 0 (count indices))
+	;; Draw points without indices
+	(GL11/glDrawArrays GL11/GL_TRIANGLES 0 points-count)
+
+	;; Draw with indices
+	(GL11/glDrawElements GL11/GL_TRIANGLES points-count GL11/GL_UNSIGNED_INT 0))
+)
+)))
 
 (defn render [window to-render-functions]
   "Draw everything needed in the GLFW window. to-render-functions is a vector of functions that contains OpenGL instructions to draw shapes from corresponding VAO"
 
 
   (GL11/glClearColor 0.0 0.0 0.0 1.0)
-  (GL11/glClear GL11/GL_COLOR_BUFFER_BIT)
+  (GL11/glClear (bit-or GL11/GL_COLOR_BUFFER_BIT GL11/GL_DEPTH_BUFFER_BIT))
 
-  (doseq [f to-render-functions] (f (transformation/rotate-z (GLFW/glfwGetTime))))
+  (doseq [f to-render-functions] (f (transformation/make "rotate-z" [(* 25 (GLFW/glfwGetTime))])))
 
   (GLFW/glfwSwapBuffers window)
   (GLFW/glfwPollEvents))

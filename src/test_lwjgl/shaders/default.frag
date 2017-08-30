@@ -12,5 +12,5 @@ uniform vec4 uniformColor;
 
 void main()
 {
-  outColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.5) * vertexColor; 
+  outColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2) * vertexColor; 
 } 
