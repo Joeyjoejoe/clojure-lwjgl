@@ -1,4 +1,5 @@
 (ns test-lwjgl.core
+  (:use [test-lwjgl.utility])
   (:require [test-lwjgl.window :as window]
 	    [clojure.core.matrix :as m]
             [test-lwjgl.buffers :as buffer]
@@ -94,10 +95,11 @@
 []
 ))
 
+(def fps (atom [0 0]))
   ;;  Start game loop
   (loop [to-render-functions [init]
-         curr (.getTime (new java.util.Date))
-         prev (.getTime (new java.util.Date))
+         curr (GLFW/glfwGetTime)
+         prev (GLFW/glfwGetTime)
          lag (atom 0.0)]
 
     (swap! lag #(+ % (- curr prev)))
@@ -115,8 +117,15 @@
     ;; (render (/ lag 0.1))
     (window/render window to-render-functions)
 
+    
+    (if (>= (- (GLFW/glfwGetTime) (@fps 1)) 1.0)
+	(do (println (str "FPS: " (+ 1 (@fps 0))))
+	    (swap! fps update-in [1] inc)
+	    (swap! fps assoc 0 0))
+ 	(swap! fps update-in [0] inc))
+
     (if (zero? (GLFW/glfwWindowShouldClose window))
-      (recur to-render-functions (.getTime (new java.util.Date)) curr lag)))
+      (recur to-render-functions (GLFW/glfwGetTime) curr lag)))
 
   (GLFW/glfwDestroyWindow window)
   (GLFW/glfwTerminate))

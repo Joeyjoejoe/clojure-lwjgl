@@ -81,7 +81,6 @@
 	
       (program/bind program-id)
       
-(println "fdsfdsfds")
       (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "rotate") false (buffer/create-float-buffer uniform-rotate))
       ;; view matrix
       (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "view") false (buffer/create-float-buffer (transformation/make "translate-matrix" [0.0 0.0 -3.0])))
@@ -113,7 +112,7 @@
  [ 1.5  0.2 -1.5 ] 
  [-1.3  1.0 -1.5 ]]] 
      
- (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "model") false (buffer/create-float-buffer (clojure.core.matrix/as-vector (clojure.core.matrix/mmul (transformation/make "translate-matrix" t true) (transformation/make "rotate-x" [55.0] true)))))
+ (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "model") false (buffer/create-float-buffer (clojure.core.matrix/as-vector (clojure.core.matrix/mmul (transformation/make "translate-matrix" t true) (transformation/make "rotate-x" [(* -10 (* (t 2) (t 2)))] true)))))
 
       (if (= 0 (count indices))
 	;; Draw points without indices

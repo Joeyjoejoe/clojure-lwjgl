@@ -68,10 +68,6 @@
 
 (defn make 
   ([transformation args] 
-	(println "2 arity")
-	(println transformation)
 	(m/as-vector (apply (resolve (symbol (str "test-lwjgl.transformations/" transformation))) args)))
   ([transformation args vectorz] 
-	(println "3 arity")
-	(println transformation)
 	(apply (resolve (symbol (str "test-lwjgl.transformations/" transformation))) args)))
