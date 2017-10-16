@@ -8,7 +8,8 @@
   (:import (org.lwjgl.glfw GLFW GLFWKeyCallback) 
 	   (org.lwjgl BufferUtils)
            (org.lwjgl.system MemoryUtil)
-           (org.lwjgl.opengl GL11 GL20 GLCapabilities GL)))
+           (org.lwjgl.opengl GL11 GL20 GLCapabilities GL))
+  (:gen-class))
 
 (defn -main [] 
   "Start the game"
