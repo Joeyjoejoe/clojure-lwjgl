@@ -11,8 +11,7 @@
            (org.lwjgl.system MemoryUtil)
            (org.lwjgl.opengl GL11 GL13 GL15 GL20 GL30 GLCapabilities GL)))
 
-
-(defn create [params]
+(defn initialize [params]
   "Create the game window and set the OpenGl context where everything will be draw"
   (let [{:keys [title width height]} params]
     (GLFW/glfwInit)
@@ -26,18 +25,23 @@
     (GLFW/glfwWindowHint GLFW/GLFW_OPENGL_PROFILE GLFW/GLFW_OPENGL_CORE_PROFILE)
     (GLFW/glfwWindowHint GLFW/GLFW_OPENGL_FORWARD_COMPAT GL11/GL_TRUE)
 
-    (let [window (GLFW/glfwCreateWindow width height title (MemoryUtil/NULL) (MemoryUtil/NULL))]
-      (GLFW/glfwSwapInterval 1)
-      (GLFW/glfwMakeContextCurrent window)
-      ;;  Init keyboard controls
-      (GLFW/glfwSetKeyCallback window controls/key-callback)
-      (GL/createCapabilities)
-      (GL11/glEnable GL11/GL_DEPTH_TEST)
-      (GLFW/glfwShowWindow window)
-    
-      (println "OpenGL version:" (GL11/glGetString GL11/GL_VERSION))
-      window)))
+    (GLFW/glfwCreateWindow width height title (MemoryUtil/NULL) (MemoryUtil/NULL))))
 
+(defn configure [window]
+  (GLFW/glfwSwapInterval 1)
+  (GLFW/glfwMakeContextCurrent window)
+  ;;  Init keyboard controls
+  (GLFW/glfwSetKeyCallback window controls/key-callback)
+  (GL/createCapabilities)
+  (GL11/glEnable GL11/GL_DEPTH_TEST)
+  (GLFW/glfwShowWindow window)
+
+  (println "OpenGL version:" (GL11/glGetString GL11/GL_VERSION))
+  window)
+
+(defn create [params]
+  (let [window (initialize params)]
+    (configure window)))
 
 (defn vertex-setup [vertices indices]
   "Take a list of vertices (coordinates [x y z] of a pixel and optionaly its color), indices is a list of index from vertices, used to describe triangles."
