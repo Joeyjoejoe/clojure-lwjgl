@@ -58,6 +58,8 @@
   [fovy aspect near far]
   (let [perspective-matrix (m/mutable (m/identity-matrix 4))
 	f (/ (Math/tan (* 0.5 (Math/toRadians fovy))))
+	near (- near)
+	far (- far)
         nf (/ (- near far))
 	_ (m/mset! perspective-matrix 0 0 (/ f aspect))
 	_ (m/mset! perspective-matrix 1 1 f)
