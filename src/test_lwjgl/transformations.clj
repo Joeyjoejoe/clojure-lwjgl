@@ -68,6 +68,34 @@
 	_ (m/mset! perspective-matrix 3 2 (mm/mul 2.0 near far nf))]
     perspective-matrix))
 
+(defn position-matrix [x y z]
+  (let [position-matrix (m/mutable (m/identity-matrix 4))
+	_ (m/mset! position-matrix 0 3 x)
+	_ (m/mset! position-matrix 1 3 y)
+	_ (m/mset! position-matrix 2 3 z)]
+    position-matrix))
+
+(defn look-at
+  ([camera] (let [camera @camera
+                  position (:position camera)
+                  right (:right camera)
+                  up (:up camera)
+                  direction (:direction camera)]
+              (look-at position right up direction)))
+  ([position right up direction] (let [position (position-matrix (m/mget position 0) (m/mget position 1) (m/mget position 2))
+                                       look (m/mutable (m/identity-matrix 4))
+                                       _ (m/mset! look 0 0 (m/mget right 0))
+                                       _ (m/mset! look 0 1 (m/mget up 0))
+                                       _ (m/mset! look 0 2 (m/mget direction 0))
+                                       _ (m/mset! look 1 0 (m/mget right 1))
+                                       _ (m/mset! look 1 1 (m/mget up 1))
+                                       _ (m/mset! look 1 2 (m/mget direction 1))
+                                       _ (m/mset! look 2 0 (m/mget right 2))
+                                       _ (m/mset! look 2 1 (m/mget up 2))
+                                       _ (m/mset! look 2 2 (m/mget direction 2))]
+                                    (m/mmul look position)	
+                                   )))
+
 (defn make 
   ([transformation args] 
 	(m/as-vector (apply (resolve (symbol (str "test-lwjgl.transformations/" transformation))) args)))

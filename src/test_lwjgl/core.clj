@@ -1,9 +1,10 @@
 (ns test-lwjgl.core
   (:use [test-lwjgl.utility])
   (:require [test-lwjgl.window :as window]
-	    [clojure.core.matrix :as m]
+	          [clojure.core.matrix :as m]
             [test-lwjgl.buffers :as buffer]
             [test-lwjgl.transformations :as transformation]
+            [test-lwjgl.camera :as camera]
             [clojure.tools.logging :as log])
   (:import (org.lwjgl.glfw GLFW GLFWKeyCallback) 
 	   (org.lwjgl BufferUtils)
