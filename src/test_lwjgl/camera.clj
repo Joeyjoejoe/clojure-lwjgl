@@ -7,7 +7,7 @@
             target [0.0 0.0 0.0]]
         (initialize position target)))
 
-  ([position target] (let [position (m/negate (m/array position))
+  ([position target] (let [position (m/array position)
                            target (m/array target)
                            direction (m/normalise (m/sub position target))
                            right (m/normalise (m/cross (m/array [0.0 1.0 0.0]) direction))

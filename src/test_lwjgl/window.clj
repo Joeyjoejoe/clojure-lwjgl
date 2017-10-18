@@ -89,8 +89,8 @@
       
       (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "rotate") false (buffer/create-float-buffer uniform-rotate))
       ;; view matrix
-      ;;(GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "view") false (buffer/create-float-buffer (transformation/make "translate-matrix" [0.0 0.0 -3.0])))
-      (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "view") false (buffer/create-float-buffer (transformation/make "look-at" [camera])))
+      (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "view") false (buffer/create-float-buffer (transformation/make "translate-matrix" [0.0 0.0 -3.0])))
+      ;;(GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "view") false (buffer/create-float-buffer (transformation/make "look-at" [camera])))
       ;; projection matrix (perspective)	
       (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "projection") false (buffer/create-float-buffer (transformation/make "perspective-projection" [45.0 (/ 1280.0 960.0) 0.1 100.0])))
 

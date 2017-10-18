@@ -7,6 +7,12 @@
 ;; Overide core.matrix with vectorz-clj implementation
 (m/set-current-implementation :vectorz) 
 
+(defn make 
+  ([transformation args] 
+	(m/as-vector (apply (resolve (symbol (str "test-lwjgl.transformations/" transformation))) args)))
+  ([transformation args vectorz] 
+	(apply (resolve (symbol (str "test-lwjgl.transformations/" transformation))) args)))
+
 (defn scale-matrix [Sx Sy Sz vector]
   (m/diagonal-matrix [Sx Sy Sz 1]))
 
@@ -82,22 +88,18 @@
                   up (:up camera)
                   direction (:direction camera)]
               (look-at position right up direction)))
-  ([position right up direction] (let [position (position-matrix (m/mget position 0) (m/mget position 1) (m/mget position 2))
+  ([position right up direction] (let [position (make "position-matrix" (m/negate position) true)
                                        look (m/mutable (m/identity-matrix 4))
                                        _ (m/mset! look 0 0 (m/mget right 0))
-                                       _ (m/mset! look 0 1 (m/mget up 0))
-                                       _ (m/mset! look 0 2 (m/mget direction 0))
-                                       _ (m/mset! look 1 0 (m/mget right 1))
+                                       _ (m/mset! look 0 1 (m/mget right 1))
+                                       _ (m/mset! look 0 2 (m/mget right 2))
+                                       _ (m/mset! look 1 0 (m/mget up 0))
                                        _ (m/mset! look 1 1 (m/mget up 1))
-                                       _ (m/mset! look 1 2 (m/mget direction 1))
-                                       _ (m/mset! look 2 0 (m/mget right 2))
-                                       _ (m/mset! look 2 1 (m/mget up 2))
+                                       _ (m/mset! look 1 2 (m/mget up 2))
+                                       _ (m/mset! look 2 0 (m/mget direction 0))
+                                       _ (m/mset! look 2 1 (m/mget direction 1))
                                        _ (m/mset! look 2 2 (m/mget direction 2))]
-                                    (m/mmul look position)	
+                                    {:look look :position position}	
                                    )))
 
-(defn make 
-  ([transformation args] 
-	(m/as-vector (apply (resolve (symbol (str "test-lwjgl.transformations/" transformation))) args)))
-  ([transformation args vectorz] 
-	(apply (resolve (symbol (str "test-lwjgl.transformations/" transformation))) args)))
+
