@@ -76,10 +76,11 @@
     perspective-matrix))
 
 (defn look-at
-  ([camera] (let [position (:position camera)
+  ([camera] (let [front (:front camera)
+                  eye (:position camera)
                   up (:up camera)
-                  direction (:direction camera)]
-              (look-at position direction up)))
+                  center (mo/+ front (:position camera))]
+              (look-at eye center up)))
   ([eye center up] (let [eyex (nth eye 0)
                          eyey (nth eye 1)
                          eyez (nth eye 2)

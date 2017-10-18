@@ -4,6 +4,7 @@
 	    [clojure.core.matrix :as m]
 	    [clojure.core.matrix.operators :as mo]
             [test-lwjgl.buffers :as buffer]
+            [test-lwjgl.state :as state]
             [test-lwjgl.transformations :as transformation]
             [test-lwjgl.camera :as camera]
             [clojure.tools.logging :as log])
@@ -12,14 +13,12 @@
            (org.lwjgl.system MemoryUtil)
            (org.lwjgl.opengl GL11 GL20 GLCapabilities GL))
   (:gen-class))
-
 (defn -main [] 
   "Start the game"
 
 
   (def window (window/create {:width 1280 :height 960 :title "My Shitty Game"}))
 
- (def camera (camera/initialize))
 
   (def init (window/vertex-setup 
 ;;    [{:coordinates [-0.5 -0.5 0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
@@ -95,7 +94,7 @@
        {:coordinates [-0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]} 
        {:coordinates [-0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]} 
 ] 
-[] camera
+[]
 ))
 
 (def fps (atom [0 0]))
@@ -106,7 +105,9 @@
          lag (atom 0.0)]
 
     (swap! lag #(+ % (- curr prev)))
+    (swap! (state/get-atom) assoc :deltatime (- curr prev))
   
+    (GLFW/glfwPollEvents)
     ;;  (handle-inputs)
 
     ;;  (log/info "previous: " (new java.util.Date prev))
