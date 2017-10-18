@@ -1,7 +1,8 @@
 (ns test-lwjgl.core
   (:use [test-lwjgl.utility])
   (:require [test-lwjgl.window :as window]
-	          [clojure.core.matrix :as m]
+	    [clojure.core.matrix :as m]
+	    [clojure.core.matrix.operators :as mo]
             [test-lwjgl.buffers :as buffer]
             [test-lwjgl.transformations :as transformation]
             [test-lwjgl.camera :as camera]

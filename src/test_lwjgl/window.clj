@@ -3,6 +3,7 @@
   (:require [test-lwjgl.shader-program :as program]
             [test-lwjgl.transformations :as transformation]
             [test-lwjgl.config.controls :as controls]
+	    [clojure.core.matrix :as m]
             [test-lwjgl.textures :as textures]
             [test-lwjgl.buffers :as buffer]
             [test-lwjgl.camera :as camera]
@@ -89,8 +90,14 @@
       
       (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "rotate") false (buffer/create-float-buffer uniform-rotate))
       ;; view matrix
-      (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "view") false (buffer/create-float-buffer (transformation/make "translate-matrix" [0.0 0.0 -3.0])))
-      ;;(GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "view") false (buffer/create-float-buffer (transformation/make "look-at" [camera])))
+      ;;(GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "view") false (buffer/create-float-buffer (transformation/make "translate-matrix" [0.0 0.0 -3.0])))
+
+      (let [radius 10.0
+	    camX (* (Math/sin (GLFW/glfwGetTime)) radius)
+	    camZ (* (Math/cos (GLFW/glfwGetTime)) radius)]
+	(swap! camera assoc :position (m/array [camX 0.0 camZ]))
+      (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "view") false (buffer/create-float-buffer (transformation/make "look-at" [camera]))))
+
       ;; projection matrix (perspective)	
       (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "projection") false (buffer/create-float-buffer (transformation/make "perspective-projection" [45.0 (/ 1280.0 960.0) 0.1 100.0])))
 
@@ -108,7 +115,7 @@
 
       ;; model matrix
       ;; draw the same cube multiple times with different transformation to position it in the world	
- (doseq [t [[ 0.0  0.0  0.0 ] 
+ (doseq [t [[0.0 0.0 0.0] 
  [ 2.0  5.0 -15.0]
  [-1.5 -2.2 -2.5 ]
  [-3.8 -2.0 -12.3]

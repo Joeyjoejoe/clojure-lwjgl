@@ -1,6 +1,7 @@
 (ns test-lwjgl.transformations
   (:use [test-lwjgl.utility])
   (:require [clojure.core.matrix :as m]
+	    [clojure.core.matrix.operators :as mo]
 	    [thi.ng.math.macros :as mm]))
 
 
@@ -76,9 +77,9 @@
 
 (defn position-matrix [x y z]
   (let [position-matrix (m/mutable (m/identity-matrix 4))
-	_ (m/mset! position-matrix 0 3 x)
-	_ (m/mset! position-matrix 1 3 y)
-	_ (m/mset! position-matrix 2 3 z)]
+	_ (m/mset! position-matrix 3 0 x)
+	_ (m/mset! position-matrix 3 1 y)
+	_ (m/mset! position-matrix 3 2 z)]
     position-matrix))
 
 (defn look-at
@@ -88,7 +89,7 @@
                   up (:up camera)
                   direction (:direction camera)]
               (look-at position right up direction)))
-  ([position right up direction] (let [position (make "position-matrix" (m/negate position) true)
+  ([position right up direction] (let [position (make "position-matrix" position true)
                                        look (m/mutable (m/identity-matrix 4))
                                        _ (m/mset! look 0 0 (m/mget right 0))
                                        _ (m/mset! look 0 1 (m/mget right 1))
@@ -99,7 +100,7 @@
                                        _ (m/mset! look 2 0 (m/mget direction 0))
                                        _ (m/mset! look 2 1 (m/mget direction 1))
                                        _ (m/mset! look 2 2 (m/mget direction 2))]
-                                    {:look look :position position}	
+                                    (m/mmul position look)	
                                    )))
 
 
