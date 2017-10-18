@@ -45,7 +45,7 @@
   (let [window (initialize params)]
     (configure window)))
 
-(defn vertex-setup [vertices indices]
+(defn vertex-setup [vertices indices camera]
   "Take a list of vertices (coordinates [x y z] of a pixel and optionaly its color), indices is a list of index from vertices, used to describe triangles."
   (let [vao-id (GL30/glGenVertexArrays)
         _ (GL30/glBindVertexArray vao-id)
@@ -54,7 +54,6 @@
 	      texture1-id (textures/setup "src/test_lwjgl/assets/textures/container.jpg")
 	      texture2-id (textures/setup "src/test_lwjgl/assets/textures/awesomeface.png")
         program-id (program/create)
-        camera (camera/initialize)
 	      points-count (if (= 0 (count indices)) (count vertices) (count indices) )]
 
     (program/attach-shader program-id vertex-id)
@@ -95,8 +94,8 @@
       (let [radius 10.0
 	    camX (* (Math/sin (GLFW/glfwGetTime)) radius)
 	    camZ (* (Math/cos (GLFW/glfwGetTime)) radius)]
-	(swap! camera assoc :position (m/array [camX 0.0 camZ]))
-      (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "view") false (buffer/create-float-buffer (transformation/make "look-at" [camera]))))
+	    (swap! camera assoc :position [camX 0.0 camZ])
+      (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "view") false (buffer/create-float-buffer (transformation/make "look-at" [@camera]))))
 
       ;; projection matrix (perspective)	
       (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "projection") false (buffer/create-float-buffer (transformation/make "perspective-projection" [45.0 (/ 1280.0 960.0) 0.1 100.0])))

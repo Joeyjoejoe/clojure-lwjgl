@@ -19,7 +19,7 @@
 
   (def window (window/create {:width 1280 :height 960 :title "My Shitty Game"}))
 
-
+ (def camera (camera/initialize))
 
   (def init (window/vertex-setup 
 ;;    [{:coordinates [-0.5 -0.5 0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
@@ -95,7 +95,7 @@
        {:coordinates [-0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]} 
        {:coordinates [-0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]} 
 ] 
-[]
+[] camera
 ))
 
 (def fps (atom [0 0]))

@@ -75,32 +75,43 @@
 	_ (m/mset! perspective-matrix 3 2 (mm/mul 2.0 near far nf))]
     perspective-matrix))
 
-(defn position-matrix [x y z]
-  (let [position-matrix (m/mutable (m/identity-matrix 4))
-	_ (m/mset! position-matrix 3 0 x)
-	_ (m/mset! position-matrix 3 1 y)
-	_ (m/mset! position-matrix 3 2 z)]
-    position-matrix))
-
 (defn look-at
-  ([camera] (let [camera @camera
-                  position (:position camera)
-                  right (:right camera)
+  ([camera] (let [position (:position camera)
                   up (:up camera)
                   direction (:direction camera)]
-              (look-at position right up direction)))
-  ([position right up direction] (let [position (make "position-matrix" position true)
-                                       look (m/mutable (m/identity-matrix 4))
-                                       _ (m/mset! look 0 0 (m/mget right 0))
-                                       _ (m/mset! look 0 1 (m/mget right 1))
-                                       _ (m/mset! look 0 2 (m/mget right 2))
-                                       _ (m/mset! look 1 0 (m/mget up 0))
-                                       _ (m/mset! look 1 1 (m/mget up 1))
-                                       _ (m/mset! look 1 2 (m/mget up 2))
-                                       _ (m/mset! look 2 0 (m/mget direction 0))
-                                       _ (m/mset! look 2 1 (m/mget direction 1))
-                                       _ (m/mset! look 2 2 (m/mget direction 2))]
-                                    (m/mmul position look)	
-                                   )))
+              (look-at position direction up)))
+  ([eye center up] (let [eyex (nth eye 0)
+                         eyey (nth eye 1)
+                         eyez (nth eye 2)
+                         upx (nth up 0)
+                         upy (nth up 1)
+                         upz (nth up 2)
+                         z0 (- eyex (m/mget center 0))
+                         z1 (- eyey (m/mget center 1))
+                         z2 (- eyez (m/mget center 2))
+                         len (/ 1 (Math/sqrt (+ (* z0 z0) (* z1 z1) (* z2 z2))))
+                         z0 (* z0 len)
+                         z1 (* z1 len)
+                         z2 (* z2 len)
+                         x0 (- (* upy z2) (* upz z1))
+                         x1 (- (* upz z0) (* upx z2))
+                         x2 (- (* upx z1) (* upy z0))
+                         len (Math/sqrt (+ (* x0 x0) (* x1 x1) (* x2 x2)))
+                         x0 (cond (= len 0) 0 :else (/ x0 len))
+                         x1 (cond (= len 0) 0 :else (/ x1 len))
+                         x2 (cond (= len 0) 0 :else (/ x2 len))
+                         y0 (- (* z1 x2) (* z2 x1))
+                         y1 (- (* z2 x0) (* z0 x2))
+                         y2 (- (* z0 x1) (* z1 x0))
+                         len (Math/sqrt (+ (* y0 y0) (* y1 y1) (* y2 y2)))
+                         y0 (cond (= len 0) 0 :else (/ y0 len))
+                         y1 (cond (= len 0) 0 :else (/ y1 len))
+                         y2 (cond (= len 0) 0 :else (/ y2 len))
+                         look (m/mutable (m/identity-matrix 4))
+                         _ (m/set-row! look 0 [x0 y0 z0 0.0])
+                         _ (m/set-row! look 1 [x1 y1 z1 0.0])
+                         _ (m/set-row! look 2 [x2 y2 z2 0.0])
+                         _ (m/set-row! look 3 [(- (+ (* x0 eyex) (* x1 eyey) (* x2 eyez))) (- (+ (* y0 eyex) (* y1 eyey) (* y2 eyez))) (- (+ (* z0 eyex) (* z1 eyey) (* z2 eyez))) 1.0])]
+                        look)))
 
 
