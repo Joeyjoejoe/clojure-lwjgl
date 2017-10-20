@@ -55,6 +55,7 @@
 	      texture1-id (textures/setup "src/test_lwjgl/assets/textures/container.jpg")
 	      texture2-id (textures/setup "src/test_lwjgl/assets/textures/awesomeface.png")
         program-id (program/create)
+	cubes-pos (map (fn [x] (vector (+ (rand -100) (rand 100)) (+ (rand -100) (rand 100)) (+ (rand -100) (rand 100)))) (vec (repeat 1042 nil)))
 	      points-count (if (= 0 (count indices)) (count vertices) (count indices) )]
 
     (program/attach-shader program-id vertex-id)
@@ -115,16 +116,7 @@
 
       ;; model matrix
       ;; draw the same cube multiple times with different transformation to position it in the world	
- (doseq [t [[0.0 0.0 0.0] 
- [ 2.0  5.0 -15.0]
- [-1.5 -2.2 -2.5 ]
- [-3.8 -2.0 -12.3]
- [ 2.4 -0.4 -3.5 ] 
- [-1.7  3.0 -7.5 ] 
- [ 1.3 -2.0 -2.5 ] 
- [ 1.5  2.0 -2.5 ] 
- [ 1.5  0.2 -1.5 ] 
- [-1.3  1.0 -1.5 ]]] 
+ (doseq [t cubes-pos] 
      
  (GL20/glUniformMatrix4fv (GL20/glGetUniformLocation program-id "model") false (buffer/create-float-buffer (transformation/make "translate-matrix" t)))
 
