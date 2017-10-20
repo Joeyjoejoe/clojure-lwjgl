@@ -50,6 +50,35 @@
         position (:position @camera)]
 	    (swap! camera assoc :position (mo/+ position (mo/* (m/normalise (m/cross front up)) (state/camera-speed))))))
 
+
+
+
+(defn camera-front-x [win]
+(let [camera (camera/get-atom)
+        front (:front @camera)]
+   (swap! camera assoc :front [(+ -0.5 (nth front 0)) (nth front 1) (nth front 2)])))
+
+(defn camera-front-y [win]
+(let [camera (camera/get-atom)
+        front (:front @camera)]
+   (swap! camera assoc :front [(nth front 0) (+ -0.5 (nth front 1)) (nth front 2)])))
+
+(defn camera-front-z [win]
+(let [camera (camera/get-atom)
+        front (:front @camera)]
+   (swap! camera assoc :front [(nth front 0) (nth front 1) (+ -0.5 (nth front 2))])))
+
+
+
+
+
+
+
+
+
+
+
+
 (def key-bindings
   "Bind key codes with a vector of three actions indexed as default key events:
   press, released, repeat"
@@ -64,6 +93,9 @@
       GLFW/GLFW_KEY_S  [default-release move-backward move-backward]
       GLFW/GLFW_KEY_A  [default-release move-left move-left]
       GLFW/GLFW_KEY_D  [default-release move-right move-right]
+      GLFW/GLFW_KEY_UP  [default-release camera-front-z camera-front-z]
+      GLFW/GLFW_KEY_DOWN  [default-release camera-front-x camera-front-x]
+      GLFW/GLFW_KEY_LEFT  [default-release camera-front-y camera-front-y]
   }
 )
 

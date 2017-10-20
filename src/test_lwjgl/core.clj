@@ -107,7 +107,6 @@
     (swap! lag #(+ % (- curr prev)))
     (swap! (state/get-atom) assoc :deltatime (- curr prev))
   
-    (GLFW/glfwPollEvents)
     ;;  (handle-inputs)
 
     ;;  (log/info "previous: " (new java.util.Date prev))

@@ -147,6 +147,7 @@
   (doseq [f to-render-functions] (f (transformation/make "rotate-z" [(* 25 (GLFW/glfwGetTime))])))
 
   (GLFW/glfwSwapBuffers window)
+  (GLFW/glfwPollEvents)
   )
 
 
