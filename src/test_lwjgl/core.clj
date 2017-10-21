@@ -18,6 +18,14 @@
 
 
   (def window (window/create {:width 1280 :height 960 :title "My Shitty Game"}))
+ ;; (def ground (window/vertex-setup 
+ ;; 	  [{:coordinates [-100.0 0.0 -100.0] :color [0.0 1.0 0.0] :texture [0.0 0.0]} 
+ ;;      {:coordinates [-100.0 0.0  100.0] :color [0.0 1.0 0.0] :texture [1.0 0.0]} 
+ ;;      {:coordinates [ 100.0 0.0  100.0] :color [0.0 1.0 0.0] :texture [1.0 1.0]} 
+ ;;      {:coordinates [ 100.0 0.0  100.0] :color [0.0 1.0 0.0] :texture [0.0 0.0]} 
+ ;;      {:coordinates [ 100.0 0.0 -100.0] :color [0.0 1.0 0.0] :texture [1.0 0.0]}
+ ;; 	   {:coordinates [-100.0 0.0 -100.0] :color [0.0 1.0 0.0] :texture [1.0 1.0]} 
+ ;;      ] []))
 
 
   (def init (window/vertex-setup 

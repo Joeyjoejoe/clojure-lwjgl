@@ -3,7 +3,7 @@
 
 (def state (atom {:camera nil 
                   :deltatime 0.0 
-                  :camera-speed 0.5}))
+                  :camera-speed 2.0}))
 
 (defn get-atom [] state)
 (defn get-data [] @state)

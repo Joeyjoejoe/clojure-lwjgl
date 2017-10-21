@@ -8,7 +8,7 @@ in vec2 TexCoord;
 uniform sampler2D texture1;
 uniform sampler2D texture2;
 
-uniform vec4 uniformColor;
+//uniform vec4 uniformColor;
 
 void main()
 {

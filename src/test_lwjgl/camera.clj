@@ -3,13 +3,14 @@
             [clojure.core.matrix :as m]))
 
 (defn initialize 
-  ([] (let [position [0.0 0.0 3.0]
-            front [0.0 0.0 -1.0]
+  ([] (let [position [0.0 10.0 10.0]
+            front [0.0 -2.0 -4.0]
             target [0.0 0.0 0.0]]
         (initialize position target front)))
 
   ([position target front] (let [target (m/array target)
-                           direction (m/normalise (m/sub position target))
+                           direction (m/normalise position)
+                           ;; direction (m/normalise (m/sub position target)) ;; FPS
                            right (m/normalise (m/cross (m/array [0.0 1.0 0.0]) direction))
                            up (m/cross direction right)]
 
