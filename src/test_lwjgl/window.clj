@@ -28,7 +28,7 @@
     (GLFW/glfwWindowHint GLFW/GLFW_OPENGL_PROFILE GLFW/GLFW_OPENGL_CORE_PROFILE)
     (GLFW/glfwWindowHint GLFW/GLFW_OPENGL_FORWARD_COMPAT GL11/GL_TRUE)
 
-    (GLFW/glfwCreateWindow width height title (MemoryUtil/NULL) (MemoryUtil/NULL))))
+    (GLFW/glfwCreateWindow ^Long width ^Long height ^String title (MemoryUtil/NULL) (MemoryUtil/NULL))))
 
 (defn configure [window]
   (GLFW/glfwSwapInterval 1)

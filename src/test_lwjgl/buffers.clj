@@ -3,7 +3,6 @@
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.opengl GL11 GL15 GL20)))
 
-
 (defn create-float-buffer [datas]
   "Create an float array buffer from datas"
   (let [datas (float-array datas)]
@@ -41,7 +40,7 @@
 
     ;; Describe vertices
     (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER vbo-id) 
-    (GL15/glBufferData GL15/GL_ARRAY_BUFFER vertices-buffer GL15/GL_STATIC_DRAW)
+    (GL15/glBufferData GL15/GL_ARRAY_BUFFER ^java.nio.DirectFloatBufferU vertices-buffer GL15/GL_STATIC_DRAW)
     (GL20/glVertexAttribPointer vertex-position vertex-size data-type normalize-datas? stride 0)
     (GL20/glEnableVertexAttribArray vertex-position)
     
@@ -62,7 +61,7 @@
   (let [ebo-id (GL15/glGenBuffers)
 	indices-buffer (create-int-buffer indices)]
   (GL15/glBindBuffer GL15/GL_ELEMENT_ARRAY_BUFFER ebo-id) 
-  (GL15/glBufferData GL15/GL_ELEMENT_ARRAY_BUFFER indices-buffer GL15/GL_STATIC_DRAW)))
+  (GL15/glBufferData GL15/GL_ELEMENT_ARRAY_BUFFER ^java.nio.DirectIntBufferU indices-buffer GL15/GL_STATIC_DRAW)))
 
 (defn create-tbo [texture-coordinates]
   "Create a texture buffer object"

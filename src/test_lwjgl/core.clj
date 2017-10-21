@@ -13,6 +13,7 @@
            (org.lwjgl.system MemoryUtil)
            (org.lwjgl.opengl GL11 GL20 GLCapabilities GL))
   (:gen-class))
+
 (defn -main [] 
   "Start the game"
 

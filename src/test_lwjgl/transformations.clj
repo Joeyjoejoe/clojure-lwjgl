@@ -4,7 +4,6 @@
 	    [clojure.core.matrix.operators :as mo]
 	    [thi.ng.math.macros :as mm]))
 
-
 ;; Overide core.matrix with vectorz-clj implementation
 (m/set-current-implementation :vectorz) 
 
@@ -79,7 +78,7 @@
   ([camera] (let [front (:front camera)
                   eye (:position camera)
                   up (:up camera)
-                  center (mo/+ front (:position camera))]
+                  center (mo/+ front eye)]
               (look-at eye center up)))
   ([eye center up] (let [eyex (nth eye 0)
                          eyey (nth eye 1)
@@ -87,9 +86,9 @@
                          upx (nth up 0)
                          upy (nth up 1)
                          upz (nth up 2)
-                         z0 (- eyex (m/mget center 0))
-                         z1 (- eyey (m/mget center 1))
-                         z2 (- eyez (m/mget center 2))
+                         z0 (- eyex (nth center 0))
+                         z1 (- eyey (nth center 1))
+                         z2 (- eyez (nth center 2))
                          len (/ 1 (Math/sqrt (+ (* z0 z0) (* z1 z1) (* z2 z2))))
                          z0 (* z0 len)
                          z1 (* z1 len)
@@ -98,16 +97,18 @@
                          x1 (- (* upz z0) (* upx z2))
                          x2 (- (* upx z1) (* upy z0))
                          len (Math/sqrt (+ (* x0 x0) (* x1 x1) (* x2 x2)))
-                         x0 (cond (= len 0) 0 :else (/ x0 len))
-                         x1 (cond (= len 0) 0 :else (/ x1 len))
-                         x2 (cond (= len 0) 0 :else (/ x2 len))
+                         condition (zero? len)
+                         x0 (cond condition 0 :else (/ x0 len))
+                         x1 (cond condition 0 :else (/ x1 len))
+                         x2 (cond condition 0 :else (/ x2 len))
                          y0 (- (* z1 x2) (* z2 x1))
                          y1 (- (* z2 x0) (* z0 x2))
                          y2 (- (* z0 x1) (* z1 x0))
                          len (Math/sqrt (+ (* y0 y0) (* y1 y1) (* y2 y2)))
-                         y0 (cond (= len 0) 0 :else (/ y0 len))
-                         y1 (cond (= len 0) 0 :else (/ y1 len))
-                         y2 (cond (= len 0) 0 :else (/ y2 len))
+                         condition (zero? len)
+                         y0 (cond condition 0 :else (/ y0 len))
+                         y1 (cond condition 0 :else (/ y1 len))
+                         y2 (cond condition 0 :else (/ y2 len))
                          look (m/mutable (m/identity-matrix 4))
                          _ (m/set-row! look 0 [x0 y0 z0 0.0])
                          _ (m/set-row! look 1 [x1 y1 z1 0.0])
