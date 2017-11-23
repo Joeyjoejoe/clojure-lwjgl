@@ -1,7 +1,7 @@
 (ns test-lwjgl.buffers
   (:use [test-lwjgl.utility])
   (:import (org.lwjgl BufferUtils)
-           (org.lwjgl.opengl GL11 GL15 GL20)))
+           (org.lwjgl.opengl GL11 GL15 GL20 GL33)))
 
 (defn create-float-buffer [datas]
   "Create an float array buffer from datas"
@@ -66,3 +66,38 @@
 (defn create-tbo [texture-coordinates]
   "Create a texture buffer object"
   )
+
+
+
+(defn create-pbo [datas]
+   (let [data-type GL11/GL_FLOAT
+         normalize-datas? false
+         stride (* 4 java.lang.Float/BYTES)
+	 formated-datas (vec (mapcat concat datas))
+	 vertices-buffer (create-float-buffer formated-datas)
+         pbo-id (GL15/glGenBuffers)]
+
+    ;; Describe vertices
+    (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER pbo-id) 
+    (GL15/glBufferData GL15/GL_ARRAY_BUFFER ^java.nio.DirectFloatBufferU vertices-buffer GL15/GL_STATIC_DRAW)
+
+    (GL20/glEnableVertexAttribArray 3)
+    (GL20/glVertexAttribPointer 3 4 data-type normalize-datas? stride 0)
+    
+    (GL20/glEnableVertexAttribArray 4)
+    (GL20/glVertexAttribPointer 4 4 data-type normalize-datas? stride 4)
+
+    (GL20/glEnableVertexAttribArray 5)
+    (GL20/glVertexAttribPointer 5 4 data-type normalize-datas? stride 8)
+
+    (GL20/glEnableVertexAttribArray 6)
+    (GL20/glVertexAttribPointer 6 4 data-type normalize-datas? stride 12)
+
+    (GL33/glVertexAttribDivisor 3 1)
+    (GL33/glVertexAttribDivisor 4 1)
+    (GL33/glVertexAttribDivisor 5 1)
+    (GL33/glVertexAttribDivisor 6 1)
+
+    ;; note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
+    (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER 0)))
+

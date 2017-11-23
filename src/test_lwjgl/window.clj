@@ -12,7 +12,7 @@
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.glfw GLFW GLFWKeyCallback)
            (org.lwjgl.system MemoryUtil)
-           (org.lwjgl.opengl GL11 GL13 GL15 GL20 GL30 GLCapabilities GL)))
+           (org.lwjgl.opengl GL11 GL13 GL15 GL20 GL30 GL31 GLCapabilities GL)))
 
 (defn initialize [params]
   "Create the game window and set the OpenGl context where everything will be draw"
@@ -56,7 +56,7 @@
 	      texture1-id (textures/setup "src/test_lwjgl/assets/textures/container.jpg")
 	      texture2-id (textures/setup "src/test_lwjgl/assets/textures/awesomeface.png")
         program-id (program/create)
-	      cubes-pos (map (fn [x] (vector (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)))) (vec (repeat 400 nil)))
+	      cubes-pos (map #(transformation/make "translate-matrix" %) (map (fn [x] (vector (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)))) (vec (repeat 400 nil))))
 	      points-count (if (= 0 (count indices)) (count vertices) (count indices) )]
 
     (program/attach-shader program-id vertex-id)
@@ -71,6 +71,7 @@
     (program/validate program-id)
 
     (buffer/create-vbo vertices)
+    (buffer/create-pbo cubes-pos)
     
     (if (< 0 (count indices))
     (buffer/create-ebo indices))
@@ -121,18 +122,19 @@
 
       ;; model matrix
       ;; draw the same cube multiple times with different transformation to position it in the world	
- (doseq [t cubes-pos] 
+;; (doseq [t cubes-pos] 
      
- (GL20/glUniformMatrix4fv model-position false (buffer/create-float-buffer (transformation/make "translate-matrix" t)))
+ ;;(GL20/glUniformMatrix4fv model-position false (buffer/create-float-buffer (transformation/make "translate-matrix" t)))
 
      ;; (if (= 0 (count indices))
 	;; Draw points without indices
-	(GL11/glDrawArrays GL11/GL_TRIANGLES 0 points-count)
+	;;(GL11/glDrawArrays GL11/GL_TRIANGLES 0 points-count)
+	(GL31/glDrawArraysInstanced GL11/GL_TRIANGLES 0 points-count 400)
 
 	;; Draw with indices
 ;;	(GL11/glDrawElements GL11/GL_TRIANGLES points-count GL11/GL_UNSIGNED_INT 0))
-)
 )))
+  ;;)
 
 (defn render [window to-render-functions]
   "Draw everything needed in the GLFW window. to-render-functions is a vector of functions that contains OpenGL instructions to draw shapes from corresponding VAO"
