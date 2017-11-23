@@ -72,7 +72,8 @@
 (defn create-pbo [datas]
    (let [data-type GL11/GL_FLOAT
          normalize-datas? false
-         stride (* 4 java.lang.Float/BYTES)
+         stride (* 4 4 java.lang.Float/BYTES)
+	 vector-bytes-size (* 4 java.lang.Float/BYTES)
 	 formated-datas (vec (mapcat concat datas))
 	 vertices-buffer (create-float-buffer formated-datas)
          pbo-id (GL15/glGenBuffers)]
@@ -85,13 +86,13 @@
     (GL20/glVertexAttribPointer 3 4 data-type normalize-datas? stride 0)
     
     (GL20/glEnableVertexAttribArray 4)
-    (GL20/glVertexAttribPointer 4 4 data-type normalize-datas? stride 4)
+    (GL20/glVertexAttribPointer 4 4 data-type normalize-datas? stride vector-bytes-size)
 
     (GL20/glEnableVertexAttribArray 5)
-    (GL20/glVertexAttribPointer 5 4 data-type normalize-datas? stride 8)
+    (GL20/glVertexAttribPointer 5 4 data-type normalize-datas? stride (* 2 vector-bytes-size))
 
     (GL20/glEnableVertexAttribArray 6)
-    (GL20/glVertexAttribPointer 6 4 data-type normalize-datas? stride 12)
+    (GL20/glVertexAttribPointer 6 4 data-type normalize-datas? stride (* 3 vector-bytes-size))
 
     (GL33/glVertexAttribDivisor 3 1)
     (GL33/glVertexAttribDivisor 4 1)
