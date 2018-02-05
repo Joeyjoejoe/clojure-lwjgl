@@ -148,5 +148,3 @@
   (GLFW/glfwSwapBuffers window)
   (GLFW/glfwPollEvents)
   )
-
-
