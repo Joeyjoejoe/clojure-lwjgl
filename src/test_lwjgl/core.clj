@@ -1,8 +1,8 @@
 (ns test-lwjgl.core
   (:use [test-lwjgl.utility])
   (:require [test-lwjgl.window :as window]
-	    [clojure.core.matrix :as m]
-	    [clojure.core.matrix.operators :as mo]
+	          [clojure.core.matrix :as m]
+	          [clojure.core.matrix.operators :as mo]
             [test-lwjgl.buffers :as buffer]
             [test-lwjgl.state :as state]
             [test-lwjgl.transformations :as transformation]
@@ -136,7 +136,7 @@
 	    (swap! fps assoc 0 0))
  	(swap! fps update-in [0] inc))
 
-    (if (zero? (GLFW/glfwWindowShouldClose window))
+    (if (not (GLFW/glfwWindowShouldClose window))
       (recur to-render-functions (GLFW/glfwGetTime) curr lag)))
 
   (GLFW/glfwDestroyWindow window)

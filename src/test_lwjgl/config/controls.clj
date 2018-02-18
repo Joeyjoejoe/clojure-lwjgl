@@ -20,7 +20,7 @@
 )
 
 (defn close-window [win]
-  (GLFW/glfwSetWindowShouldClose win GL11/GL_TRUE)
+  (GLFW/glfwSetWindowShouldClose win true)
 )
 
 (defn move-forward [win]

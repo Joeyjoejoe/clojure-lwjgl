@@ -19,7 +19,7 @@
     (GL11/glTexParameteri GL11/GL_TEXTURE_2D GL11/GL_TEXTURE_MAG_FILTER GL11/GL_LINEAR)
 
     ;; Flip the texture horizontaly, because OpenGL expects the 0.0 coordinate on the y-axis to be on the bottom side of the image, but images usually have 0.0 at the top of the y-axis
-    (STBImage/stbi_set_flip_vertically_on_load GL11/GL_TRUE)
+    (STBImage/stbi_set_flip_vertically_on_load true)
     
     (if-let [texture-data (STBImage/stbi_load path width height color desired-color-channels)]
       (do	
