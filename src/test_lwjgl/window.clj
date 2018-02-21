@@ -57,7 +57,7 @@
         _ (GL30/glBindVertexArray vao-id)
 	      texture1-id (textures/setup "src/test_lwjgl/assets/textures/container.jpg")
 	      texture2-id (textures/setup "src/test_lwjgl/assets/textures/awesomeface.png")
-        program-id (program/default)
+        program-id (program/init)
 	      cubes-pos (map #(transformation/make "translate-matrix" %) (map (fn [x] (vector (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)))) (vec (repeat 400 nil))))
 	      points-count (if (= 0 (count indices)) (count vertices) (count indices) )]
 

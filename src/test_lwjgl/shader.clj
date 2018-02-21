@@ -15,3 +15,9 @@
 
     shader-id))
 
+(defn init-defaults []
+  (def default-vertex
+    (load-and-compile "src/test_lwjgl/shaders/default.vert" GL20/GL_VERTEX_SHADER))
+
+  (def default-fragment
+    (load-and-compile "src/test_lwjgl/shaders/default.frag" GL20/GL_FRAGMENT_SHADER)))

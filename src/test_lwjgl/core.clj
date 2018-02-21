@@ -7,6 +7,7 @@
             [test-lwjgl.state :as state]
             [test-lwjgl.transformations :as transformation]
             [test-lwjgl.camera :as camera]
+            [test-lwjgl.shader :as shader]
             [clojure.tools.logging :as log])
   (:import (org.lwjgl.glfw GLFW GLFWKeyCallback) 
 	   (org.lwjgl BufferUtils)
@@ -27,6 +28,8 @@
  ;;      {:coordinates [ 100.0 0.0 -100.0] :color [0.0 1.0 0.0] :texture [1.0 0.0]}
  ;; 	   {:coordinates [-100.0 0.0 -100.0] :color [0.0 1.0 0.0] :texture [1.0 1.0]} 
  ;;      ] []))
+
+ (shader/init-defaults)
 
  (def tri (window/vertex-setup 
                 ;; TRIANGLE
