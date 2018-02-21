@@ -120,21 +120,14 @@
       (GL30/glBindVertexArray vao-id)
       ;;(GL20/glUniform4f triangle-color 0.0 (Math/sin (GLFW/glfwGetTime)) 0.0 1.0)
 
-      ;; model matrix
-      ;; draw the same cube multiple times with different transformation to position it in the world	
-;; (doseq [t cubes-pos] 
-     
- ;;(GL20/glUniformMatrix4fv model-position false (buffer/create-float-buffer (transformation/make "translate-matrix" t)))
-
-     ;; (if (= 0 (count indices))
-	;; Draw points without indices
-	;;(GL11/glDrawArrays GL11/GL_TRIANGLES 0 points-count)
 	(GL31/glDrawArraysInstanced GL11/GL_TRIANGLES 0 points-count 400)
 
+  ;; (if (= 0 (count indices))
+	;; Draw points without indices
+	;;     (GL11/glDrawArrays GL11/GL_TRIANGLES 0 points-count)
 	;; Draw with indices
-;;	(GL11/glDrawElements GL11/GL_TRIANGLES points-count GL11/GL_UNSIGNED_INT 0))
+  ;;     (GL11/glDrawElements GL11/GL_TRIANGLES points-count GL11/GL_UNSIGNED_INT 0))
 )))
-  ;;)
 
 (defn render [window to-render-functions]
   "Draw everything needed in the GLFW window. to-render-functions is a vector of functions that contains OpenGL instructions to draw shapes from corresponding VAO"

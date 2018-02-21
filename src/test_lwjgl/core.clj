@@ -28,6 +28,26 @@
  ;; 	   {:coordinates [-100.0 0.0 -100.0] :color [0.0 1.0 0.0] :texture [1.0 1.0]} 
  ;;      ] []))
 
+ (def tri (window/vertex-setup 
+                ;; TRIANGLE
+		[
+       {:coordinates [ 0.5 -0.5 0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]} ;;a
+       {:coordinates [-0.5 -0.5 0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]} ;;b
+       {:coordinates [ 0.0  0.5 0.0] :color [1.0 0.0 0.0] :texture [1.0 1.0]} ;;c
+
+       {:coordinates [ 0.5 -0.5 0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]} ;;a
+       {:coordinates [ 0.0  0.5 0.0] :color [1.0 0.0 0.0] :texture [1.0 1.0]} ;;c
+       {:coordinates [ 0.0 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]};;d 
+
+       {:coordinates [-0.5 -0.5 0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]} ;;b
+       {:coordinates [ 0.0  0.5 0.0] :color [1.0 0.0 0.0] :texture [1.0 1.0]} ;;c
+       {:coordinates [ 0.0 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]};;d 
+
+       {:coordinates [ 0.5 -0.5 0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]} ;;a
+       {:coordinates [-0.5 -0.5 0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]} ;;b
+       {:coordinates [ 0.0 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]};;d 
+] []
+            ))
 
   (def init (window/vertex-setup 
 ;;    [{:coordinates [-0.5 -0.5 0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
@@ -59,8 +79,10 @@
 ;;		 0 1 4 ;; Bottom face
 ;;		 5 1 4]
 
+
 		
-		[
+    ;; SQUARE
+	[
        {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]} 
        {:coordinates [ 0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]} 
        {:coordinates [ 0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]} 
@@ -108,7 +130,7 @@
 
 (def fps (atom [0 0]))
   ;;  Start game loop
-  (loop [to-render-functions [init]
+  (loop [to-render-functions [init tri]
          curr (GLFW/glfwGetTime)
          prev (GLFW/glfwGetTime)
          lag (atom 0.0)]
