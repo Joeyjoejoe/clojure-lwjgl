@@ -1,8 +1,8 @@
 (ns test-lwjgl.config.controls
   (:require [clojure.tools.logging :as log]
-	          [clojure.core.matrix :as m]
-	          [clojure.core.matrix.operators :as mo]
-	          [test-lwjgl.state :as state]
+	    [clojure.core.matrix :as m]
+	    [clojure.core.matrix.operators :as mo]
+	    [test-lwjgl.state :as state]
             [test-lwjgl.camera :as camera])
   (:import (org.lwjgl.glfw GLFW GLFWKeyCallback)
            (org.lwjgl.opengl GL11)))

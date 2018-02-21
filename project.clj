@@ -84,6 +84,8 @@
   :license {:name "Eclipse Public License"
   :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies ~all-dependencies 
-	:jvm-opts ^:replace ~(jvm-opts)
+  :jvm-opts ^:replace ~(jvm-opts)
   :main test-lwjgl.core
+  :resource-paths ["src/test_lwjgl/shaders"
+		   "src/test_lwjgl/assets/textures"]
   :repl-options {:init-ns test-lwjgl.core}) 
