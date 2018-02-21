@@ -1,8 +1,8 @@
 (ns test-lwjgl.shader
   (:import (org.lwjgl.opengl GL20)))
 
-(defn create [file shader-type]
-  "Compile a sharder file and return its id"
+(defn load-and-compile [file shader-type]
+  "Compile a shader file and return its id"
   (let [shader-id (GL20/glCreateShader shader-type) shader-code (slurp file)]
 
     (when (= 0 shader-id) (throw (Exception. (str "Error creating shader of type: " shader-type))))
@@ -14,3 +14,4 @@
       (throw (Exception. (str "Error compiling shader: " (GL20/glGetShaderInfoLog shader-id 1024) " in " file))))
 
     shader-id))
+

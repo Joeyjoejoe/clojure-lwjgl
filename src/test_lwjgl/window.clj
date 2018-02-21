@@ -7,8 +7,7 @@
 	    [test-lwjgl.uniforms :as uniform]
             [test-lwjgl.textures :as textures]
             [test-lwjgl.buffers :as buffer]
-            [test-lwjgl.camera :as camera]
-            [test-lwjgl.shader :as shader])
+            [test-lwjgl.camera :as camera])
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.glfw GLFW GLFWKeyCallback GLFWErrorCallback)
            (org.lwjgl.system MemoryUtil)
@@ -56,30 +55,17 @@
   "Take a list of vertices (coordinates [x y z] of a pixel and optionaly its color), indices is a list of index from vertices, used to describe triangles."
   (let [vao-id (GL30/glGenVertexArrays)
         _ (GL30/glBindVertexArray vao-id)
-        vertex-id (shader/create "src/test_lwjgl/shaders/default.vert" GL20/GL_VERTEX_SHADER)
-        fragment-id (shader/create "src/test_lwjgl/shaders/default.frag" GL20/GL_FRAGMENT_SHADER)
 	      texture1-id (textures/setup "src/test_lwjgl/assets/textures/container.jpg")
 	      texture2-id (textures/setup "src/test_lwjgl/assets/textures/awesomeface.png")
-        program-id (program/create)
+        program-id (program/default)
 	      cubes-pos (map #(transformation/make "translate-matrix" %) (map (fn [x] (vector (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)))) (vec (repeat 400 nil))))
 	      points-count (if (= 0 (count indices)) (count vertices) (count indices) )]
-
-    (program/attach-shader program-id vertex-id)
-    (program/attach-shader program-id fragment-id)
-    (program/link program-id)
-
-
-    (GL20/glDeleteShader vertex-id)
-    (GL20/glDeleteShader fragment-id)
-
-    ;; To remove for production
-    (program/validate program-id)
 
     (buffer/create-vbo vertices)
     (buffer/create-pbo cubes-pos)
     
     (if (< 0 (count indices))
-    (buffer/create-ebo indices))
+        (buffer/create-ebo indices))
     ;; You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     (GL30/glBindVertexArray 0) 
 

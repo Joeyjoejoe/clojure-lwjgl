@@ -1,4 +1,5 @@
 (ns test-lwjgl.shader-program
+  (:require [test-lwjgl.shader :as shader])
   (:import (org.lwjgl.opengl GL20)))
 
 (defn create []
@@ -33,3 +34,21 @@
 (defn cleanup [program-id]
   (unbind)
   (when (not= 0 program-id) (GL20/glDeleteProgram program-id)))
+
+(defn default 
+  [] (let [vertex-shader-id   (shader/load-and-compile "src/test_lwjgl/shaders/default.vert" GL20/GL_VERTEX_SHADER)
+           fragment-shader-id (shader/load-and-compile "src/test_lwjgl/shaders/default.frag" GL20/GL_FRAGMENT_SHADER)
+           program-id         (create)]
+          
+       (attach-shader program-id vertex-shader-id)
+       (attach-shader program-id fragment-shader-id)
+       (link program-id)
+
+       (GL20/glDeleteShader vertex-shader-id)
+       (GL20/glDeleteShader fragment-shader-id)
+      
+       ;; To remove for production
+       (validate program-id)
+
+       program-id))
+
