@@ -34,8 +34,8 @@
     (GLFW/glfwCreateWindow ^Long width ^Long height ^String title (MemoryUtil/NULL) (MemoryUtil/NULL))))
 
 (defn configure [window]
-  (GLFW/glfwSwapInterval 1)
   (GLFW/glfwMakeContextCurrent window)
+  (GLFW/glfwSwapInterval 1)
   ;;  Init keyboard controls
   (println window)
   (println controls/key-callback)
