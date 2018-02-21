@@ -3,21 +3,24 @@
   (:require [test-lwjgl.shader-program :as program]
             [test-lwjgl.transformations :as transformation]
             [test-lwjgl.config.controls :as controls]
-	          [clojure.core.matrix :as m]
-	          [test-lwjgl.uniforms :as uniform]
+	    [clojure.core.matrix :as m]
+	    [test-lwjgl.uniforms :as uniform]
             [test-lwjgl.textures :as textures]
             [test-lwjgl.buffers :as buffer]
             [test-lwjgl.camera :as camera]
             [test-lwjgl.shader :as shader])
   (:import (org.lwjgl BufferUtils)
-           (org.lwjgl.glfw GLFW GLFWKeyCallback)
+           (org.lwjgl.glfw GLFW GLFWKeyCallback GLFWErrorCallback)
            (org.lwjgl.system MemoryUtil)
            (org.lwjgl.opengl GL11 GL13 GL15 GL20 GL30 GL31 GLCapabilities GL)))
 
 (defn initialize [params]
   "Create the game window and set the OpenGl context where everything will be draw"
   (let [{:keys [title width height]} params]
-    (GLFW/glfwInit)
+    (GLFW/glfwSetErrorCallback (GLFWErrorCallback/createPrint System/err))
+    
+    (when-not (GLFW/glfwInit)
+	(throw (IllegalStateException. "Unable to initialize GLFW")))
     (GLFW/glfwDefaultWindowHints)
     (GLFW/glfwWindowHint GLFW/GLFW_VISIBLE GLFW/GLFW_FALSE)
     (GLFW/glfwWindowHint GLFW/GLFW_RESIZABLE GL11/GL_TRUE)
@@ -34,6 +37,8 @@
   (GLFW/glfwSwapInterval 1)
   (GLFW/glfwMakeContextCurrent window)
   ;;  Init keyboard controls
+  (println window)
+  (println controls/key-callback)
   (GLFW/glfwSetKeyCallback window controls/key-callback)
   (GLFW/glfwSetInputMode window GLFW/GLFW_STICKY_KEYS 1)
   (GL/createCapabilities)
