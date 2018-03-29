@@ -36,8 +36,6 @@
   (GLFW/glfwMakeContextCurrent window)
   (GLFW/glfwSwapInterval 1)
   ;;  Init keyboard controls
-  (println window)
-  (println controls/key-callback)
   (GLFW/glfwSetKeyCallback window controls/key-callback)
   (GLFW/glfwSetInputMode window GLFW/GLFW_STICKY_KEYS 1)
   (GL/createCapabilities)

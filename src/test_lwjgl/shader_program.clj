@@ -42,7 +42,6 @@
   ([] (init shader/default-vertex shader/default-fragment))
   
   ([& shaders-ids] 
-   (println shaders-ids)
     (let [program-id (create)]
       (doseq [shader-id shaders-ids]
         (attach-shader program-id shader-id))

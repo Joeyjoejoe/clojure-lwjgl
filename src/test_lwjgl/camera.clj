@@ -20,7 +20,6 @@
                :up up}))))
 
 (def camera (initialize))
-(println camera)
 
 (defn get-atom []
   camera)
