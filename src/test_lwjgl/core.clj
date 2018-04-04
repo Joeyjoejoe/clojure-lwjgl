@@ -63,71 +63,71 @@
 ;;     {:coordinates [-0.5 0.5 -0.5] :color [0.0 1.0 0.0] :texture [0.0 1.0]}
 ;;     {:coordinates [0.5 0.5 -0.5] :color [0.0 0.0 1.0] :texture [1.0 1.0]}
 ;;]
-;;		
-;;		[3 2 1 ;; Front face
-;;		 0 1 2
 ;;
-;;		 7 6 5 ;; Back face
-;;		 4 5 6
+;;    [3 2 1 ;; Front face
+;;     0 1 2
 ;;
-;;		 2 6 0 ;; Left face
-;;		 0 4 6
+;;     7 6 5 ;; Back face
+;;     4 5 6
 ;;
-;;		 3 7 5 ;; Right face
-;;		 1 5 3
+;;     2 6 0 ;; Left face
+;;     0 4 6
 ;;
-;;		 2 6 3 ;; Top face
-;;		 7 6 3
+;;     3 7 5 ;; Right face
+;;     1 5 3
 ;;
-;;		 0 1 4 ;; Bottom face
-;;		 5 1 4]
+;;     2 6 3 ;; Top face
+;;     7 6 3
+;;
+;;     0 1 4 ;; Bottom face
+;;     5 1 4]
 
 
-		
+
     ;; SQUARE
-	[
-       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]} 
-       {:coordinates [ 0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]} 
-       {:coordinates [ 0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]} 
-       {:coordinates [ 0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]} 
-       {:coordinates [-0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]} 
-       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]} 
+  [
+       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
+       {:coordinates [ 0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
+       {:coordinates [ 0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]}
+       {:coordinates [ 0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]}
+       {:coordinates [-0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
+       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
 
-       {:coordinates [-0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]} 
-       {:coordinates [ 0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]} 
-       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]} 
-       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]} 
-       {:coordinates [-0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]} 
-       {:coordinates [-0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]} 
+       {:coordinates [-0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
+       {:coordinates [ 0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
+       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]}
+       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]}
+       {:coordinates [-0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
+       {:coordinates [-0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
 
-       {:coordinates [-0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]} 
-       {:coordinates [-0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]} 
-       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]} 
-       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]} 
-       {:coordinates [-0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]} 
-       {:coordinates [-0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]} 
+       {:coordinates [-0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
+       {:coordinates [-0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]}
+       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
+       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
+       {:coordinates [-0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
+       {:coordinates [-0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
 
-       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]} 
-       {:coordinates [ 0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]} 
-       {:coordinates [ 0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]} 
-       {:coordinates [ 0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]} 
-       {:coordinates [ 0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]} 
-       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]} 
+       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
+       {:coordinates [ 0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]}
+       {:coordinates [ 0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
+       {:coordinates [ 0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
+       {:coordinates [ 0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
+       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
 
-       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]} 
-       {:coordinates [ 0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]} 
-       {:coordinates [ 0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]} 
-       {:coordinates [ 0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]} 
-       {:coordinates [-0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]} 
-       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]} 
+       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
+       {:coordinates [ 0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]}
+       {:coordinates [ 0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
+       {:coordinates [ 0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
+       {:coordinates [-0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
+       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
 
-       {:coordinates [-0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]} 
-       {:coordinates [ 0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]} 
-       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]} 
-       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]} 
-       {:coordinates [-0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]} 
-       {:coordinates [-0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]} 
-] 
+       {:coordinates [-0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
+       {:coordinates [ 0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]}
+       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
+       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
+       {:coordinates [-0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
+       {:coordinates [-0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
+]
 []
 ))
 
@@ -140,7 +140,7 @@
 
     (swap! lag #(+ % (- curr prev)))
     (swap! (state/get-atom) assoc :deltatime (- curr prev))
-  
+
     ;;  (handle-inputs)
 
     ;;  (log/info "previous: " (new java.util.Date prev))
