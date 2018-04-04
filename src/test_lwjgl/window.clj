@@ -17,7 +17,7 @@
   "Create the game window and set the OpenGl context where everything will be draw"
   (let [{:keys [title width height]} params]
     (GLFW/glfwSetErrorCallback (GLFWErrorCallback/createPrint System/err))
-    
+
     (when-not (GLFW/glfwInit)
 	(throw (IllegalStateException. "Unable to initialize GLFW")))
     (GLFW/glfwDefaultWindowHints)
@@ -56,16 +56,16 @@
 	      texture1-id (textures/setup "src/test_lwjgl/assets/textures/container.jpg")
 	      texture2-id (textures/setup "src/test_lwjgl/assets/textures/awesomeface.png")
         program-id (program/init)
-	      cubes-pos (map #(transformation/make "translate-matrix" %) (map (fn [x] (vector (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)))) (vec (repeat 400 nil))))
+	      cubes-pos (map #(transformation/make "translate-matrix" %) (map (fn [x] (vector (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)))) (vec (repeat 1 nil))))
 	      points-count (if (= 0 (count indices)) (count vertices) (count indices) )]
 
     (buffer/create-vbo vertices)
     (buffer/create-pbo cubes-pos)
-    
+
     (if (< 0 (count indices))
         (buffer/create-ebo indices))
     ;; You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-    (GL30/glBindVertexArray 0) 
+    (GL30/glBindVertexArray 0)
 
     (def triangle-color (uniform/get-location program-id "uniformColor"))
     ;;(GL11/glPolygonMode GL11/GL_FRONT_AND_BACK GL11/GL_LINE)
@@ -76,7 +76,7 @@
     (GL20/glUniform1i (uniform/get-location program-id, "texture2") 1)
 
 
-    ;; projection matrix (perspective)	
+    ;; projection matrix (perspective)
     (GL20/glUniformMatrix4fv (uniform/get-location program-id "projection") false (buffer/create-float-buffer (transformation/make "perspective-projection" [45.0 (/ 1280.0 960.0) 0.1 100.0])))
     (def model-position (uniform/get-location program-id "model"))
     (def view-position (uniform/get-location program-id "view"))
@@ -85,9 +85,9 @@
     (program/unbind)
 
     (fn []
-	
+
       (program/bind program-id)
-      
+
       ;;(GL20/glUniformMatrix4fv (uniform/get-location program-id "rotate") false (buffer/create-float-buffer uniform-rotate))
       ;; view matrix
       ;;(GL20/glUniformMatrix4fv (uniform/get-location program-id "view") false (buffer/create-float-buffer (transformation/make "translate-matrix" [0.0 0.0 -3.0])))
@@ -109,7 +109,7 @@
       (GL30/glBindVertexArray vao-id)
       ;;(GL20/glUniform4f triangle-color 0.0 (Math/sin (GLFW/glfwGetTime)) 0.0 1.0)
 
-	(GL31/glDrawArraysInstanced GL11/GL_TRIANGLES 0 points-count 400)
+	(GL31/glDrawArraysInstanced GL11/GL_TRIANGLES 0 points-count 1)
 
   ;; (if (= 0 (count indices))
 	;; Draw points without indices
