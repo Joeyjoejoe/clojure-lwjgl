@@ -56,7 +56,7 @@
 	      texture1-id (textures/setup "src/test_lwjgl/assets/textures/container.jpg")
 	      texture2-id (textures/setup "src/test_lwjgl/assets/textures/awesomeface.png")
         program-id (program/init)
-	      cubes-pos (map #(transformation/make "translate-matrix" %) (map (fn [x] (vector (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)))) (vec (repeat 1 nil))))
+	      cubes-pos (map #(transformation/make "translate-matrix" %) (map (fn [x] (vector (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)))) (vec (repeat 10 nil))))
 	      points-count (if (= 0 (count indices)) (count vertices) (count indices) )]
 
     (buffer/create-vbo vertices)
@@ -109,7 +109,9 @@
       (GL30/glBindVertexArray vao-id)
       ;;(GL20/glUniform4f triangle-color 0.0 (Math/sin (GLFW/glfwGetTime)) 0.0 1.0)
 
-	(GL31/glDrawArraysInstanced GL11/GL_TRIANGLES 0 points-count 1)
+  (if (= 0 (count indices))
+	(GL31/glDrawArraysInstanced GL11/GL_TRIANGLES 0 points-count 10)
+	(GL31/glDrawElementsInstanced GL11/GL_TRIANGLES points-count GL11/GL_UNSIGNED_INT 0 10))
 
   ;; (if (= 0 (count indices))
 	;; Draw points without indices
@@ -122,7 +124,7 @@
   "Draw everything needed in the GLFW window. to-render-functions is a vector of functions that contains OpenGL instructions to draw shapes from corresponding VAO"
 
 
-  (GL11/glClearColor 0.0 0.0 0.0 1.0)
+  (GL11/glClearColor 0.5 0.2 0.0 1.0)
   (GL11/glClear (bit-or GL11/GL_COLOR_BUFFER_BIT GL11/GL_DEPTH_BUFFER_BIT))
 
   (doseq [f to-render-functions] (f))

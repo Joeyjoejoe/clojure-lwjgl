@@ -1,6 +1,8 @@
 (ns test-lwjgl.core
   (:use [test-lwjgl.utility])
   (:require [test-lwjgl.window :as window]
+						[clojure.java.io :as io]
+						[test-lwjgl.parser_3d.ply :as ply]
             [clojure.core.matrix :as m]
             [clojure.core.matrix.operators :as mo]
             [test-lwjgl.buffers :as buffer]
@@ -14,6 +16,7 @@
            (org.lwjgl.system MemoryUtil)
            (org.lwjgl.opengl GL11 GL20 GLCapabilities GL))
   (:gen-class))
+
 
 (defn -main []
   "Start the game"
@@ -30,6 +33,10 @@
  ;;      ] []))
 
  (shader/init-defaults)
+
+ (def pandaki (ply/parse-ply "pandaki2.ply"))
+
+ (def pandaki-data (window/vertex-setup (:vertices pandaki) (:indices pandaki)))
 
  (def tri (window/vertex-setup
                 ;; TRIANGLE
@@ -52,7 +59,7 @@
 ] []
             ))
 
-  (def init (window/vertex-setup 
+  (def init (window/vertex-setup
 ;;    [{:coordinates [-0.5 -0.5 0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
 ;;     {:coordinates [0.5 -0.5 0.5] :color [0.0 1.0 0.0] :texture [1.0 0.0]}
 ;;     {:coordinates [-0.5 0.5 0.5] :color [0.0 1.0 0.0] :texture [0.0 1.0]}
@@ -133,7 +140,7 @@
 
 (def fps (atom [0 0]))
   ;;  Start game loop
-  (loop [to-render-functions [init tri]
+  (loop [to-render-functions [pandaki-data tri init]
          curr (GLFW/glfwGetTime)
          prev (GLFW/glfwGetTime)
          lag (atom 0.0)]
