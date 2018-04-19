@@ -1,12 +1,20 @@
 (ns test-lwjgl.state
   (:require [test-lwjgl.camera :as camera]))
 
-(def state (atom {:camera nil 
-                  :deltatime 0.0 
-                  :camera-speed 2.0}))
+(def state (atom {:camera nil
+                  :deltatime 0.0
+                  :camera-speed 10.0
+                  :mouse-sensivity 0.05
+                  :mouse-position {:x 640 :y 480 :yaw -90.0 :pitch 0.0}}))
 
 (defn get-atom [] state)
-(defn get-data [] @state)
+(defn get-data
+  ([] @state)
+  ([k] (k @state)))
+
+(defn mouse-position
+  ([] (get-data :mouse-position))
+  ([k] (k (mouse-position))))
 
 (defn camera-speed []
-  (* 1.0 (:deltatime @state)))
+  (* (get-data :camera-speed) (get-data :deltatime)))

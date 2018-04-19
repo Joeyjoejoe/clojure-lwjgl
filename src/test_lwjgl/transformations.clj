@@ -1,16 +1,15 @@
 (ns test-lwjgl.transformations
-  (:use [test-lwjgl.utility])
   (:require [clojure.core.matrix :as m]
-	    [clojure.core.matrix.operators :as mo]
-	    [thi.ng.math.macros :as mm]))
+	          [clojure.core.matrix.operators :as mo]
+	          [thi.ng.math.macros :as mm]))
 
 ;; Overide core.matrix with vectorz-clj implementation
-(m/set-current-implementation :vectorz) 
+(m/set-current-implementation :vectorz)
 
-(defn make 
-  ([transformation args] 
+(defn make
+  ([transformation args]
 	(m/as-vector (apply (resolve (symbol (str "test-lwjgl.transformations/" transformation))) args)))
-  ([transformation args vectorz] 
+  ([transformation args vectorz]
 	(apply (resolve (symbol (str "test-lwjgl.transformations/" transformation))) args)))
 
 (defn scale-matrix [Sx Sy Sz vector]

@@ -104,3 +104,22 @@
     (let [key-actions (key-bindings key)]
       (if (not (nil? key-actions)) 
         ((key-actions action) win))))))
+
+(def mouse-callback (proxy [GLFWCursorPosCallback] []
+  (invoke [win xpos ypos]
+    (let [sensivity (state/get-data :mouse-sensivity)
+          last-x (state/mouse-position :x)
+          last-y (state/mouse-position :y)
+          x-offset (* sensivity (- xpos last-x))
+          y-offset (* sensivity (- last-y ypos))
+          yaw (+ x-offset (state/mouse-position :yaw))
+          pitch (+ y-offset (state/mouse-position :pitch))
+          pitch (if (< pitch -89.0) -89.0 pitch)
+          pitch (if (> pitch 89.0) 89.0 pitch)
+          pitch-cos (Math/cos (Math/toRadians pitch))
+          front-x (* (Math/cos (Math/toRadians yaw)) pitch-cos)
+          front-y (Math/sin (Math/toRadians pitch))
+          front-z (* (Math/sin (Math/toRadians yaw)) pitch-cos)
+          front (m/normalise [front-x front-y front-z])]
+      (swap! (state/get-atom) assoc-in [:mouse-position] {:x xpos :y ypos :yaw yaw :pitch pitch})
+      (swap! (camera/get-atom) assoc-in [:front] front)))))

@@ -2,9 +2,9 @@
   (:require [test-lwjgl.buffers :as buffer]
             [clojure.core.matrix :as m]))
 
-(defn initialize 
+(defn initialize
   ([] (let [position [0.0 10.0 10.0]
-            front [0.0 -2.0 -4.0]
+            front [0.0 0.0 -1.0]
             target [0.0 0.0 0.0]]
         (initialize position target front)))
 
@@ -17,14 +17,15 @@
         (atom {:position position
                :direction direction
                :front front
-               :up up}))))
+               :up up
+               :acceleration {:forward false :backward false :left false :right false}}))))
 
 (def camera (initialize))
 
 (defn get-atom []
   camera)
 
-(defn get-raw []
+(defn get-data []
  @camera)
 
 

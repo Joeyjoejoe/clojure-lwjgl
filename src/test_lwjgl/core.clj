@@ -140,7 +140,7 @@
 
 (def fps (atom [0 0]))
   ;;  Start game loop
-  (loop [to-render-functions [pandaki-data tri init]
+  (loop [to-render-functions [pandaki-data]
          curr (GLFW/glfwGetTime)
          prev (GLFW/glfwGetTime)
          lag (atom 0.0)]

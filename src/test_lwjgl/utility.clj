@@ -1,4 +1,5 @@
-(ns test-lwjgl.utility)
+(ns test-lwjgl.utility
+  (:require [test-lwjgl.transformations :as transformation]))
 
 ;; Picked from here: http://blog.jayfields.com/2011/01/clojure-select-keys-select-values-and.html
 (defn select-values [map ks]
@@ -25,3 +26,11 @@
              ~@code
              (recur (next vals#) (inc ~index-sym)))
 		nil))))
+
+(defn rand-coordinates [n min max]
+  (map (fn [x] (vector (+ (rand min) (rand max)) (+ (rand min) (rand max)) (+ (rand min) (rand max)))) (vec (repeat n nil))))
+
+(defn rand-positions
+  ([n] (rand-positions n -10 10))
+  ([n min max] (map #(transformation/make "translate-matrix" %) (rand-coordinates n min max))))
+

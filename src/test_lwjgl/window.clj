@@ -3,8 +3,8 @@
   (:require [test-lwjgl.shader-program :as program]
             [test-lwjgl.transformations :as transformation]
             [test-lwjgl.config.controls :as controls]
-	    [clojure.core.matrix :as m]
-	    [test-lwjgl.uniforms :as uniform]
+	          [clojure.core.matrix :as m]
+	          [test-lwjgl.uniforms :as uniform]
             [test-lwjgl.textures :as textures]
             [test-lwjgl.buffers :as buffer]
             [test-lwjgl.camera :as camera])
@@ -38,6 +38,10 @@
   ;;  Init keyboard controls
   (GLFW/glfwSetKeyCallback window controls/key-callback)
   (GLFW/glfwSetInputMode window GLFW/GLFW_STICKY_KEYS 1)
+  ;; Hide mouse cursor and capture its position.
+  (GLFW/glfwSetInputMode window GLFW/GLFW_CURSOR GLFW/GLFW_CURSOR_DISABLED)
+  (GLFW/glfwSetCursorPosCallback window controls/mouse-callback)
+
   (GL/createCapabilities)
   (GL11/glEnable GL11/GL_DEPTH_TEST)
   (GLFW/glfwShowWindow window)
@@ -56,11 +60,12 @@
 	      texture1-id (textures/setup "src/test_lwjgl/assets/textures/container.jpg")
 	      texture2-id (textures/setup "src/test_lwjgl/assets/textures/awesomeface.png")
         program-id (program/init)
-	      cubes-pos (map #(transformation/make "translate-matrix" %) (map (fn [x] (vector (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)) (+ (rand -15) (rand 15)))) (vec (repeat 10 nil))))
+        instances-count 10
+	      instances-coords (rand-positions instances-count)
 	      points-count (if (= 0 (count indices)) (count vertices) (count indices) )]
 
     (buffer/create-vbo vertices)
-    (buffer/create-pbo cubes-pos)
+    (buffer/create-pbo instances-coords)
 
     (if (< 0 (count indices))
         (buffer/create-ebo indices))
@@ -96,7 +101,7 @@
 	  ;;  camX (* (Math/sin (GLFW/glfwGetTime)) radius)
 	  ;;  camZ (* (Math/cos (GLFW/glfwGetTime)) radius)]
 	    ;;(swap! (camera/get-atom) assoc :position [camX 0.0 camZ]))
-      (GL20/glUniformMatrix4fv view-position false (buffer/create-float-buffer (transformation/make "look-at" [(camera/get-raw)])))
+      (GL20/glUniformMatrix4fv view-position false (buffer/create-float-buffer (transformation/make "look-at" [(camera/get-data)])))
 
       ;; Texture
       (GL13/glActiveTexture GL13/GL_TEXTURE0)
@@ -110,8 +115,8 @@
       ;;(GL20/glUniform4f triangle-color 0.0 (Math/sin (GLFW/glfwGetTime)) 0.0 1.0)
 
   (if (= 0 (count indices))
-	(GL31/glDrawArraysInstanced GL11/GL_TRIANGLES 0 points-count 10)
-	(GL31/glDrawElementsInstanced GL11/GL_TRIANGLES points-count GL11/GL_UNSIGNED_INT 0 10))
+	(GL31/glDrawArraysInstanced GL11/GL_TRIANGLES 0 points-count instances-count)
+	(GL31/glDrawElementsInstanced GL11/GL_TRIANGLES points-count GL11/GL_UNSIGNED_INT 0 instances-count))
 
   ;; (if (= 0 (count indices))
 	;; Draw points without indices
