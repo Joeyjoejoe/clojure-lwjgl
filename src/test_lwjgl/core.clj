@@ -149,6 +149,21 @@
     (swap! (state/get-atom) assoc :deltatime (- curr prev))
 
     ;;  (handle-inputs)
+    (let [camera (camera/get-atom)
+          cam @camera
+          front (:front cam)
+          up (:up @camera)
+          position (:position cam)
+          acceleration (:acceleration cam)
+          no-change [0.0 0.0 0.0]
+          forward (if (acceleration :forward) (mo/* (state/camera-speed) front) no-change)
+          backward (if (acceleration :backward) (mo/* -1.0 (state/camera-speed) front) no-change)
+          left (if (acceleration :left) (mo/* -1.0 (m/normalise (m/cross front up)) (state/camera-speed)) no-change)
+          right (if (acceleration :right) (mo/* (m/normalise (m/cross front up)) (state/camera-speed)) no-change)]
+      (swap! camera assoc :position (mo/+ position forward right left backward)))
+
+
+
 
     ;;  (log/info "previous: " (new java.util.Date prev))
     ;;  (log/info "current: " (new java.util.Date curr))
