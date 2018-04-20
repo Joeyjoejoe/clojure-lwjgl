@@ -7,6 +7,7 @@
 	          [test-lwjgl.uniforms :as uniform]
             [test-lwjgl.textures :as textures]
             [test-lwjgl.buffers :as buffer]
+	          [test-lwjgl.config.mouse :as mouse]
             [test-lwjgl.camera :as camera])
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.glfw GLFW GLFWKeyCallback GLFWErrorCallback)
@@ -40,7 +41,7 @@
   (GLFW/glfwSetInputMode window GLFW/GLFW_STICKY_KEYS 1)
   ;; Hide mouse cursor and capture its position.
   (GLFW/glfwSetInputMode window GLFW/GLFW_CURSOR GLFW/GLFW_CURSOR_DISABLED)
-  (GLFW/glfwSetCursorPosCallback window controls/mouse-callback)
+  (GLFW/glfwSetCursorPosCallback window mouse/fps-camera)
 
   (GL/createCapabilities)
   (GL11/glEnable GL11/GL_DEPTH_TEST)

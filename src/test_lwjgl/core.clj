@@ -26,14 +26,14 @@
   (shader/init-defaults)
 
   ;; Load shapes datas to GC and store render functions
-  (def pandaki (window/vertex-setup (ply/parse-ply "pandaki2.ply") 1))
+  (def pandaki (window/vertex-setup (ply/parse-ply "pandaki2.ply") 10))
   (def triangles (window/vertex-setup (shape/triangle true) 200))
   (def cubes (window/vertex-setup (shape/cube true) 100))
-  (def rectangles (window/vertex-setup (shape/rectangle 100 75) 1))
+  (def ground (window/vertex-setup (shape/rectangle 100 75) 1))
 
   (def fps (atom [0 0]))
   ;;  Start game loop
-  (loop [to-render-functions [rectangles cubes triangles pandaki]
+  (loop [to-render-functions [ground pandaki]
          curr (GLFW/glfwGetTime)
          prev (GLFW/glfwGetTime)
          lag (atom 0.0)]
