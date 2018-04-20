@@ -22,26 +22,18 @@
 (defn -main []
   "Start the game"
 
-
   (def window (window/create {:width 1280 :height 960 :title "My Shitty Game"}))
- ;; (def ground (window/vertex-setup
- ;;     [{:coordinates [-100.0 0.0 -100.0] :color [0.0 1.0 0.0] :texture [0.0 0.0]}
- ;;      {:coordinates [-100.0 0.0  100.0] :color [0.0 1.0 0.0] :texture [1.0 0.0]}
- ;;      {:coordinates [ 100.0 0.0  100.0] :color [0.0 1.0 0.0] :texture [1.0 1.0]}
- ;;      {:coordinates [ 100.0 0.0  100.0] :color [0.0 1.0 0.0] :texture [0.0 0.0]}
- ;;      {:coordinates [ 100.0 0.0 -100.0] :color [0.0 1.0 0.0] :texture [1.0 0.0]}
- ;;      {:coordinates [-100.0 0.0 -100.0] :color [0.0 1.0 0.0] :texture [1.0 1.0]}
- ;;      ] []))
+  (shader/init-defaults)
 
- (shader/init-defaults)
+  ;; Load shapes datas to GC and store render functions
+  (def pandaki (window/vertex-setup (ply/parse-ply "pandaki2.ply") 1))
+  (def triangles (window/vertex-setup (shape/triangle true) 200))
+  (def cubes (window/vertex-setup (shape/cube true) 100))
+  (def rectangles (window/vertex-setup (shape/rectangle 100 75) 1))
 
- (def pandaki (window/vertex-setup (ply/parse-ply "pandaki2.ply") 1))
- (def triangles (window/vertex-setup (shape/triangle true) 200))
- (def cubes (window/vertex-setup (shape/cube true) 100))
-
-(def fps (atom [0 0]))
+  (def fps (atom [0 0]))
   ;;  Start game loop
-  (loop [to-render-functions [cubes triangles pandaki]
+  (loop [to-render-functions [rectangles cubes triangles pandaki]
          curr (GLFW/glfwGetTime)
          prev (GLFW/glfwGetTime)
          lag (atom 0.0)]
@@ -63,13 +55,7 @@
           right (if (acceleration :right) (mo/* (m/normalise (m/cross front up)) (state/camera-speed)) no-change)]
       (swap! camera assoc :position (mo/+ position forward right left backward)))
 
-
-
-
-    ;;  (log/info "previous: " (new java.util.Date prev))
-    ;;  (log/info "current: " (new java.util.Date curr))
-    ;;  (log/info "elapsed: " (- curr prev))
-
+    ;; Handle game logic and update
     (while (>= @lag 0.1)
       ;;  (update)
       (swap! lag #(- % 0.1)))
@@ -77,15 +63,18 @@
     ;; (render (/ lag 0.1))
     (window/render window to-render-functions)
 
+    ;; Log FPS
+    (if
+      (>= (- (GLFW/glfwGetTime) (@fps 1)) 1.0)
+        (do (println (str "FPS: " (+ 1 (@fps 0))))
+          (swap! fps update-in [1] inc)
+          (swap! fps assoc 0 0))
+        (swap! fps update-in [0] inc))
 
-    (if (>= (- (GLFW/glfwGetTime) (@fps 1)) 1.0)
-  (do (println (str "FPS: " (+ 1 (@fps 0))))
-      (swap! fps update-in [1] inc)
-      (swap! fps assoc 0 0))
-  (swap! fps update-in [0] inc))
-
+    ;; Recur loop
     (if (not (GLFW/glfwWindowShouldClose window))
       (recur to-render-functions (GLFW/glfwGetTime) curr lag)))
 
+  ;; Quit game
   (GLFW/glfwDestroyWindow window)
   (GLFW/glfwTerminate))
