@@ -3,6 +3,7 @@
   (:require [test-lwjgl.window :as window]
 						[clojure.java.io :as io]
 						[test-lwjgl.parser_3d.ply :as ply]
+						[test-lwjgl.shapes.basic :as shape]
             [clojure.core.matrix :as m]
             [clojure.core.matrix.operators :as mo]
             [test-lwjgl.buffers :as buffer]
@@ -34,113 +35,13 @@
 
  (shader/init-defaults)
 
- (def pandaki (ply/parse-ply "pandaki2.ply"))
-
- (def pandaki-data (window/vertex-setup (:vertices pandaki) (:indices pandaki)))
-
- (def tri (window/vertex-setup
-                ;; TRIANGLE
-    [
-       {:coordinates [ 0.5 -0.5 0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]} ;;a
-       {:coordinates [-0.5 -0.5 0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]} ;;b
-       {:coordinates [ 0.0  0.5 0.0] :color [1.0 0.0 0.0] :texture [1.0 1.0]} ;;c
-
-       {:coordinates [ 0.5 -0.5 0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]} ;;a
-       {:coordinates [ 0.0  0.5 0.0] :color [1.0 0.0 0.0] :texture [1.0 1.0]} ;;c
-       {:coordinates [ 0.0 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]};;d
-
-       {:coordinates [-0.5 -0.5 0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]} ;;b
-       {:coordinates [ 0.0  0.5 0.0] :color [1.0 0.0 0.0] :texture [1.0 1.0]} ;;c
-       {:coordinates [ 0.0 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]};;d
-
-       {:coordinates [ 0.5 -0.5 0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]} ;;a
-       {:coordinates [-0.5 -0.5 0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]} ;;b
-       {:coordinates [ 0.0 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]};;d
-] []
-            ))
-
-  (def init (window/vertex-setup
-;;    [{:coordinates [-0.5 -0.5 0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
-;;     {:coordinates [0.5 -0.5 0.5] :color [0.0 1.0 0.0] :texture [1.0 0.0]}
-;;     {:coordinates [-0.5 0.5 0.5] :color [0.0 1.0 0.0] :texture [0.0 1.0]}
-;;     {:coordinates [0.5 0.5 0.5] :color [0.0 0.0 1.0] :texture [1.0 1.0]}
-;;
-;;     {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
-;;     {:coordinates [0.5 -0.5 -0.5] :color [0.0 1.0 0.0] :texture [1.0 0.0]}
-;;     {:coordinates [-0.5 0.5 -0.5] :color [0.0 1.0 0.0] :texture [0.0 1.0]}
-;;     {:coordinates [0.5 0.5 -0.5] :color [0.0 0.0 1.0] :texture [1.0 1.0]}
-;;]
-;;
-;;    [3 2 1 ;; Front face
-;;     0 1 2
-;;
-;;     7 6 5 ;; Back face
-;;     4 5 6
-;;
-;;     2 6 0 ;; Left face
-;;     0 4 6
-;;
-;;     3 7 5 ;; Right face
-;;     1 5 3
-;;
-;;     2 6 3 ;; Top face
-;;     7 6 3
-;;
-;;     0 1 4 ;; Bottom face
-;;     5 1 4]
-
-
-
-    ;; SQUARE
-  [
-       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
-       {:coordinates [ 0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
-       {:coordinates [ 0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]}
-       {:coordinates [ 0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]}
-       {:coordinates [-0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
-       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
-
-       {:coordinates [-0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
-       {:coordinates [ 0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
-       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]}
-       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]}
-       {:coordinates [-0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
-       {:coordinates [-0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
-
-       {:coordinates [-0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
-       {:coordinates [-0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]}
-       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
-       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
-       {:coordinates [-0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
-       {:coordinates [-0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
-
-       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
-       {:coordinates [ 0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]}
-       {:coordinates [ 0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
-       {:coordinates [ 0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
-       {:coordinates [ 0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
-       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
-
-       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
-       {:coordinates [ 0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]}
-       {:coordinates [ 0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
-       {:coordinates [ 0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
-       {:coordinates [-0.5 -0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
-       {:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
-
-       {:coordinates [-0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
-       {:coordinates [ 0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [1.0 1.0]}
-       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
-       {:coordinates [ 0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [1.0 0.0]}
-       {:coordinates [-0.5  0.5  0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}
-       {:coordinates [-0.5  0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 1.0]}
-]
-[]
-))
+ (def pandaki (window/vertex-setup (ply/parse-ply "pandaki2.ply") 1))
+ (def triangles (window/vertex-setup (shape/triangle true) 200))
+ (def cubes (window/vertex-setup (shape/cube true) 100))
 
 (def fps (atom [0 0]))
   ;;  Start game loop
-  (loop [to-render-functions [pandaki-data]
+  (loop [to-render-functions [cubes triangles pandaki]
          curr (GLFW/glfwGetTime)
          prev (GLFW/glfwGetTime)
          lag (atom 0.0)]

@@ -53,15 +53,16 @@
   (let [window (initialize params)]
     (configure window)))
 
-(defn vertex-setup [vertices indices]
+(defn vertex-setup [shape instances]
   "Take a list of vertices (coordinates [x y z] of a pixel and optionaly its color), indices is a list of index from vertices, used to describe triangles."
-  (let [vao-id (GL30/glGenVertexArrays)
+  (let [vertices (:vertices shape)
+        indices (:indices shape)
+        vao-id (GL30/glGenVertexArrays)
         _ (GL30/glBindVertexArray vao-id)
 	      texture1-id (textures/setup "src/test_lwjgl/assets/textures/container.jpg")
 	      texture2-id (textures/setup "src/test_lwjgl/assets/textures/awesomeface.png")
         program-id (program/init)
-        instances-count 10
-	      instances-coords (rand-positions instances-count)
+	      instances-coords (rand-positions instances)
 	      points-count (if (= 0 (count indices)) (count vertices) (count indices) )]
 
     (buffer/create-vbo vertices)
@@ -114,15 +115,16 @@
       (GL30/glBindVertexArray vao-id)
       ;;(GL20/glUniform4f triangle-color 0.0 (Math/sin (GLFW/glfwGetTime)) 0.0 1.0)
 
+  (if (> instances 1)
   (if (= 0 (count indices))
-	(GL31/glDrawArraysInstanced GL11/GL_TRIANGLES 0 points-count instances-count)
-	(GL31/glDrawElementsInstanced GL11/GL_TRIANGLES points-count GL11/GL_UNSIGNED_INT 0 instances-count))
+	(GL31/glDrawArraysInstanced GL11/GL_TRIANGLES 0 points-count instances)
+	(GL31/glDrawElementsInstanced GL11/GL_TRIANGLES points-count GL11/GL_UNSIGNED_INT 0 instances))
 
-  ;; (if (= 0 (count indices))
+  (if (= 0 (count indices))
 	;; Draw points without indices
-	;;     (GL11/glDrawArrays GL11/GL_TRIANGLES 0 points-count)
+	     (GL11/glDrawArrays GL11/GL_TRIANGLES 0 points-count)
 	;; Draw with indices
-  ;;     (GL11/glDrawElements GL11/GL_TRIANGLES points-count GL11/GL_UNSIGNED_INT 0))
+       (GL11/glDrawElements GL11/GL_TRIANGLES points-count GL11/GL_UNSIGNED_INT 0)))
 )))
 
 (defn render [window to-render-functions]
