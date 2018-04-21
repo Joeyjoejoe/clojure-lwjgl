@@ -18,7 +18,8 @@
 
 (def state (atom {:camera (new-camera)
                   :mouse  (new-mouse)
-                  :deltatime 0.0}))
+                  :deltatime 0.0
+                  :fps {:value 0 :frames 0 :seconds 0}}))
 
 (defn get-atom [] state)
 

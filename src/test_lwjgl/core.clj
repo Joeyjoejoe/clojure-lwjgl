@@ -30,7 +30,6 @@
   (def cubes (window/vertex-setup (shape/cube true) 100))
   (def ground (window/vertex-setup (shape/rectangle 100 75) 1))
 
-  (def fps (atom [0 0]))
   ;;  Start game loop
   (loop [to-render-functions [ground pandaki]
          curr (GLFW/glfwGetTime)
@@ -40,7 +39,7 @@
     (swap! lag #(+ % (- curr prev)))
     (swap! (state/get-atom) assoc :deltatime (- curr prev))
 
-    (println (state/get-data))
+    (clojure.pprint/pprint (state/get-data))
     ;;  (handle-inputs)
     (let [gstate      (state/get-atom)
           camera     (state/get-data :camera)
@@ -65,13 +64,14 @@
     ;; (render (/ lag 0.1))
     (window/render window to-render-functions)
 
-    ;; Log FPS
-    (if
-      (>= (- (GLFW/glfwGetTime) (@fps 1)) 1.0)
-        (do (println (str "FPS: " (+ 1 (@fps 0))))
-          (swap! fps update-in [1] inc)
-          (swap! fps assoc 0 0))
-        (swap! fps update-in [0] inc))
+    ;; Calculate FPS
+    (let [state  (state/get-atom)
+          fps    (state/get-data :fps)
+          frames   (:frames fps)
+          seconds (:seconds fps)]
+      (if (>= (- (GLFW/glfwGetTime) seconds) 1.0)
+            (swap! state assoc :fps {:value (+ 1 frames) :frames 0 :seconds (inc seconds)})
+            (swap! state assoc-in [:fps :frames] (inc frames))))
 
     ;; Recur loop
     (if (not (GLFW/glfwWindowShouldClose window))
