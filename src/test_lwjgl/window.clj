@@ -8,6 +8,7 @@
             [test-lwjgl.textures :as textures]
             [test-lwjgl.buffers :as buffer]
 	          [test-lwjgl.config.mouse :as mouse]
+	          [test-lwjgl.state :as state]
             [test-lwjgl.camera :as camera])
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.glfw GLFW GLFWKeyCallback GLFWErrorCallback)
@@ -33,6 +34,18 @@
 
     (GLFW/glfwCreateWindow ^Long width ^Long height ^String title (MemoryUtil/NULL) (MemoryUtil/NULL))))
 
+(defn get-size [window]
+  (let [width (buffer/create-int-buffer [0])
+        height (buffer/create-int-buffer [0])]
+    (GLFW/glfwGetWindowSize window width height)
+    {:width (.get width 0) :height (.get height 0)}))
+
+(defn center-cursor [window]
+  (let [window-size (get-size window)
+        x (/ (:width window-size) 2)
+        y (/ (:height window-size) 2)]
+    (GLFW/glfwSetCursorPos window x y)))
+
 (defn configure [window]
   (GLFW/glfwMakeContextCurrent window)
   (GLFW/glfwSwapInterval 1)
@@ -40,6 +53,7 @@
   (GLFW/glfwSetKeyCallback window controls/key-callback)
   (GLFW/glfwSetInputMode window GLFW/GLFW_STICKY_KEYS 1)
   ;; Hide mouse cursor and capture its position.
+  (center-cursor window)
   (GLFW/glfwSetInputMode window GLFW/GLFW_CURSOR GLFW/GLFW_CURSOR_DISABLED)
   (GLFW/glfwSetCursorPosCallback window mouse/fps-camera)
 
