@@ -3,7 +3,6 @@
 	          [clojure.core.matrix :as m]
 	          [clojure.core.matrix.operators :as mo]
 	          [test-lwjgl.state :as state]
-            [test-lwjgl.camera :as camera]
 	          [test-lwjgl.config.mouse :as mouse])
   (:import (org.lwjgl.glfw GLFW GLFWKeyCallback GLFWCursorPosCallback)
            (org.lwjgl.opengl GL11)))
@@ -21,10 +20,10 @@
   (GLFW/glfwSetWindowShouldClose win true))
 
 (defn enable-acceleration [direction]
-  (fn [window] (swap! (camera/get-atom) assoc-in [:acceleration direction] true)))
+  (fn [window] (swap! (state/get-atom) assoc-in [:camera :motion :directions direction] true)))
 
 (defn disable-acceleration [direction]
-  (fn [window] (swap! (camera/get-atom) assoc-in [:acceleration direction] false)))
+  (fn [window] (swap! (state/get-atom) assoc-in [:camera :motion :directions direction] false)))
 
 (def key-bindings
   "Bind key codes with a vector of three actions indexed as default key events:

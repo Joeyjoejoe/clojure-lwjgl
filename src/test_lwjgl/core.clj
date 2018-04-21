@@ -9,7 +9,6 @@
             [test-lwjgl.buffers :as buffer]
             [test-lwjgl.state :as state]
             [test-lwjgl.transformations :as transformation]
-            [test-lwjgl.camera :as camera]
             [test-lwjgl.shader :as shader]
             [clojure.tools.logging :as log])
   (:import (org.lwjgl.glfw GLFW GLFWKeyCallback)
@@ -41,19 +40,22 @@
     (swap! lag #(+ % (- curr prev)))
     (swap! (state/get-atom) assoc :deltatime (- curr prev))
 
+    (println (state/get-data))
     ;;  (handle-inputs)
-    (let [camera (camera/get-atom)
-          cam @camera
-          front (:front cam)
-          up (:up @camera)
-          position (:position cam)
-          acceleration (:acceleration cam)
-          no-change [0.0 0.0 0.0]
-          forward (if (acceleration :forward) (mo/* (state/camera-speed) front) no-change)
-          backward (if (acceleration :backward) (mo/* -1.0 (state/camera-speed) front) no-change)
-          left (if (acceleration :left) (mo/* -1.0 (m/normalise (m/cross front up)) (state/camera-speed)) no-change)
-          right (if (acceleration :right) (mo/* (m/normalise (m/cross front up)) (state/camera-speed)) no-change)]
-      (swap! camera assoc :position (mo/+ position forward right left backward)))
+    (let [gstate      (state/get-atom)
+          camera     (state/get-data :camera)
+          front      (:front    camera)
+          up         (:up       camera)
+          position   (:position camera)
+          directions (get-in camera [:motion :directions])
+          speed      (get-in camera [:motion :speed])
+          no-change  [0.0 0.0 0.0]
+          front-up   (m/normalise (m/cross front up))
+          forward    (if (:forward directions)  (mo/* speed front)         no-change)
+          backward   (if (:backward directions) (mo/* speed front -1.0)    no-change)
+          left       (if (:left directions)     (mo/* speed front-up -1.0) no-change)
+          right      (if (:right directions)    (mo/* speed front-up)      no-change)]
+      (swap! gstate assoc-in [:camera :position] (mo/+ position forward right left backward)))
 
     ;; Handle game logic and update
     (while (>= @lag 0.1)

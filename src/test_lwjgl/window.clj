@@ -8,8 +8,7 @@
             [test-lwjgl.textures :as textures]
             [test-lwjgl.buffers :as buffer]
 	          [test-lwjgl.config.mouse :as mouse]
-	          [test-lwjgl.state :as state]
-            [test-lwjgl.camera :as camera])
+	          [test-lwjgl.state :as state])
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.glfw GLFW GLFWKeyCallback GLFWErrorCallback)
            (org.lwjgl.system MemoryUtil)
@@ -96,61 +95,41 @@
     (GL20/glUniform1i (uniform/get-location program-id, "texture1") 0)
     (GL20/glUniform1i (uniform/get-location program-id, "texture2") 1)
 
-
     ;; projection matrix (perspective)
     (GL20/glUniformMatrix4fv (uniform/get-location program-id "projection") false (buffer/create-float-buffer (transformation/make "perspective-projection" [45.0 (/ 1280.0 960.0) 0.1 100.0])))
     (def model-position (uniform/get-location program-id "model"))
     (def view-position (uniform/get-location program-id "view"))
 
-
     (program/unbind)
 
+    ;; Return a function with draw code
     (fn []
-
       (program/bind program-id)
-
-      ;;(GL20/glUniformMatrix4fv (uniform/get-location program-id "rotate") false (buffer/create-float-buffer uniform-rotate))
-      ;; view matrix
-      ;;(GL20/glUniformMatrix4fv (uniform/get-location program-id "view") false (buffer/create-float-buffer (transformation/make "translate-matrix" [0.0 0.0 -3.0])))
-
-    ;;  (let [radius 10.0
-	  ;;  camX (* (Math/sin (GLFW/glfwGetTime)) radius)
-	  ;;  camZ (* (Math/cos (GLFW/glfwGetTime)) radius)]
-	    ;;(swap! (camera/get-atom) assoc :position [camX 0.0 camZ]))
-      (GL20/glUniformMatrix4fv view-position false (buffer/create-float-buffer (transformation/make "look-at" [(camera/get-data)])))
-
+      (GL20/glUniformMatrix4fv view-position false (buffer/create-float-buffer (transformation/make "look-at" [(state/get-data :camera)])))
       ;; Texture
       (GL13/glActiveTexture GL13/GL_TEXTURE0)
       (GL11/glBindTexture GL11/GL_TEXTURE_2D texture1-id)
-
       (GL13/glActiveTexture GL13/GL_TEXTURE1)
       (GL11/glBindTexture GL11/GL_TEXTURE_2D texture2-id)
 
-
       (GL30/glBindVertexArray vao-id)
-      ;;(GL20/glUniform4f triangle-color 0.0 (Math/sin (GLFW/glfwGetTime)) 0.0 1.0)
 
-  (if (> instances 1)
-  (if (= 0 (count indices))
-	(GL31/glDrawArraysInstanced GL11/GL_TRIANGLES 0 points-count instances)
-	(GL31/glDrawElementsInstanced GL11/GL_TRIANGLES points-count GL11/GL_UNSIGNED_INT 0 instances))
-
-  (if (= 0 (count indices))
-	;; Draw points without indices
-	     (GL11/glDrawArrays GL11/GL_TRIANGLES 0 points-count)
-	;; Draw with indices
-       (GL11/glDrawElements GL11/GL_TRIANGLES points-count GL11/GL_UNSIGNED_INT 0)))
-)))
+      (if (> instances 1)
+        ;; Draw multiple instances
+        (if (= 0 (count indices))
+    	    (GL31/glDrawArraysInstanced GL11/GL_TRIANGLES 0 points-count instances) ;; Normal draw
+    	    (GL31/glDrawElementsInstanced GL11/GL_TRIANGLES points-count GL11/GL_UNSIGNED_INT 0 instances)) ;; Draw with indices
+        ;; Draw single shape
+        (if (= 0 (count indices))
+    	    (GL11/glDrawArrays GL11/GL_TRIANGLES 0 points-count) ;; Normal draw
+          (GL11/glDrawElements GL11/GL_TRIANGLES points-count GL11/GL_UNSIGNED_INT 0)))))) ;; Draw with indices
 
 (defn render [window to-render-functions]
   "Draw everything needed in the GLFW window. to-render-functions is a vector of functions that contains OpenGL instructions to draw shapes from corresponding VAO"
-
-
   (GL11/glClearColor 0.5 0.2 0.0 1.0)
   (GL11/glClear (bit-or GL11/GL_COLOR_BUFFER_BIT GL11/GL_DEPTH_BUFFER_BIT))
 
   (doseq [f to-render-functions] (f))
 
   (GLFW/glfwSwapBuffers window)
-  (GLFW/glfwPollEvents)
-  )
+  (GLFW/glfwPollEvents))
