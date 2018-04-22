@@ -73,27 +73,25 @@
         indices (:indices shape)
         vao-id (GL30/glGenVertexArrays)
         _ (GL30/glBindVertexArray vao-id)
-	      texture1-id (textures/setup "src/test_lwjgl/assets/textures/container.jpg")
-	      texture2-id (textures/setup "src/test_lwjgl/assets/textures/awesomeface.png")
+	      ;;texture1-id (textures/setup "src/test_lwjgl/assets/textures/container.jpg")
+	      ;;texture2-id (textures/setup "src/test_lwjgl/assets/textures/awesomeface.png")
         program-id (program/init)
 	      instances-coords (rand-positions instances)
 	      points-count (if (= 0 (count indices)) (count vertices) (count indices) )]
 
     (buffer/create-vbo vertices)
     (buffer/create-pbo instances-coords)
-
     (if (< 0 (count indices))
         (buffer/create-ebo indices))
     ;; You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     (GL30/glBindVertexArray 0)
 
-    (def triangle-color (uniform/get-location program-id "uniformColor"))
     ;;(GL11/glPolygonMode GL11/GL_FRONT_AND_BACK GL11/GL_LINE)
 
     ;; Bind Texture to uniform in shader
     (program/bind program-id)
-    (GL20/glUniform1i (uniform/get-location program-id, "texture1") 0)
-    (GL20/glUniform1i (uniform/get-location program-id, "texture2") 1)
+    ;;(GL20/glUniform1i (uniform/get-location program-id, "texture1") 0)
+    ;;(GL20/glUniform1i (uniform/get-location program-id, "texture2") 1)
 
     ;; projection matrix (perspective)
     (GL20/glUniformMatrix4fv (uniform/get-location program-id "projection") false (buffer/create-float-buffer (transformation/make "perspective-projection" [45.0 (/ 1280.0 960.0) 0.1 100.0])))
@@ -107,10 +105,10 @@
       (program/bind program-id)
       (GL20/glUniformMatrix4fv view-position false (buffer/create-float-buffer (transformation/make "look-at" [(state/get-data :camera)])))
       ;; Texture
-      (GL13/glActiveTexture GL13/GL_TEXTURE0)
-      (GL11/glBindTexture GL11/GL_TEXTURE_2D texture1-id)
-      (GL13/glActiveTexture GL13/GL_TEXTURE1)
-      (GL11/glBindTexture GL11/GL_TEXTURE_2D texture2-id)
+      ;;(GL13/glActiveTexture GL13/GL_TEXTURE0)
+      ;;(GL11/glBindTexture GL11/GL_TEXTURE_2D texture1-id)
+      ;;(GL13/glActiveTexture GL13/GL_TEXTURE1)
+      ;;(GL11/glBindTexture GL11/GL_TEXTURE_2D texture2-id)
 
       (GL30/glBindVertexArray vao-id)
 
