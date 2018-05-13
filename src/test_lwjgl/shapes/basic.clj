@@ -5,10 +5,10 @@
         hl (/ length 2.0)
         -hl (- hl)
         -hw (- hw)]
-  {:vertices [{:coordinates [-hw 0.0 -hl] :color [1.0 1.0 1.0] :texture [0.0 0.0]}
-              {:coordinates [ hw 0.0 -hl] :color [1.0 1.0 1.0] :texture [0.0 0.0]}
-              {:coordinates [ hw 0.0  hl] :color [1.0 1.0 1.0] :texture [0.0 0.0]}
-              {:coordinates [-hw 0.0  hl] :color [1.0 1.0 1.0] :texture [0.0 0.0]}]
+  {:vertices [{:coordinates [-hw 0.0 -hl] :color [0.0 0.0 1.0] :texture [0.0 0.0]}
+              {:coordinates [ hw 0.0 -hl] :color [0.0 0.0 1.0] :texture [0.0 0.0]}
+              {:coordinates [ hw 0.0  hl] :color [0.0 0.0 1.0] :texture [0.0 0.0]}
+              {:coordinates [-hw 0.0  hl] :color [0.0 0.0 1.0] :texture [0.0 0.0]}]
    :indices  [0 1 2 2 3 0]}))
 
 (defn cube

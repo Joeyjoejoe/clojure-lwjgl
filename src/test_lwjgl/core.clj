@@ -30,6 +30,10 @@
   (def cubes (window/vertex-setup (shape/cube true) 100))
   (def ground (window/vertex-setup (shape/rectangle 100 75) 1))
 
+  (let [mouse-position (window/get-size window)
+        x (/ (:width mouse-position) 2.0)
+        y (/ (:height mouse-position) 2.0)]
+  (swap! (state/get-atom) assoc-in [:mouse :position] {:x x :y y}))
   ;;  Start game loop
   (loop [to-render-functions [ground pandaki]
          curr (GLFW/glfwGetTime)
