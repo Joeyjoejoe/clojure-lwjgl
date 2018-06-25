@@ -78,12 +78,12 @@
      [org.slf4j/slf4j-log4j12 "1.7.12"]]
 		(lwjgl-deps-with-natives)))
 
-(defproject test-lwjgl "0.1.0-SNAPSHOT"
+(defproject clopengl "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
   :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies ~all-dependencies 
   :jvm-opts ^:replace ~(jvm-opts)
-  :main test-lwjgl.core
-  :repl-options {:init-ns test-lwjgl.core}) 
+  :main clopengl.core
+  :repl-options {:init-ns clopengl.core}) 

@@ -1,5 +1,5 @@
-(ns test-lwjgl.engine.opengl.shader-program
-  (:require [test-lwjgl.engine.opengl.shader :as shader])
+(ns clopengl.engine.opengl.shader-program
+  (:require [clopengl.engine.opengl.shader :as shader])
   (:import (org.lwjgl.opengl GL20)))
 
 (defn create []

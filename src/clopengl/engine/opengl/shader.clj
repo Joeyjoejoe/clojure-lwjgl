@@ -1,4 +1,4 @@
-(ns test-lwjgl.engine.opengl.shader
+(ns clopengl.engine.opengl.shader
   (:require [clojure.java.io :as io])
   (:import (org.lwjgl.opengl GL20)))
 

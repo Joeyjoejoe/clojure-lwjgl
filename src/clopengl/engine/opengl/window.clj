@@ -1,14 +1,14 @@
-(ns test-lwjgl.engine.opengl.window
-  (:use [test-lwjgl.engine.utilities.misc])
-  (:require [test-lwjgl.engine.opengl.shader-program :as program]
-            [test-lwjgl.engine.utilities.transformations :as transformation]
-            [test-lwjgl.engine.glfw.controls.keyboard :as keyboard]
+(ns clopengl.engine.opengl.window
+  (:use [clopengl.engine.utilities.misc])
+  (:require [clopengl.engine.opengl.shader-program :as program]
+            [clopengl.engine.utilities.transformations :as transformation]
+            [clopengl.engine.glfw.controls.keyboard :as keyboard]
 	          [clojure.core.matrix :as m]
-	          [test-lwjgl.engine.opengl.uniforms :as uniform]
-            [test-lwjgl.engine.opengl.textures :as textures]
-            [test-lwjgl.engine.opengl.buffers :as buffer]
-	          [test-lwjgl.engine.glfw.controls.mouse :as mouse]
-	          [test-lwjgl.engine.state.global :as state])
+	          [clopengl.engine.opengl.uniforms :as uniform]
+            [clopengl.engine.opengl.textures :as textures]
+            [clopengl.engine.opengl.buffers :as buffer]
+	          [clopengl.engine.glfw.controls.mouse :as mouse]
+	          [clopengl.engine.state.global :as state])
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.glfw GLFW GLFWKeyCallback GLFWErrorCallback)
            (org.lwjgl.system MemoryUtil)
@@ -73,8 +73,8 @@
         indices (:indices shape)
         vao-id (GL30/glGenVertexArrays)
         _ (GL30/glBindVertexArray vao-id)
-	      ;;texture1-id (textures/setup "src/test_lwjgl/assets/textures/container.jpg")
-	      ;;texture2-id (textures/setup "src/test_lwjgl/assets/textures/awesomeface.png")
+	      ;;texture1-id (textures/setup "src/clopengl/assets/textures/container.jpg")
+	      ;;texture2-id (textures/setup "src/clopengl/assets/textures/awesomeface.png")
         program-id (program/init)
 	      instances-coords (rand-positions instances)
 	      points-count (if (= 0 (count indices)) (count vertices) (count indices) )]

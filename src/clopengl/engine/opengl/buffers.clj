@@ -1,5 +1,5 @@
-(ns test-lwjgl.engine.opengl.buffers
-  (:use [test-lwjgl.engine.utilities.misc])
+(ns clopengl.engine.opengl.buffers
+  (:use [clopengl.engine.utilities.misc])
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.opengl GL11 GL15 GL20 GL33)))
 

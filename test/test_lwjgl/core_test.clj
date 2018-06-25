@@ -1,6 +1,6 @@
-(ns test-lwjgl.core-test
+(ns clopengl.core-test
   (:require [clojure.test :refer :all]
-            [test-lwjgl.core :refer :all]))
+            [clopengl.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."

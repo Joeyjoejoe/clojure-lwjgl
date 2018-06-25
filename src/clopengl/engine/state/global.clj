@@ -1,6 +1,6 @@
-(ns test-lwjgl.engine.state.global
-  (:require [test-lwjgl.engine.state.camera :as camera]
-            [test-lwjgl.engine.state.mouse :as mouse]))
+(ns clopengl.engine.state.global
+  (:require [clopengl.engine.state.camera :as camera]
+            [clopengl.engine.state.mouse :as mouse]))
 
 (def state (atom {:camera (camera/init)
                   :mouse  (mouse/init)

@@ -1,4 +1,4 @@
-(ns test-lwjgl.engine.opengl.textures
+(ns clopengl.engine.opengl.textures
   (:import (org.lwjgl.stb STBImage)
 	   (org.lwjgl BufferUtils)
 	   (org.lwjgl.opengl GL11 GL30)))
