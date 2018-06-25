@@ -8,7 +8,7 @@
             [test-lwjgl.engine.opengl.textures :as textures]
             [test-lwjgl.engine.opengl.buffers :as buffer]
 	          [test-lwjgl.engine.glfw.controls.mouse :as mouse]
-	          [test-lwjgl.engine.state.camera :as state])
+	          [test-lwjgl.engine.state.global :as state])
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.glfw GLFW GLFWKeyCallback GLFWErrorCallback)
            (org.lwjgl.system MemoryUtil)

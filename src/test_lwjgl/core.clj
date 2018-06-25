@@ -7,7 +7,7 @@
             [clojure.core.matrix :as m]
             [clojure.core.matrix.operators :as mo]
             [test-lwjgl.engine.opengl.buffers :as buffer]
-            [test-lwjgl.engine.state.camera :as state]
+            [test-lwjgl.engine.state.global :as state]
             [test-lwjgl.engine.utilities.transformations :as transformation]
             [test-lwjgl.engine.opengl.shader :as shader]
             [clojure.tools.logging :as log])

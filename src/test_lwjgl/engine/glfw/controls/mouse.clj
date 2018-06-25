@@ -2,7 +2,7 @@
   (:require [clojure.tools.logging :as log]
 	          [clojure.core.matrix :as m]
 	          [clojure.core.matrix.operators :as mo]
-	          [test-lwjgl.engine.state.camera :as state])
+	          [test-lwjgl.engine.state.global :as state])
   (:import (org.lwjgl.glfw GLFW GLFWKeyCallback GLFWCursorPosCallback)
            (org.lwjgl.opengl GL11)))
 
