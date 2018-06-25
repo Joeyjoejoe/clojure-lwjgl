@@ -1,4 +1,4 @@
-(ns test-lwjgl.shapes.basic)
+(ns test-lwjgl.engine.utilities.shapes.basic)
 
 (defn rectangle [length width]
   (let [hw (/ width 2.0)

@@ -1,5 +1,5 @@
-(ns test-lwjgl.buffers
-  (:use [test-lwjgl.utility])
+(ns test-lwjgl.engine.opengl.buffers
+  (:use [test-lwjgl.engine.utilities.misc])
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.opengl GL11 GL15 GL20 GL33)))
 
@@ -39,11 +39,11 @@
          vbo-id (GL15/glGenBuffers)]
 
     ;; Describe vertices
-    (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER vbo-id) 
+    (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER vbo-id)
     (GL15/glBufferData GL15/GL_ARRAY_BUFFER ^java.nio.DirectFloatBufferU vertices-buffer GL15/GL_STATIC_DRAW)
     (GL20/glVertexAttribPointer vertex-position vertex-size data-type normalize-datas? stride 0)
     (GL20/glEnableVertexAttribArray vertex-position)
-    
+
     ;; Describe colors
     (GL20/glVertexAttribPointer color-position color-size data-type normalize-datas? stride color-offset)
     (GL20/glEnableVertexAttribArray color-position)
@@ -60,7 +60,7 @@
   "Creates an Elements buffer object containing a list of indices corresponding to vbo vertices index. Theses indices are used to define triangles without loading identical points multiple times"
   (let [ebo-id (GL15/glGenBuffers)
 	indices-buffer (create-int-buffer indices)]
-  (GL15/glBindBuffer GL15/GL_ELEMENT_ARRAY_BUFFER ebo-id) 
+  (GL15/glBindBuffer GL15/GL_ELEMENT_ARRAY_BUFFER ebo-id)
   (GL15/glBufferData GL15/GL_ELEMENT_ARRAY_BUFFER ^java.nio.DirectIntBufferU indices-buffer GL15/GL_STATIC_DRAW)))
 
 (defn create-tbo [texture-coordinates]
@@ -79,12 +79,12 @@
          pbo-id (GL15/glGenBuffers)]
 
     ;; Describe vertices
-    (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER pbo-id) 
+    (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER pbo-id)
     (GL15/glBufferData GL15/GL_ARRAY_BUFFER ^java.nio.DirectFloatBufferU vertices-buffer GL15/GL_STATIC_DRAW)
 
     (GL20/glEnableVertexAttribArray 3)
     (GL20/glVertexAttribPointer 3 4 data-type normalize-datas? stride 0)
-    
+
     (GL20/glEnableVertexAttribArray 4)
     (GL20/glVertexAttribPointer 4 4 data-type normalize-datas? stride vector-bytes-size)
 

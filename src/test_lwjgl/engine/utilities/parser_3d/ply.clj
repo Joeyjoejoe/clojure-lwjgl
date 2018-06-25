@@ -1,6 +1,6 @@
-(ns test-lwjgl.parser_3d.ply
-  (:use [test-lwjgl.utility])
-  (:require [test-lwjgl.window :as window]
+(ns test-lwjgl.engine.utilities.parser_3d.ply
+  (:use [test-lwjgl.engine.utilities.misc])
+  (:require [test-lwjgl.engine.opengl.window :as window]
             [clojure.java.io :as io]))
 
 (defn triangulate-indice [indice]

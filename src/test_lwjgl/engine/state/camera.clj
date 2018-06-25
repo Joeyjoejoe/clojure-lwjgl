@@ -1,4 +1,4 @@
-(ns test-lwjgl.state)
+(ns test-lwjgl.engine.state.camera)
 
 (defn new-motion
   ([]      (new-motion 0.5))

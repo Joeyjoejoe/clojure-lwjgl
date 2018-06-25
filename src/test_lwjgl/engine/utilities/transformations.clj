@@ -1,4 +1,4 @@
-(ns test-lwjgl.transformations
+(ns test-lwjgl.engine.utilities.transformations
   (:require [clojure.core.matrix :as m]
 	          [clojure.core.matrix.operators :as mo]
 	          [thi.ng.math.macros :as mm]))
@@ -8,9 +8,9 @@
 
 (defn make
   ([transformation args]
-	(m/as-vector (apply (resolve (symbol (str "test-lwjgl.transformations/" transformation))) args)))
+	(m/as-vector (apply (resolve (symbol (str "test-lwjgl.engine.utilities.transformations/" transformation))) args)))
   ([transformation args vectorz]
-	(apply (resolve (symbol (str "test-lwjgl.transformations/" transformation))) args)))
+	(apply (resolve (symbol (str "test-lwjgl.engine.utilities.transformations/" transformation))) args)))
 
 (defn scale-matrix [Sx Sy Sz vector]
   (m/diagonal-matrix [Sx Sy Sz 1]))

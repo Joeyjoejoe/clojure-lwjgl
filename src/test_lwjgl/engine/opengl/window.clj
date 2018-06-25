@@ -1,14 +1,14 @@
-(ns test-lwjgl.window
-  (:use [test-lwjgl.utility])
-  (:require [test-lwjgl.shader-program :as program]
-            [test-lwjgl.transformations :as transformation]
-            [test-lwjgl.config.controls :as controls]
+(ns test-lwjgl.engine.opengl.window
+  (:use [test-lwjgl.engine.utilities.misc])
+  (:require [test-lwjgl.engine.opengl.shader-program :as program]
+            [test-lwjgl.engine.utilities.transformations :as transformation]
+            [test-lwjgl.engine.glfw.controls.keyboard :as keyboard]
 	          [clojure.core.matrix :as m]
-	          [test-lwjgl.uniforms :as uniform]
-            [test-lwjgl.textures :as textures]
-            [test-lwjgl.buffers :as buffer]
-	          [test-lwjgl.config.mouse :as mouse]
-	          [test-lwjgl.state :as state])
+	          [test-lwjgl.engine.opengl.uniforms :as uniform]
+            [test-lwjgl.engine.opengl.textures :as textures]
+            [test-lwjgl.engine.opengl.buffers :as buffer]
+	          [test-lwjgl.engine.glfw.controls.mouse :as mouse]
+	          [test-lwjgl.engine.state.camera :as state])
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.glfw GLFW GLFWKeyCallback GLFWErrorCallback)
            (org.lwjgl.system MemoryUtil)
@@ -49,7 +49,7 @@
   (GLFW/glfwMakeContextCurrent window)
   (GLFW/glfwSwapInterval 1)
   ;;  Init keyboard controls
-  (GLFW/glfwSetKeyCallback window controls/key-callback)
+  (GLFW/glfwSetKeyCallback window keyboard/key-callback)
   (GLFW/glfwSetInputMode window GLFW/GLFW_STICKY_KEYS 1)
   ;; Hide mouse cursor and capture its position.
   (center-cursor window)

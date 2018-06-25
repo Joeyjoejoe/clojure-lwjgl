@@ -1,9 +1,9 @@
-(ns test-lwjgl.config.controls
+(ns test-lwjgl.engine.glfw.controls.keyboard
   (:require [clojure.tools.logging :as log]
 	          [clojure.core.matrix :as m]
 	          [clojure.core.matrix.operators :as mo]
-	          [test-lwjgl.state :as state]
-	          [test-lwjgl.config.mouse :as mouse])
+	          [test-lwjgl.engine.state.camera :as state]
+	          [test-lwjgl.engine.glfw.controls.mouse :as mouse])
   (:import (org.lwjgl.glfw GLFW GLFWKeyCallback GLFWCursorPosCallback)
            (org.lwjgl.opengl GL11)))
 

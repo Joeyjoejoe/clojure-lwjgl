@@ -1,4 +1,4 @@
-(ns test-lwjgl.textures
+(ns test-lwjgl.engine.opengl.textures
   (:import (org.lwjgl.stb STBImage)
 	   (org.lwjgl BufferUtils)
 	   (org.lwjgl.opengl GL11 GL30)))
@@ -20,9 +20,9 @@
 
     ;; Flip the texture horizontaly, because OpenGL expects the 0.0 coordinate on the y-axis to be on the bottom side of the image, but images usually have 0.0 at the top of the y-axis
     (STBImage/stbi_set_flip_vertically_on_load true)
-    
+
     (if-let [texture-data (STBImage/stbi_load path width height color desired-color-channels)]
-      (do	
+      (do
 	      (GL11/glTexImage2D GL11/GL_TEXTURE_2D 0 GL11/GL_RGB (.get width) (.get height) 0 GL11/GL_RGB GL11/GL_UNSIGNED_BYTE texture-data)
 	      (GL30/glGenerateMipmap GL11/GL_TEXTURE_2D)
 	      (STBImage/stbi_image_free texture-data))

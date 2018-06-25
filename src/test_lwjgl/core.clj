@@ -1,15 +1,15 @@
 (ns test-lwjgl.core
-  (:use [test-lwjgl.utility])
-  (:require [test-lwjgl.window :as window]
+  (:use [test-lwjgl.engine.utilities.misc])
+  (:require [test-lwjgl.engine.opengl.window :as window]
 						[clojure.java.io :as io]
-						[test-lwjgl.parser_3d.ply :as ply]
-						[test-lwjgl.shapes.basic :as shape]
+						[test-lwjgl.engine.utilities.parser_3d.ply :as ply]
+						[test-lwjgl.engine.utilities.shapes.basic :as shape]
             [clojure.core.matrix :as m]
             [clojure.core.matrix.operators :as mo]
-            [test-lwjgl.buffers :as buffer]
-            [test-lwjgl.state :as state]
-            [test-lwjgl.transformations :as transformation]
-            [test-lwjgl.shader :as shader]
+            [test-lwjgl.engine.opengl.buffers :as buffer]
+            [test-lwjgl.engine.state.camera :as state]
+            [test-lwjgl.engine.utilities.transformations :as transformation]
+            [test-lwjgl.engine.opengl.shader :as shader]
             [clojure.tools.logging :as log])
   (:import (org.lwjgl.glfw GLFW GLFWKeyCallback)
            (org.lwjgl BufferUtils)
