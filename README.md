@@ -1,10 +1,13 @@
 # clopengl
 
-A Clojure library designed to ... well, that part is up to you.
+A very very humble clojure 3D engine attempt using lwjgl. 
 
 ## Usage
 
-FIXME
+### Demo
+* clone the repo: git clone git@github.com:Joeyjoejoe/clopengl.git
+* Install dependancies: lein deps
+* run it: lein run
 
 ## License
 
