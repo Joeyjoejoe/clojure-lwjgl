@@ -1,6 +1,7 @@
 (ns clopengl.core
   (:use [clopengl.engine.utilities.misc])
   (:require [clopengl.engine.opengl.window :as window]
+            [clopengl.engine.opengl.vertices :as vertices]
 						[clojure.java.io :as io]
 						[clopengl.engine.utilities.parser_3d.ply :as ply]
 						[clopengl.engine.utilities.shapes.basic :as shape]
@@ -25,10 +26,10 @@
   (shader/init-defaults)
 
   ;; Load shapes datas to GC and store render functions
-  (def pandaki (window/vertex-setup (ply/parse-ply "pandaki2.ply") 10))
-  (def triangles (window/vertex-setup (shape/triangle true) 200))
-  (def cubes (window/vertex-setup (shape/cube true) 100))
-  (def ground (window/vertex-setup (shape/rectangle 100 75) 1))
+  (def pandaki (vertices/setup (ply/parse-ply "pandaki2.ply") 10))
+  (def triangles (vertices/setup (shape/triangle true) 200))
+  (def cubes (vertices/setup (shape/cube true) 100))
+  (def ground (vertices/setup (shape/rectangle 100 75) 1))
 
   (let [mouse-position (window/get-size window)
         x (/ (:width mouse-position) 2.0)
