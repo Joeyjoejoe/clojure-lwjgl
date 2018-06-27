@@ -10,7 +10,7 @@
             [clopengl.engine.opengl.buffers :as buffer]
             [clopengl.engine.state.global :as state]
             [clopengl.engine.utilities.transformations :as transformation]
-            [clopengl.engine.opengl.shader :as shader]
+            [clopengl.engine.opengl.shaders.shader :as shader]
             [clojure.tools.logging :as log])
   (:import (org.lwjgl.glfw GLFW GLFWKeyCallback)
            (org.lwjgl BufferUtils)

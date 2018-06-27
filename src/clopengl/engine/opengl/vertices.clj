@@ -1,6 +1,6 @@
 (ns clopengl.engine.opengl.vertices
   (:use [clopengl.engine.utilities.misc])
-  (:require [clopengl.engine.opengl.shader-program :as program]
+  (:require [clopengl.engine.opengl.shaders.program :as program]
             [clopengl.engine.opengl.buffers :as buffer]
 	          [clopengl.engine.opengl.uniforms :as uniform]
             [clopengl.engine.utilities.transformations :as transformation]
