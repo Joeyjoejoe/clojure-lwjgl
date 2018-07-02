@@ -55,3 +55,11 @@
     (let [mouse (state/get-data :mouse)]
       (if (= (:mod mouse) :camera) (normal-mod window) (camera-mod window)))))
 
+(defn update-position [coordinates]
+  (swap! (state/get-atom) assoc-in [:mouse :position] coordinates))
+
+(defn center [window coordinates]
+  (let [x (:x coordinates)
+        y (:y coordinates)]
+  (update-position coordinates)
+  (GLFW/glfwSetCursorPos window x y)))

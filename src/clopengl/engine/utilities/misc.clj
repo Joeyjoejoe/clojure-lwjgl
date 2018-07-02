@@ -1,5 +1,6 @@
 (ns clopengl.engine.utilities.misc
-  (:require [clopengl.engine.utilities.transformations :as transformation]))
+  (:require [clopengl.engine.utilities.transformations :as transformation])
+  (:import (org.lwjgl.glfw GLFW)))
 
 ;; Picked from here: http://blog.jayfields.com/2011/01/clojure-select-keys-select-values-and.html
 (defn select-values [map ks]
@@ -34,3 +35,10 @@
   ([n] (rand-positions n -10 10))
   ([n min max] (map #(transformation/make "translate-matrix" %) (rand-coordinates n min max))))
 
+(defn record-fps [state]
+  (let [fps    (:fps @state)
+        frames   (:frames fps)
+        seconds (:seconds fps)]
+    (if (>= (- (GLFW/glfwGetTime) seconds) 1.0)
+      (swap! state assoc :fps {:value (+ 1 frames) :frames 0 :seconds (inc seconds)})
+      (swap! state assoc-in [:fps :frames] (inc frames)))))

@@ -83,7 +83,8 @@
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
   :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies ~all-dependencies 
+  :dependencies ~all-dependencies
   :jvm-opts ^:replace ~(jvm-opts)
+  :plugins [[cider/cider-nrepl "0.17.0"]]
   :main clopengl.core
-  :repl-options {:init-ns clopengl.core}) 
+  :repl-options {:init-ns clopengl.core})
