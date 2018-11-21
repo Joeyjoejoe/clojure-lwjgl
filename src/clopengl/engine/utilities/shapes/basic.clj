@@ -1,15 +1,19 @@
 (ns clopengl.engine.utilities.shapes.basic)
 
-(defn rectangle [length width]
-  (let [hw (/ width 2.0)
-        hl (/ length 2.0)
-        -hl (- hl)
-        -hw (- hw)]
-  {:vertices [{:coordinates [-hw 0.0 -hl] :color [0.0 0.0 1.0] :texture [0.0 0.0]}
-              {:coordinates [ hw 0.0 -hl] :color [0.0 0.0 1.0] :texture [0.0 0.0]}
-              {:coordinates [ hw 0.0  hl] :color [0.0 0.0 1.0] :texture [0.0 0.0]}
-              {:coordinates [-hw 0.0  hl] :color [0.0 0.0 1.0] :texture [0.0 0.0]}]
-   :indices  [0 1 2 2 3 0]}))
+(defn rectangle2D
+  ([length width] (rectangle2D length width :horizontal))
+  ([length width direction]
+  (let [x (/ width 2.0)
+        y (if (= direction :vertical) (/ length 2.0) 0.0)
+        z (if (= direction :horizontal) (/ length 2.0) 0.0)
+        -x (- x)
+        -y (- y)
+        -z (- z)]
+  {:vertices [{:coordinates [-x -y -z] :color [0.0 0.0 1.0] :texture [1.0 1.0]}
+              {:coordinates [ x -y -z] :color [0.0 0.0 1.0] :texture [1.0 0.0]}
+              {:coordinates [ x  y  z] :color [0.0 0.0 1.0] :texture [0.0 0.0]}
+              {:coordinates [-x  y  z] :color [0.0 0.0 1.0] :texture [0.0 1.0]}]
+   :indices  [0 1 2 2 3 0]})))
 
 (defn cube
   ([] {:vertices [{:coordinates [-0.5 -0.5 -0.5] :color [1.0 0.0 0.0] :texture [0.0 0.0]}

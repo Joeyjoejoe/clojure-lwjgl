@@ -21,9 +21,9 @@
   (def pandaki (vertices/setup (ply/parse-ply "pandaki2.ply") 10))
   (def triangles (vertices/setup (shape/triangle true) 200))
   (def cubes (vertices/setup (shape/cube true) 100))
-  (def ground (vertices/setup (shape/rectangle 100 75) 1))
+  (def ground (vertices/setup (shape/rectangle2D 100 75 :vertical) 1))
 
-  (swap! (state/get-atom) assoc :render [ground pandaki])
+  (swap! (state/get-atom) assoc :render [ground cubes pandaki])
 
   ;;  Start game loop
   (loop [to-render-functions (state/get-data :render)

@@ -2,7 +2,6 @@
   (:use [clopengl.engine.utilities.misc])
   (:require [clopengl.engine.glfw.controls.keyboard :as keyboard]
 	          [clojure.core.matrix :as m]
-            [clopengl.engine.opengl.textures :as textures]
             [clopengl.engine.opengl.buffers :as buffer]
             [clopengl.engine.utilities.transformations :as transformation]
             [clopengl.engine.state.global :as state]

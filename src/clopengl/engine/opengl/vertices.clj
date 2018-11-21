@@ -2,6 +2,8 @@
   (:use [clopengl.engine.utilities.misc])
   (:require [clopengl.engine.opengl.shaders.program :as program]
             [clopengl.engine.opengl.buffers :as buffer]
+            [clopengl.engine.opengl.textures :as textures]
+            [clojure.java.io :as io]
 	          [clopengl.engine.opengl.shaders.uniforms :as uniform]
             [clopengl.engine.utilities.transformations :as transformation]
             [clopengl.engine.state.global :as state])
@@ -13,8 +15,8 @@
         indices (:indices shape)
         vao-id (GL30/glGenVertexArrays)
         _ (GL30/glBindVertexArray vao-id)
-	      ;;texture1-id (textures/setup "src/clopengl/assets/textures/container.jpg")
-	      ;;texture2-id (textures/setup "src/clopengl/assets/textures/awesomeface.png")
+	      texture1-id (textures/setup (.getAbsolutePath (io/file (io/resource "textures/container.jpg"))))
+	      texture2-id (textures/setup (.getAbsolutePath (io/file (io/resource "textures/awesomeface.png"))))
         program-id (program/init)
 	      instances-coords (rand-positions instances)
 	      points-count (if (= 0 (count indices)) (count vertices) (count indices) )]
@@ -30,8 +32,8 @@
 
     ;; Bind Texture to uniform in shader
     (program/bind program-id)
-    ;;(GL20/glUniform1i (uniform/get-location program-id, "texture1") 0)
-    ;;(GL20/glUniform1i (uniform/get-location program-id, "texture2") 1)
+    (GL20/glUniform1i (uniform/get-location program-id, "texture1") 0)
+    (GL20/glUniform1i (uniform/get-location program-id, "texture2") 1)
 
     ;; projection matrix (perspective)
     (GL20/glUniformMatrix4fv (uniform/get-location program-id "projection") false (buffer/create-float-buffer (transformation/make "perspective-projection" [45.0 (/ 1280.0 960.0) 0.1 100.0])))
@@ -45,10 +47,10 @@
       (program/bind program-id)
       (GL20/glUniformMatrix4fv view-position false camera)
       ;; Texture
-      ;;(GL13/glActiveTexture GL13/GL_TEXTURE0)
-      ;;(GL11/glBindTexture GL11/GL_TEXTURE_2D texture1-id)
-      ;;(GL13/glActiveTexture GL13/GL_TEXTURE1)
-      ;;(GL11/glBindTexture GL11/GL_TEXTURE_2D texture2-id)
+      (GL13/glActiveTexture GL13/GL_TEXTURE0)
+      (GL11/glBindTexture GL11/GL_TEXTURE_2D texture1-id)
+      (GL13/glActiveTexture GL13/GL_TEXTURE1)
+      (GL11/glBindTexture GL11/GL_TEXTURE_2D texture2-id)
 
       (GL30/glBindVertexArray vao-id)
 
