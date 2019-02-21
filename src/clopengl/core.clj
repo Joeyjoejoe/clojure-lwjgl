@@ -35,6 +35,11 @@
     (swap! (state/get-atom) assoc :deltatime (- curr prev))
 
     (clojure.pprint/pprint (state/get-data))
+    (clojure.pprint/pprint curr)
+
+    ;; Trigger events based on time
+    ;; (time-triggers curr)
+
     ;;  (handle-inputs)
     (state/update-camera)
     ;; Handle game logic and update

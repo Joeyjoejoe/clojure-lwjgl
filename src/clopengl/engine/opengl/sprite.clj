@@ -1,7 +1,7 @@
 
 ;;  _____________________________
 ;; |     |     |     |     |     |  Here is a sprite sheet composed of 25 frames numeroted from 0 to 24.
-;; |  0  |  1  |  2  |  3  |  4  |  The spirte sheet is composed of:
+;; |  0  |  1  |  2  |  3  |  4  |  The sprite sheet is composed of:
 ;; |_____|_____|_____|_____|_____|    * 5 frames horizontal: FH = 5
 ;; |     |     |     |     |     |    * 5 frames vertical:   FV = 5
 ;; |  5  |  6  |  7  |  8  |  9  |
@@ -22,8 +22,9 @@
 
 (defprotocol Activable
   (current [this] "Return the collection active element")
-  (next [this] "Set element after active one to active"))
+  (next [this] "Active the next element, looping through the collection"))
 
+;; A finite collection with one active element
 (deftype RelayVector [collection active]
   Activable
   (current [this] (nth collection active))
