@@ -8,8 +8,6 @@ layout (location = 3) in mat4 aWorldPos;
 out vec4 vertexColor;
 out vec2 TexCoord;
 
-uniform mat4 rotate;
-uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 

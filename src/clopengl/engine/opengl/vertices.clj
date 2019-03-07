@@ -37,7 +37,6 @@
 
     ;; projection matrix (perspective)
     (GL20/glUniformMatrix4fv (uniform/get-location program-id "projection") false (buffer/create-float-buffer (transformation/make "perspective-projection" [45.0 (/ 1280.0 960.0) 0.1 100.0])))
-    (def model-position (uniform/get-location program-id "model"))
     (def view-position (uniform/get-location program-id "view"))
 
     (program/unbind)
