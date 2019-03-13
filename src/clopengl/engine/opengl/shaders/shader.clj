@@ -14,9 +14,8 @@
       (throw (Exception. (str "Error compiling shader: " (GL20/glGetShaderInfoLog shader-id 1024) " in " file-path))))
     shader-id))
 
-(defn init-defaults []
-  (def default-vertex
-    (load-and-compile "default.vert" GL20/GL_VERTEX_SHADER))
+(defn add-vertex [shader-path]
+  (load-and-compile shader-path GL20/GL_VERTEX_SHADER))
 
-  (def default-fragment
-    (load-and-compile "default.frag" GL20/GL_FRAGMENT_SHADER)))
+(defn add-fragment [shader-path]
+  (load-and-compile shader-path GL20/GL_FRAGMENT_SHADER))

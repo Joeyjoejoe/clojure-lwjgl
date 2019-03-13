@@ -2,6 +2,7 @@
   (:use [clopengl.engine.utilities.misc])
   (:require [clopengl.engine.opengl.window :as window]
             [clopengl.engine.opengl.vertices :as vertices]
+            [clopengl.engine.opengl.shaders.program :as program]
 						[clopengl.engine.utilities.parser_3d.ply :as ply]
 						[clopengl.engine.utilities.shapes.basic :as shape]
             [clopengl.engine.opengl.buffers :as buffer]
@@ -15,13 +16,16 @@
   "Start the game"
 
   (def window (window/create {:width 1280 :height 960 :title "My Game"}))
-  (shader/init-defaults)
+
+  (let [programs {:default (program/defprogram "default.vert" "default.frag")
+                  :light-source (program/defprogram "basic.vert" "simple-light.frag")}]
+    (swap! (state/get-atom) assoc-in [:engine :shader-programs] programs))
 
   ;; Load shapes datas to GC and store render functions
-  (def pandaki (vertices/setup (ply/parse-ply "pandaki2.ply") 10))
-  (def triangles (vertices/setup (shape/triangle true) 200))
-  (def cubes (vertices/setup (shape/cube true) 100))
-  (def ground (vertices/setup (shape/rectangle2D 100 75 :vertical) 1))
+  (def pandaki (vertices/setup (ply/parse-ply "pandaki2.ply") 10 (:default (:shader-programs (state/get-data :engine)))))
+  (def triangles (vertices/setup (shape/triangle true) 200 (:default (:shader-programs (state/get-data :engine)))))
+  (def cubes (vertices/setup (shape/cube true) 100 (:default (:shader-programs (state/get-data :engine)))))
+  (def ground (vertices/setup (shape/rectangle2D 100 75 :vertical) 1 (:default (:shader-programs (state/get-data :engine)))))
 
   (swap! (state/get-atom) assoc :render [ground cubes pandaki])
 

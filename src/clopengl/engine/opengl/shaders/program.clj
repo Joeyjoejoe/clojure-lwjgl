@@ -38,19 +38,17 @@
   (when (not= 0 program-id)
     (GL20/glDeleteProgram program-id)))
 
-(defn init
-  ([] (init shader/default-vertex shader/default-fragment))
+(defn defprogram [vertex-shader fragment-shader]
+  (let [program-id (create)
+        vertex-shader-id (shader/add-vertex vertex-shader)
+        fragment-shader-id (shader/add-fragment fragment-shader)]
+    (attach-shader program-id vertex-shader-id)
+    (attach-shader program-id fragment-shader-id)
+    (link program-id)
+    (GL20/glDeleteShader vertex-shader-id)
+    (GL20/glDeleteShader fragment-shader-id)
+    ;; To remove for production
+    ;;(validate program-id)
 
-  ([& shaders-ids]
-    (let [program-id (create)]
-      (doseq [shader-id shaders-ids]
-        (attach-shader program-id shader-id))
+    program-id))
 
-      (link program-id)
-
-      (doseq [shader-id shaders-ids]
-        (GL20/glDeleteShader shader-id))
-
-      ;; To remove for production
-      ;;(validate program-id)
-      program-id)))

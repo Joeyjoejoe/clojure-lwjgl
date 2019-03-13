@@ -9,7 +9,7 @@
             [clopengl.engine.state.global :as state])
   (:import (org.lwjgl.opengl GL11 GL13 GL20 GL30 GL31)))
 
-(defn setup [shape instances]
+(defn setup [shape instances program-id]
   "Take a list of vertices (coordinates [x y z] of a pixel and optionaly its color), indices is a list of index from vertices, used to describe triangles."
   (let [vertices (:vertices shape)
         indices (:indices shape)
@@ -17,7 +17,6 @@
         _ (GL30/glBindVertexArray vao-id)
 	      texture1-id (textures/setup (.getAbsolutePath (io/file (io/resource "textures/container.jpg"))))
 	      texture2-id (textures/setup (.getAbsolutePath (io/file (io/resource "textures/awesomeface.png"))))
-        program-id (program/init)
 	      instances-coords (rand-positions instances)
 	      points-count (if (= 0 (count indices)) (count vertices) (count indices) )]
 
