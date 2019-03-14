@@ -17,17 +17,19 @@
 
   (def window (window/create {:width 1280 :height 960 :title "My Game"}))
 
-  (let [programs {:default (program/defprogram "default.vert" "default.frag")
-                  :light-source (program/defprogram "basic.vert" "simple-light.frag")}]
+  (let [programs {:default (program/defprogram "vertices/default.vert" "fragments/lightnings/default.frag")
+                  :light-source (program/defprogram "vertices/default.vert" "fragments/unicolor.frag")}]
     (swap! (state/get-atom) assoc-in [:engine :shader-programs] programs))
 
   ;; Load shapes datas to GC and store render functions
-  (def pandaki (vertices/setup (ply/parse-ply "pandaki2.ply") 10 (:default (:shader-programs (state/get-data :engine)))))
-  (def triangles (vertices/setup (shape/triangle true) 200 (:default (:shader-programs (state/get-data :engine)))))
-  (def cubes (vertices/setup (shape/cube true) 100 (:default (:shader-programs (state/get-data :engine)))))
-  (def ground (vertices/setup (shape/rectangle2D 100 75 :vertical) 1 (:default (:shader-programs (state/get-data :engine)))))
+  ;;(def pandaki (vertices/setup (ply/parse-ply "pandaki2.ply") 10 (state/shader-program :default)))
+  ;;(def triangles (vertices/setup (shape/triangle true) 200 (state/shader-program :default)))
+  ;;(def cubes (vertices/setup (shape/cube true) 100 (state/shader-program :default)))
+  ;;(def ground (vertices/setup (shape/rectangle2D 100 75 :vertical) 1 (state/shader-program :default)))
+  (def cube (vertices/setup (shape/cube true) 1 (state/shader-program :default)))
+  (def lamp (vertices/setup (shape/cube true) 1 (state/shader-program :light-source)))
 
-  (swap! (state/get-atom) assoc :render [ground cubes pandaki])
+  (swap! (state/get-atom) assoc :render [cube lamp])
 
   ;;  Start game loop
   (loop [to-render-functions (state/get-data :render)

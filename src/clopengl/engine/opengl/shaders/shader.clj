@@ -5,7 +5,7 @@
 (defn load-and-compile [file-path shader-type]
   "Compile a shader file and return its id"
   (let [shader-id   (GL20/glCreateShader shader-type)
-        file        (io/file (io/resource file-path))
+        file        (io/file (io/resource (str "shaders/" file-path)))
         shader-code (slurp file)]
     (when (= 0 shader-id) (throw (Exception. (str "Error creating shader of type: " shader-type))))
     (GL20/glShaderSource shader-id shader-code)

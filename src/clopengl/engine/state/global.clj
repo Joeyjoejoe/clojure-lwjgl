@@ -19,3 +19,6 @@
 
 (defn update-camera []
   (camera/update (get-atom)))
+
+(defn shader-program [identifier]
+  (-> (get-data :engine) :shader-programs identifier))
