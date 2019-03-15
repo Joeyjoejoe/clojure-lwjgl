@@ -23,18 +23,22 @@
    (let [coordinates (vec (mapcat #(select-values %1 [:coordinates]) datas))
          colors (vec (mapcat #(select-values % [:color]) datas))
          textures (vec (mapcat #(select-values % [:texture]) datas))
+         normals (vec (mapcat #(select-values % [:normals]) datas))
          vertex-size (count (:coordinates (first datas)))
          color-size (count (:color (first datas)))
          texture-size (count (:texture (first datas)))
-         stride (* (+ vertex-size color-size texture-size) java.lang.Float/BYTES)
+         normals-size (count (:normals (first datas)))
+         stride (* (+ vertex-size color-size texture-size normals-size) java.lang.Float/BYTES)
          vertex-position 0
          color-position 1
          texture-position 2
+         normals-position 3
          color-offset (* vertex-size java.lang.Float/BYTES)
          texture-offset (* (+ vertex-size color-size) java.lang.Float/BYTES)
+         normals-offset (* (+ vertex-size color-size texture-size) java.lang.Float/BYTES)
          data-type GL11/GL_FLOAT
          normalize-datas? false
-         formated-datas (vec (mapcat concat coordinates colors textures))
+         formated-datas (vec (mapcat concat coordinates colors textures normals))
          vertices-buffer (create-float-buffer formated-datas)
          vbo-id (GL15/glGenBuffers)]
 
@@ -51,6 +55,10 @@
     ;; Decribe texture
     (GL20/glVertexAttribPointer texture-position texture-size data-type normalize-datas? stride texture-offset)
     (GL20/glEnableVertexAttribArray texture-position)
+
+    ;; Decribe normals
+    (GL20/glVertexAttribPointer normals-position normals-size data-type normalize-datas? stride normals-offset)
+    (GL20/glEnableVertexAttribArray normals-position)
 
     ;; note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
     (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER 0)))
@@ -82,22 +90,22 @@
     (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER pbo-id)
     (GL15/glBufferData GL15/GL_ARRAY_BUFFER ^java.nio.DirectFloatBufferU vertices-buffer GL15/GL_STATIC_DRAW)
 
-    (GL20/glEnableVertexAttribArray 3)
-    (GL20/glVertexAttribPointer 3 4 data-type normalize-datas? stride 0)
-
     (GL20/glEnableVertexAttribArray 4)
-    (GL20/glVertexAttribPointer 4 4 data-type normalize-datas? stride vector-bytes-size)
+    (GL20/glVertexAttribPointer 4 4 data-type normalize-datas? stride 0)
 
     (GL20/glEnableVertexAttribArray 5)
-    (GL20/glVertexAttribPointer 5 4 data-type normalize-datas? stride (* 2 vector-bytes-size))
+    (GL20/glVertexAttribPointer 5 4 data-type normalize-datas? stride vector-bytes-size)
 
     (GL20/glEnableVertexAttribArray 6)
-    (GL20/glVertexAttribPointer 6 4 data-type normalize-datas? stride (* 3 vector-bytes-size))
+    (GL20/glVertexAttribPointer 6 4 data-type normalize-datas? stride (* 2 vector-bytes-size))
 
-    (GL33/glVertexAttribDivisor 3 1)
+    (GL20/glEnableVertexAttribArray 7)
+    (GL20/glVertexAttribPointer 7 4 data-type normalize-datas? stride (* 3 vector-bytes-size))
+
     (GL33/glVertexAttribDivisor 4 1)
     (GL33/glVertexAttribDivisor 5 1)
     (GL33/glVertexAttribDivisor 6 1)
+    (GL33/glVertexAttribDivisor 7 1)
 
     ;; note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
     (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER 0)))

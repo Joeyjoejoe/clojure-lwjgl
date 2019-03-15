@@ -4,6 +4,8 @@ out vec4 outColor;
 
 in vec4 vertexColor;
 in vec2 TexCoord;
+in vec3 Normal;
+in vec3 FragPos;
 
 uniform sampler2D texture1;
 uniform sampler2D texture2;

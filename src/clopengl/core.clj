@@ -26,8 +26,8 @@
   ;;(def triangles (vertices/setup (shape/triangle true) 200 (state/shader-program :default)))
   ;;(def cubes (vertices/setup (shape/cube true) 100 (state/shader-program :default)))
   ;;(def ground (vertices/setup (shape/rectangle2D 100 75 :vertical) 1 (state/shader-program :default)))
-  (def cube (vertices/setup (shape/cube true) 1 (state/shader-program :default)))
-  (def lamp (vertices/setup (shape/cube true) 1 (state/shader-program :light-source)))
+  (def cube (vertices/setup (shape/cube-w-normals) 1 (state/shader-program :default)))
+  (def lamp (vertices/setup (shape/cube-w-normals) 1 (state/shader-program :light-source)))
 
   (swap! (state/get-atom) assoc :render [cube lamp])
 
