@@ -7,12 +7,12 @@ out vec4 FragColor;
 
 void main()
 {
-
-  float ambientStrength = 0.5;
-  vec3 ambient = ambientStrength * vec3(1.0);
-
   vec3 lightColor = vec3(1.0);
   vec3 lightPos = vec3(1.0);
+
+  float ambientStrength = 0.5;
+  vec3 ambient = ambientStrength * lightColor;
+
   vec3 norm = normalize(Normal);
   vec3 lightDir = normalize(lightPos - FragPos);
   float diff = max(dot(norm, lightDir), 0.0);

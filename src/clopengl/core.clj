@@ -18,7 +18,7 @@
   (def window (window/create {:width 1280 :height 960 :title "My Game"}))
 
   (let [programs {:default (program/defprogram "vertices/default.vert" "fragments/lightnings/default.frag")
-                  :light-source (program/defprogram "vertices/default.vert" "fragments/unicolor.frag")}]
+                  :light-source (program/defprogram "vertices/light-source.vert" "fragments/default.frag")}]
     (swap! (state/get-atom) assoc-in [:engine :shader-programs] programs))
 
   ;; Load shapes datas to GC and store render functions
@@ -27,7 +27,7 @@
   ;;(def cubes (vertices/setup (shape/cube true) 100 (state/shader-program :default)))
   ;;(def ground (vertices/setup (shape/rectangle2D 100 75 :vertical) 1 (state/shader-program :default)))
   (def cube (vertices/setup (shape/cube-w-normals) 1 (state/shader-program :default)))
-  (def lamp (vertices/setup (shape/cube-w-normals) 1 (state/shader-program :light-source)))
+  (def lamp (vertices/setup (shape/cube true) 1 (state/shader-program :light-source)))
 
   (swap! (state/get-atom) assoc :render [cube lamp])
 
