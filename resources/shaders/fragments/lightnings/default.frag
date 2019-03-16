@@ -1,5 +1,6 @@
 #version 330 core
 in vec3 vertexColor;
+in vec2 TexCoord;
 in vec3 Normal;
 in vec3 FragPos;
 out vec4 FragColor;
@@ -8,7 +9,7 @@ out vec4 FragColor;
 void main()
 {
   vec3 lightColor = vec3(1.0);
-  vec3 lightPos = vec3(1.0);
+  vec3 lightPos = vec3(0.0, 0.0, 0.0);
 
   float ambientStrength = 0.5;
   vec3 ambient = ambientStrength * lightColor;

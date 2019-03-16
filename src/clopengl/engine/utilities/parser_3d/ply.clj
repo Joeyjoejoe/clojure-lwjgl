@@ -9,7 +9,7 @@
 
 (defn coords-n-colors [data]
   (let [[x y z nx ny nz _ _ r g b] data]
-    {:coordinates [x y z] :color [r g b] :texture [0.0 0.0]}))
+    {:coordinates [x y z] :normals [nx ny nz] :color [r g b] :texture [0.0 0.0]}))
 
 (defn parse-ply [file-path]
   (let [file  (slurp (io/file (io/resource file-path)))
