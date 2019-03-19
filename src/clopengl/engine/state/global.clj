@@ -22,3 +22,6 @@
 
 (defn shader-program [identifier]
   (-> (get-data :engine) :shader-programs identifier))
+
+(defn cam [identifier]
+  (-> (get-data :camera) identifier))

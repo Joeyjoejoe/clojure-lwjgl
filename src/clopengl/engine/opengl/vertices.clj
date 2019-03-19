@@ -37,13 +37,15 @@
     ;; projection matrix (perspective)
     (GL20/glUniformMatrix4fv (uniform/get-location program-id "projection") false (buffer/create-float-buffer (transformation/make "perspective-projection" [45.0 (/ 1280.0 960.0) 0.1 100.0])))
     (def view-position (uniform/get-location program-id "view"))
+    (def camera-position (uniform/get-location program-id "camPos"))
 
     (program/unbind)
 
     ;; Return a function with draw code
-    (fn [camera]
+    (fn [camera cam-position]
       (program/bind program-id)
       (GL20/glUniformMatrix4fv view-position false camera)
+      (GL20/glUniform3fv camera-position cam-position)
       ;; Texture
       (GL13/glActiveTexture GL13/GL_TEXTURE0)
       (GL11/glBindTexture GL11/GL_TEXTURE_2D texture1-id)

@@ -71,10 +71,11 @@
 
 (defn render [window to-render-functions]
   "Draw everything needed in the GLFW window. to-render-functions is a vector of functions that contains OpenGL instructions to draw shapes from corresponding VAO"
-  (let [cam (buffer/create-float-buffer (transformation/make "look-at" [(state/get-data :camera)]))]
+  (let [cam (buffer/create-float-buffer (transformation/make "look-at" [(state/get-data :camera)]))
+        cam-position (buffer/create-float-buffer (state/cam :front))]
   (GL11/glClearColor 0.0 0.0 0.0 1.0)
   (GL11/glClear (bit-or GL11/GL_COLOR_BUFFER_BIT GL11/GL_DEPTH_BUFFER_BIT))
-  (doseq [f to-render-functions] (f cam))
+  (doseq [f to-render-functions] (f cam cam-position))
 
   (GLFW/glfwSwapBuffers window)
   (GLFW/glfwPollEvents)))
