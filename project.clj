@@ -16,7 +16,7 @@
 (def LWJGL_NS "org.lwjgl")
 
 ;; Edit this to change the version.
-(def LWJGL_VERSION "3.2.1")
+(def LWJGL_VERSION "3.2.3")
 
 ;; Edit this to add/remove packages.
 (def LWJGL_MODULES ["lwjgl"
