@@ -75,7 +75,8 @@
      [org.clojure/tools.logging "0.3.1"]
      [net.mikera/vectorz-clj "0.47.0"]
 		 [thi.ng/math "0.2.1"]
-     [org.slf4j/slf4j-log4j12 "1.7.12"]]
+     [org.slf4j/slf4j-log4j12 "1.7.12"]
+     [codox-theme-rdash "0.1.2"]]
 		(lwjgl-deps-with-natives)))
 
 (defproject clopengl "0.1.0-SNAPSHOT"
@@ -85,6 +86,10 @@
   :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies ~all-dependencies
   :jvm-opts ^:replace ~(jvm-opts)
-  :plugins [[cider/cider-nrepl "0.17.0"]]
+  :plugins [[cider/cider-nrepl "0.17.0"]
+            [lein-codox "0.10.7"]]
+  :codox {:metadata {:doc/format :markdown}
+          :themes [:rdash]
+          :source-uri "https://github.com/Joeyjoejoe/clopengl/blob/master/{filepath}#L{line}"}
   :main clopengl.core
   :repl-options {:init-ns clopengl.core})
