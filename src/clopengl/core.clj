@@ -7,7 +7,9 @@
 						[clopengl.engine.utilities.shapes.basic :as shape]
             [clopengl.engine.opengl.buffers :as buffer]
             [clopengl.engine.state.global :as state]
-            [clopengl.engine.opengl.shaders.shader :as shader])
+            [clopengl.engine.opengl.shaders.shader :as shader]
+            [clopengl.opengl.abstract.transformation :as transform]
+            [clopengl.opengl.program :as new-prog])
   (:import (org.lwjgl.glfw GLFW))
   (:gen-class))
 
@@ -17,7 +19,10 @@
 
   (def window (window/create {:width 1280 :height 960 :title "My Game"}))
 
-  (let [programs {:default (program/defprogram "vertices/default.vert" "fragments/lightnings/default.frag")
+  (def newp (transform/data->opengl! new-prog/default-prog))
+
+  (let [programs {:default (:id newp)
+                  ;;:default (program/defprogram "vertices/default.vert" "fragments/lightnings/default.frag")
                   :light-source (program/defprogram "vertices/light-source.vert" "fragments/default.frag")}]
     (swap! (state/get-atom) assoc-in [:engine :shader-programs] programs))
 
