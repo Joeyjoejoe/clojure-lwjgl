@@ -33,6 +33,7 @@
   "Creates a program datastructure."
   []
   {:id nil
+   :type :program
    :uniforms {}
    :shaders  []})
 
@@ -40,18 +41,19 @@
   "Creates a shader datastructure and place it in the provided program (if any)."
   ([path stage]
    {:path path
-    :type stage})
+    :type :shader
+    :stage stage})
   ([program path stage]
    (let [shader (+shader path stage)]
      (update program :shaders conj shader))))
 
-(defn yo [] "yo")
 (defn +uniform
   "Creates a uniform datastructure with or without value and store it in the provided programe (if any)."
   ([uname vtype]
    {:name uname
-    :type vtype
+    :type :uniform
     :value nil
+    :vtype vtype
     :location nil})
   ([program uname vtype]
    (let [uniform (+uniform uname vtype)]
