@@ -31,25 +31,32 @@
       (+uniform "camPos" "vec3")))
 
 (defmethod transform/data->opengl! :program
-  [h]
-  (let [program-id    (GL20/glCreateProgram)
-        shader-ids (map transform/data->opengl! (:shaders h))]
-    ;; Attach compiled shaders code to program
-    (doseq [sid shader-ids]
-      (GL20/glAttachShader program-id sid))
-
-    ;; Link program
-    (GL20/glLinkProgram program-id)
-    (when (= 0 (GL20/glGetProgrami program-id GL20/GL_LINK_STATUS))
-      (throw (Exception. (str "Error linking shader to program: " (GL20/glGetProgramInfoLog program-id 1024)))))
-
+  [h & _]
+  (let [program-id (GL20/glCreateProgram)
+        shader-ids (map transform/data->opengl! (:shaders h))
+                   ;; Attach compiled shaders code to program
+        _          (doseq [sid shader-ids] (GL20/glAttachShader program-id sid))
+                   ;; Link program
+        _          (doseq []
+                     (GL20/glLinkProgram program-id)
+                     (when (= 0 (GL20/glGetProgrami program-id GL20/GL_LINK_STATUS))
+                       (throw (Exception. (str
+                                            "Error linking shader to program: "
+                                            (GL20/glGetProgramInfoLog program-id 1024))))))
+                   ;; Get uniforms locations
+        uniforms   (into {} (map
+                              (fn [[k v]] [k (transform/data->opengl! v program-id)])
+                              (:uniforms h)))]
     ;; Delete shaders
     (doseq [sid shader-ids]
       (GL20/glDeleteShader sid))
-    (assoc h :id program-id)))
+
+    (-> h
+        (assoc :id program-id)
+        (assoc :uniforms uniforms))))
 
 (defmethod transform/data->opengl! :shader
-  [h]
+  [h & _]
   (let [stage (:stage h)
         path (:path h)
         id    (GL20/glCreateShader stage)
@@ -61,3 +68,10 @@
     (when (= 0 (GL20/glGetShaderi id GL20/GL_COMPILE_STATUS))
       (throw (Exception. (str "Error compiling shader: " (GL20/glGetShaderInfoLog id 1024) " in " path))))
     id))
+
+(defmethod transform/data->opengl! :uniform
+  [h & opts]
+  (let [uname      (:name h)
+        program-id (first opts)
+        location   (GL20/glGetUniformLocation ^Long program-id ^String uname)]
+    (assoc h :location location)))

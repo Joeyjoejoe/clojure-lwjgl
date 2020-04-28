@@ -2,7 +2,7 @@
   "Interface definition for transforming data.")
 
 (defmulti data->opengl!
-  (fn [data]
+  (fn [data & opts]
     (:type data)))
 
 ;; Would it be usefull?

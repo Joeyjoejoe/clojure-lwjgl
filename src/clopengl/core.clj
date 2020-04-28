@@ -19,8 +19,9 @@
 
   (def window (window/create {:width 1280 :height 960 :title "My Game"}))
 
+  (def newp (transform/data->opengl! new-prog/default-prog))
 
-  (let [programs {:default (:id (transform/data->opengl! new-prog/default-prog))
+  (let [programs {:default (:id newp)
                   ;;:default (program/defprogram "vertices/default.vert" "fragments/lightnings/default.frag")
                   :light-source (program/defprogram "vertices/light-source.vert" "fragments/default.frag")}]
     (swap! (state/get-atom) assoc-in [:engine :shader-programs] programs))
