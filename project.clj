@@ -71,7 +71,7 @@
 
 (def all-dependencies
   (into ;; Add your non-LWJGL dependencies here
-   	'[[org.clojure/clojure "1.8.0"]
+   	'[[org.clojure/clojure "1.10.1"]
      [org.clojure/tools.logging "0.3.1"]
      [net.mikera/vectorz-clj "0.47.0"]
 		 [thi.ng/math "0.2.1"]
@@ -86,7 +86,7 @@
   :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies ~all-dependencies
   :jvm-opts ^:replace ~(jvm-opts)
-  :plugins [[cider/cider-nrepl "0.17.0"]
+  :plugins [[cider/cider-nrepl "0.25.3"]
             [lein-codox "0.10.7"]]
   :codox {:metadata {:doc/format :markdown}
           :themes [:rdash]
