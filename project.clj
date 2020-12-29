@@ -76,7 +76,6 @@
      [org.joml/joml "1.10.0"]
      [net.mikera/vectorz-clj "0.47.0"]
 		 [thi.ng/math "0.2.1"]
-     [org.slf4j/slf4j-log4j12 "1.7.12"]
      [codox-theme-rdash "0.1.2"]]
 		(lwjgl-deps-with-natives)))
 

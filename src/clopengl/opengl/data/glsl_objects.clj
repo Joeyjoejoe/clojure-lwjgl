@@ -33,7 +33,7 @@
   "Creates a program datastructure."
   []
   {:id nil
-   :type :program
+   :type :type/program
    :uniforms {}
    :shaders  []})
 
@@ -41,7 +41,7 @@
   "Creates a shader datastructure and place it in the provided program (if any)."
   ([path stage]
    {:path path
-    :type :shader
+    :type :type/shader
     :stage stage})
   ([program path stage]
    (let [shader (+shader path stage)]
@@ -51,7 +51,7 @@
   "Creates a uniform datastructure with or without value and store it in the provided programe (if any)."
   ([uname vtype]
    {:name uname
-    :type :uniform
+    :type :type/uniform
     :value nil
     :vtype vtype
     :location nil})
@@ -63,10 +63,3 @@
   "Set program's uniform `uname` value"
   [program uname value]
   (assoc-in program [:uniforms uname :value] value))
-
-;; (def prg-default
-;;  (-> (program)
-;;      (+shader  "vertices/default.vert" GL20/GL_VERTEX_SHADER)
-;;      (+shader  "fragments/lightnings/default.frag" GL20/GL_FRAGMENT_SHADER)
-;;      (+uniform "view")
-;;      (+uniform "projection"))

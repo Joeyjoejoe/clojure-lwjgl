@@ -38,7 +38,7 @@
       (+uniform "projection" "mat4")
       (+uniform "positionTransformation" "mat4")))
 
-(defmethod transform/data->opengl! :program
+(defmethod transform/data->opengl! :type/program
   [h & _]
   (let [program-id (GL20/glCreateProgram)
         shader-ids (map transform/data->opengl! (:shaders h))
@@ -63,7 +63,7 @@
         (assoc :id program-id)
         (assoc :uniforms uniforms))))
 
-(defmethod transform/data->opengl! :shader
+(defmethod transform/data->opengl! :type/shader
   [h & _]
   (let [stage (:stage h)
         path (:path h)
@@ -77,7 +77,7 @@
       (throw (Exception. (str "Error compiling shader: " (GL20/glGetShaderInfoLog id 1024) " in " path))))
     id))
 
-(defmethod transform/data->opengl! :uniform
+(defmethod transform/data->opengl! :type/uniform
   [h & opts]
   (let [uname      (:name h)
         program-id (first opts)
