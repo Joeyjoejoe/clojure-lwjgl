@@ -13,12 +13,14 @@ out vec3 FragPos;
 
 uniform mat4 view;
 uniform mat4 projection;
+uniform mat4 positionTransformation;
 
 void main()
 {
-    FragPos = vec3(aWorldPos * vec4(aPos, 1.0));
+    mat4 worldPosTransformation = aWorldPos * positionTransformation;
+    FragPos = vec3(worldPosTransformation * vec4(aPos, 1.0));
     vertexColor = aColor;
     TexCoord = aTexCoord;
-    Normal = mat3(transpose(inverse(aWorldPos))) * aNormal;
+    Normal = mat3(transpose(inverse(worldPosTransformation))) * aNormal;
     gl_Position = projection * view * vec4(FragPos, 1.0);
 }

@@ -75,7 +75,7 @@
         cam-position (buffer/create-float-buffer (state/cam :front))]
   (GL11/glClearColor 0.0 0.0 0.8 0.5)
   (GL11/glClear (bit-or GL11/GL_COLOR_BUFFER_BIT GL11/GL_DEPTH_BUFFER_BIT))
-  (doseq [f to-render-functions] (f cam cam-position))
+  (doseq [f to-render-functions] (f cam cam-position (buffer/create-float-buffer (transformation/make "rotate-x" [(* 200.0 (GLFW/glfwGetTime))]))))
 
   (GLFW/glfwSwapBuffers window)
   (GLFW/glfwPollEvents)))

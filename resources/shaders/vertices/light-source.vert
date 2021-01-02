@@ -10,9 +10,10 @@ out vec3 vertexColor;
 
 uniform mat4 view;
 uniform mat4 projection;
+uniform mat4 positionTransformation;
 
 void main()
 {
-    gl_Position = projection * view * aWorldPos * vec4(aPos, 1.0);
+    gl_Position = projection * view * aWorldPos * positionTransformation * vec4(aPos, 1.0);
     vertexColor = aColor;
 }

@@ -28,7 +28,15 @@
       (+shader  "shaders/fragments/lightnings/default.frag" GL20/GL_FRAGMENT_SHADER)
       (+uniform "view" "mat4")
       (+uniform "projection" "mat4")
-      (+uniform "camPos" "vec3")))
+      (+uniform "positionTransformation" "mat4")))
+
+(def light-source
+  (-> (program)
+      (+shader  "shaders/vertices/light-source.vert" GL20/GL_VERTEX_SHADER)
+      (+shader  "shaders/fragments/default.frag" GL20/GL_FRAGMENT_SHADER)
+      (+uniform "view" "mat4")
+      (+uniform "projection" "mat4")
+      (+uniform "positionTransformation" "mat4")))
 
 (defmethod transform/data->opengl! :program
   [h & _]

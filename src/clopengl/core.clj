@@ -19,11 +19,8 @@
 
   (def window (window/create {:width 1280 :height 960 :title "My Game"}))
 
-  (def newp (transform/data->opengl! new-prog/default-prog))
-
-  (let [programs {:default (:id newp)
-                  ;;:default (program/defprogram "vertices/default.vert" "fragments/lightnings/default.frag")
-                  :light-source (program/defprogram "vertices/light-source.vert" "fragments/default.frag")}]
+  (let [programs {:default (:id (transform/data->opengl! new-prog/default-prog))
+                  :light-source (:id (transform/data->opengl! new-prog/light-source))}]
     (swap! (state/get-atom) assoc-in [:engine :shader-programs] programs))
 
   ;; Load shapes datas to GC and store render functions

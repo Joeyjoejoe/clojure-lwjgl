@@ -38,13 +38,15 @@
     (GL20/glUniformMatrix4fv (uniform/get-location program-id "projection") false (buffer/create-float-buffer (transformation/make "perspective-projection" [45.0 (/ 1280.0 960.0) 0.1 100.0])))
     (def view-position (uniform/get-location program-id "view"))
     (def camera-position (uniform/get-location program-id "camPos"))
+    (def obj-position (uniform/get-location program-id "positionTransformation"))
 
     (program/unbind)
 
     ;; Return a function with draw code
-    (fn [camera cam-position]
+    (fn [camera cam-position world-pos]
       (program/bind program-id)
       (GL20/glUniformMatrix4fv view-position false camera)
+      (GL20/glUniformMatrix4fv obj-position false world-pos)
       (GL20/glUniform3fv camera-position cam-position)
       ;; Texture
       (GL13/glActiveTexture GL13/GL_TEXTURE0)
@@ -63,4 +65,3 @@
         (if (= 0 (count indices))
     	    (GL11/glDrawArrays GL11/GL_TRIANGLES 0 points-count) ;; Normal draw
           (GL11/glDrawElements GL11/GL_TRIANGLES points-count GL11/GL_UNSIGNED_INT 0)))))) ;; Draw with indices
-
