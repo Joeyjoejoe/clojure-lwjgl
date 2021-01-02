@@ -5,7 +5,10 @@
             [clopengl.engine.opengl.buffers :as buffer]
             [clopengl.engine.utilities.transformations :as transformation]
             [clopengl.engine.state.global :as state]
-	          [clopengl.engine.glfw.controls.mouse :as mouse])
+	          [clopengl.engine.glfw.controls.mouse :as mouse]
+            [clopengl.opengl.data.space-mutations :as sm]
+            [clopengl.opengl.abstract.transformation :as transform]
+            [clopengl.opengl.motions :as _])
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.glfw GLFW GLFWKeyCallback GLFWErrorCallback)
            (org.lwjgl.system MemoryUtil)
@@ -75,15 +78,19 @@
   "Draw everything needed in the GLFW window. to-render-functions is a vector of functions that contains OpenGL instructions to draw shapes from corresponding VAO"
   (let [cam (buffer/create-float-buffer (transformation/make "look-at" [(state/get-data :camera)]))
         cam-position (buffer/create-float-buffer (state/cam :front))
-        transform-buffer (BufferUtils/createFloatBuffer 16)
-        positionTransformation (-> (Matrix4f.)
-                                   (.translate (* 2.0 (Math/sin (GLFW/glfwGetTime))) 1.0 1.0)
-                                   (.rotateXYZ (* 2.0 (GLFW/glfwGetTime)) (* 2.0 (GLFW/glfwGetTime)) (* 0.5 (GLFW/glfwGetTime)))
-                                   (.get transform-buffer))]
-                             ;;    (GLFW/glfwGetTime))]
+        pos-trans-data (-> (sm/transform-matrix)
+                           (sm/+rotate :x (* 200.0 (GLFW/glfwGetTime)))
+                           (sm/+rotate :z (* 200.0 (GLFW/glfwGetTime)))
+                           (sm/+scale (+ 4.0 (Math/sin (GLFW/glfwGetTime))))
+                           (sm/+translate :x (* 2.0 (Math/sin (GLFW/glfwGetTime))))
+                           (sm/+translate :y (* 2.0 (Math/sin (GLFW/glfwGetTime))))
+                           (sm/+translate :z (* 2.0 (Math/sin (GLFW/glfwGetTime)))))
+
+        pos-trans-buffer (:buffer (transform/data->opengl! pos-trans-data))]
+
   (GL11/glClearColor 0.0 0.0 0.8 0.5)
   (GL11/glClear (bit-or GL11/GL_COLOR_BUFFER_BIT GL11/GL_DEPTH_BUFFER_BIT))
-  (doseq [f to-render-functions] (f cam cam-position transform-buffer))
+  (doseq [f to-render-functions] (f cam cam-position pos-trans-buffer))
 
   (GLFW/glfwSwapBuffers window)
   (GLFW/glfwPollEvents)))
