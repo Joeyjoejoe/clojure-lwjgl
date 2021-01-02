@@ -9,7 +9,9 @@
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.glfw GLFW GLFWKeyCallback GLFWErrorCallback)
            (org.lwjgl.system MemoryUtil)
-           (org.lwjgl.opengl GL11 GL)))
+           (org.lwjgl BufferUtils)
+           (org.lwjgl.opengl GL11 GL)
+           (org.joml Matrix4f)))
 
 (defn initialize [params]
   "Create the game window and set the OpenGl context where everything will be draw"
@@ -72,10 +74,16 @@
 (defn render [window to-render-functions]
   "Draw everything needed in the GLFW window. to-render-functions is a vector of functions that contains OpenGL instructions to draw shapes from corresponding VAO"
   (let [cam (buffer/create-float-buffer (transformation/make "look-at" [(state/get-data :camera)]))
-        cam-position (buffer/create-float-buffer (state/cam :front))]
+        cam-position (buffer/create-float-buffer (state/cam :front))
+        transform-buffer (BufferUtils/createFloatBuffer 16)
+        positionTransformation (-> (Matrix4f.)
+                                   (.translate (* 2.0 (Math/sin (GLFW/glfwGetTime))) 1.0 1.0)
+                                   (.rotateXYZ (* 2.0 (GLFW/glfwGetTime)) (* 2.0 (GLFW/glfwGetTime)) (* 0.5 (GLFW/glfwGetTime)))
+                                   (.get transform-buffer))]
+                             ;;    (GLFW/glfwGetTime))]
   (GL11/glClearColor 0.0 0.0 0.8 0.5)
   (GL11/glClear (bit-or GL11/GL_COLOR_BUFFER_BIT GL11/GL_DEPTH_BUFFER_BIT))
-  (doseq [f to-render-functions] (f cam cam-position (buffer/create-float-buffer (transformation/make "rotate-x" [(* 200.0 (GLFW/glfwGetTime))]))))
+  (doseq [f to-render-functions] (f cam cam-position transform-buffer))
 
   (GLFW/glfwSwapBuffers window)
   (GLFW/glfwPollEvents)))
