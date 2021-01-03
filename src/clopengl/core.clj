@@ -8,7 +8,7 @@
             [clopengl.engine.opengl.buffers :as buffer]
             [clopengl.engine.state.global :as state]
             [clopengl.engine.opengl.shaders.shader :as shader]
-            [clopengl.opengl.abstract.transformation :as transform]
+            [clopengl.opengl.abstract.interface :as interface]
             [clopengl.opengl.program :as new-prog])
   (:import (org.lwjgl.glfw GLFW))
   (:gen-class))
@@ -19,8 +19,8 @@
 
   (def window (window/create {:width 1280 :height 960 :title "My Game"}))
 
-  (let [programs {:default (:id (transform/data->opengl! new-prog/default-prog))
-                  :light-source (:id (transform/data->opengl! new-prog/light-source))}]
+  (let [programs {:default (:id (interface/data->opengl! new-prog/default-prog))
+                  :light-source (:id (interface/data->opengl! new-prog/light-source))}]
     (swap! (state/get-atom) assoc-in [:engine :shader-programs] programs))
 
   ;; Load shapes datas to GC and store render functions

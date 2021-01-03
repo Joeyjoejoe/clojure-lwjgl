@@ -1,10 +1,10 @@
-(ns clopengl.opengl.motions
-  (:require [clopengl.opengl.data.space-mutations :as data]
-            [clopengl.opengl.abstract.transformation :as transform])
+(ns clopengl.opengl.matrices
+  (:require [clopengl.opengl.data.3D-transformations :as data]
+            [clopengl.opengl.abstract.interface :as interface])
   (:import (org.joml Matrix4f)
            (org.lwjgl BufferUtils)))
 
-(defmethod transform/data->opengl! :transform/matrix
+(defmethod interface/data->opengl! :transform/matrix
   [h & _]
   (let [buffer (BufferUtils/createFloatBuffer 16)
         rx (Math/toRadians (get-in h [:rotation :x]))

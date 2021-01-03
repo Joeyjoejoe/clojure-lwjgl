@@ -1,5 +1,5 @@
-(ns clopengl.opengl.abstract.transformation
-  "Interface definition for transforming data.")
+(ns clopengl.opengl.abstract.interface
+  "Interface definition for interpreting data.")
 
 (defmulti data->opengl!
   (fn [data & opts]

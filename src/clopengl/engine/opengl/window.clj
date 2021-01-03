@@ -6,9 +6,9 @@
             [clopengl.engine.utilities.transformations :as transformation]
             [clopengl.engine.state.global :as state]
 	          [clopengl.engine.glfw.controls.mouse :as mouse]
-            [clopengl.opengl.data.space-mutations :as sm]
-            [clopengl.opengl.abstract.transformation :as transform]
-            [clopengl.opengl.motions :as _])
+            [clopengl.opengl.data.3D-transformations :as t3d]
+            [clopengl.opengl.abstract.interface :as interface]
+            [clopengl.opengl.matrices :as _])
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.glfw GLFW GLFWKeyCallback GLFWErrorCallback)
            (org.lwjgl.system MemoryUtil)
@@ -78,15 +78,15 @@
   "Draw everything needed in the GLFW window. to-render-functions is a vector of functions that contains OpenGL instructions to draw shapes from corresponding VAO"
   (let [cam (buffer/create-float-buffer (transformation/make "look-at" [(state/get-data :camera)]))
         cam-position (buffer/create-float-buffer (state/cam :front))
-        pos-trans-data (-> (sm/transform-matrix)
-                           (sm/+rotate :x (* 200.0 (GLFW/glfwGetTime)))
-                           (sm/+rotate :z (* 200.0 (GLFW/glfwGetTime)))
-                           (sm/+scale (+ 4.0 (Math/sin (GLFW/glfwGetTime))))
-                           (sm/+translate :x (* 2.0 (Math/sin (GLFW/glfwGetTime))))
-                           (sm/+translate :y (* 2.0 (Math/sin (GLFW/glfwGetTime))))
-                           (sm/+translate :z (* 2.0 (Math/sin (GLFW/glfwGetTime)))))
+        pos-trans-data (-> (t3d/transform-matrix)
+                           (t3d/+rotate :x (* 200.0 (GLFW/glfwGetTime)))
+                           (t3d/+rotate :z (* 200.0 (GLFW/glfwGetTime)))
+                           (t3d/+scale (+ 4.0 (Math/sin (GLFW/glfwGetTime))))
+                           (t3d/+translate :x (* 2.0 (Math/sin (GLFW/glfwGetTime))))
+                           (t3d/+translate :y (* 2.0 (Math/sin (GLFW/glfwGetTime))))
+                           (t3d/+translate :z (* 2.0 (Math/sin (GLFW/glfwGetTime)))))
 
-        pos-trans-buffer (:buffer (transform/data->opengl! pos-trans-data))]
+        pos-trans-buffer (:buffer (interface/data->opengl! pos-trans-data))]
 
   (GL11/glClearColor 0.0 0.0 0.8 0.5)
   (GL11/glClear (bit-or GL11/GL_COLOR_BUFFER_BIT GL11/GL_DEPTH_BUFFER_BIT))

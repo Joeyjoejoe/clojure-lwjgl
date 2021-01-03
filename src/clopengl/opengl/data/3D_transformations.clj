@@ -1,4 +1,4 @@
-(ns clopengl.opengl.data.space-mutations
+(ns clopengl.opengl.data.3D-transformations
   ""
   )
 

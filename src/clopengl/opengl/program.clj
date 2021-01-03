@@ -1,7 +1,7 @@
 (ns clopengl.opengl.program
   (:import (org.lwjgl.opengl GL20))
   (:require [clopengl.opengl.data.glsl-objects :refer :all]
-            [clopengl.opengl.abstract.transformation :as transform]
+            [clopengl.opengl.abstract.interface :as interface]
             [clojure.java.io :as io]))
 
 
@@ -38,10 +38,10 @@
       (+uniform "projection" "mat4")
       (+uniform "positionTransformation" "mat4")))
 
-(defmethod transform/data->opengl! :program
+(defmethod interface/data->opengl! :program
   [h & _]
   (let [program-id (GL20/glCreateProgram)
-        shader-ids (map transform/data->opengl! (:shaders h))
+        shader-ids (map interface/data->opengl! (:shaders h))
                    ;; Attach compiled shaders code to program
         _          (doseq [sid shader-ids] (GL20/glAttachShader program-id sid))
                    ;; Link program
@@ -53,7 +53,7 @@
                                             (GL20/glGetProgramInfoLog program-id 1024))))))
                    ;; Get uniforms locations
         uniforms   (into {} (map
-                              (fn [[k v]] [k (transform/data->opengl! v program-id)])
+                              (fn [[k v]] [k (interface/data->opengl! v program-id)])
                               (:uniforms h)))]
     ;; Delete shaders
     (doseq [sid shader-ids]
@@ -63,7 +63,7 @@
         (assoc :id program-id)
         (assoc :uniforms uniforms))))
 
-(defmethod transform/data->opengl! :shader
+(defmethod interface/data->opengl! :shader
   [h & _]
   (let [stage (:stage h)
         path (:path h)
@@ -77,7 +77,7 @@
       (throw (Exception. (str "Error compiling shader: " (GL20/glGetShaderInfoLog id 1024) " in " path))))
     id))
 
-(defmethod transform/data->opengl! :uniform
+(defmethod interface/data->opengl! :uniform
   [h & opts]
   (let [uname      (:name h)
         program-id (first opts)
