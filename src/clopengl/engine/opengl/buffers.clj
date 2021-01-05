@@ -1,5 +1,7 @@
 (ns clopengl.engine.opengl.buffers
   (:use [clopengl.engine.utilities.misc])
+  (:require [clopengl.opengl.abstract.interface :as interface]
+            [clopengl.opengl.matrices :as mx])
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.opengl GL11 GL15 GL20 GL33)))
 
@@ -81,9 +83,16 @@
    (let [data-type GL11/GL_FLOAT
          normalize-datas? false
          stride (* 4 4 java.lang.Float/BYTES)
-	 vector-bytes-size (* 4 java.lang.Float/BYTES)
-	 formated-datas (vec (mapcat concat datas))
-	 vertices-buffer (create-float-buffer formated-datas)
+	       vector-bytes-size (* 4 java.lang.Float/BYTES)
+         arr (float-array (* 16 (count datas)))
+         _ (doseq [[i t] (map-indexed vector datas)]
+             (let [mat (interface/data->opengl! :matrix/translation t)
+                   offset (* 16 i)]
+               (.get mat arr offset)))
+         _ (println (vec arr))
+	       vertices-buffer (-> (BufferUtils/createFloatBuffer (count arr))
+                             (.put arr)
+                             (.flip))
          pbo-id (GL15/glGenBuffers)]
 
     ;; Describe vertices
@@ -109,4 +118,3 @@
 
     ;; note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
     (GL15/glBindBuffer GL15/GL_ARRAY_BUFFER 0)))
-

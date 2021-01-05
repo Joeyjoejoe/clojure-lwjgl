@@ -5,7 +5,8 @@
             [clopengl.engine.opengl.textures :as textures]
             [clojure.java.io :as io]
 	          [clopengl.engine.opengl.shaders.uniforms :as uniform]
-            [clopengl.engine.utilities.transformations :as transformation]
+            [clopengl.opengl.abstract.interface :as interface]
+            [clopengl.opengl.matrices :as mx]
             [clopengl.engine.state.global :as state])
   (:import (org.lwjgl.opengl GL11 GL13 GL20 GL30 GL31)))
 
@@ -35,7 +36,12 @@
     (GL20/glUniform1i (uniform/get-location program-id, "texture2") 1)
 
     ;; projection matrix (perspective)
-    (GL20/glUniformMatrix4fv (uniform/get-location program-id "projection") false (buffer/create-float-buffer (transformation/make "perspective-projection" [45.0 (/ 1280.0 960.0) 0.1 100.0])))
+
+    (GL20/glUniformMatrix4fv (uniform/get-location program-id "projection")
+                             false
+                             (:buffer (interface/data->opengl! :matrix/perspective
+                                                               (mx/perspective 45.0 (/ 1280.0 960.0) 0.1 100.0))))
+
     (def view-position (uniform/get-location program-id "view"))
     (def camera-position (uniform/get-location program-id "camPos"))
     (def obj-position (uniform/get-location program-id "positionTransformation"))

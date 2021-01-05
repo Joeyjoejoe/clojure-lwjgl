@@ -39,7 +39,6 @@
 })
 
 
-
 (s/def :rotate/x :clopengl/coord)
 (s/def :rotate/y :clopengl/coord)
 (s/def :rotate/z :clopengl/coord)

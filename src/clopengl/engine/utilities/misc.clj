@@ -1,5 +1,5 @@
 (ns clopengl.engine.utilities.misc
-  (:require [clopengl.engine.utilities.transformations :as transformation])
+  (:require [clopengl.opengl.matrices :as mx])
   (:import (org.lwjgl.glfw GLFW)))
 
 ;; Picked from here: http://blog.jayfields.com/2011/01/clojure-select-keys-select-values-and.html
@@ -33,7 +33,7 @@
 
 (defn rand-positions
   ([n] (rand-positions n -10 10))
-  ([n min max] (map #(transformation/make "translate-matrix" %) (rand-coordinates n min max))))
+  ([n min max] (map #(mx/+translate %) (rand-coordinates n min max))))
 
 (defn record-fps [state]
   (let [fps    (:fps @state)

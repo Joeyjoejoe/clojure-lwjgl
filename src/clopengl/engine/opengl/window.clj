@@ -3,7 +3,6 @@
   (:require [clopengl.engine.glfw.controls.keyboard :as keyboard]
 	          [clojure.core.matrix :as m]
             [clopengl.engine.opengl.buffers :as buffer]
-            [clopengl.engine.utilities.transformations :as transformation]
             [clopengl.engine.state.global :as state]
 	          [clopengl.engine.glfw.controls.mouse :as mouse]
             [clopengl.opengl.abstract.interface :as interface]
@@ -75,17 +74,20 @@
 
 (defn render [window to-render-functions]
   "Draw everything needed in the GLFW window. to-render-functions is a vector of functions that contains OpenGL instructions to draw shapes from corresponding VAO"
-  (let [cam (buffer/create-float-buffer (transformation/make "look-at" [(state/get-data :camera)]))
-        cam-position (buffer/create-float-buffer (state/cam :front))
+  (let [camera (state/get-data :camera)
+        look-at (interface/data->opengl! :matrix/look-at
+                                         (mx/look-at (:position camera) (:front camera) (:up camera)))
+        cam-position (buffer/create-float-buffer (:front camera))
         pos-trans-data (-> mx/build-3d-transform
-                           ;; (mx/+rotate :y (* 100.0 (GLFW/glfwGetTime)))
+                           (mx/+rotate :y (* 100.0 (GLFW/glfwGetTime)))
                            ;; (mx/+rotate :z (* 100.0 (GLFW/glfwGetTime)))
-                           (mx/+rotate :x (* 100.0 (GLFW/glfwGetTime)))
+                           ;;(mx/+rotate :x (* 100.0 (GLFW/glfwGetTime)))
                            ;; (mx/+scale :x (Math/abs (Math/sin (GLFW/glfwGetTime))))
                            ;; (mx/+scale :y (+ 1.0 (Math/abs (Math/sin (GLFW/glfwGetTime)))))
                            ;; (mx/+scale :z (+ 1.0 (Math/abs (Math/sin (GLFW/glfwGetTime)))))
                            ;; (mx/+scale :x (+ 1.0 (Math/abs (Math/sin (GLFW/glfwGetTime)))))
                            ;; (mx/+translate :x (* 5.0 (Math/sin (GLFW/glfwGetTime))))
+                            (mx/+translate :x -5.0)
                            ;; (mx/+translate :y (* 3.0 (Math/sin (GLFW/glfwGetTime))))
                            ;; (mx/+translate :z (* 8.0 (Math/sin (GLFW/glfwGetTime))))
                            )
@@ -94,7 +96,7 @@
 
   (GL11/glClearColor 0.0 0.0 0.8 0.5)
   (GL11/glClear (bit-or GL11/GL_COLOR_BUFFER_BIT GL11/GL_DEPTH_BUFFER_BIT))
-  (doseq [f to-render-functions] (f cam cam-position pos-trans-buffer))
+  (doseq [f to-render-functions] (f (:buffer look-at) cam-position pos-trans-buffer))
 
   (GLFW/glfwSwapBuffers window)
   (GLFW/glfwPollEvents)))
