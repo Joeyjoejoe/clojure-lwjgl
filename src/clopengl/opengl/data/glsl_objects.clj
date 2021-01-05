@@ -3,70 +3,75 @@
 
    #### Programs:
    ```clojure
-   {:id       1
-    :uniforms [Uniforms]
-    :shaders  [Shaders]}
+   {:program/id       1
+    :program/uniforms []
+    :program/shaders  []}
    ```
-   A Program Object represents fully processed executable code, in the OpenGL Shading Language, for one or more **shader stages**.
+   A Program object represents fully processed executable code, in the OpenGL Shading Language, for one or more **shader stages**.
 
    #### Shaders:
    ```clojure
-   {:path \"path/to/shader\"
-    :type 1}
+   {:shader/path \"path/to/file\"
+    :shader/stage 1}
    ```
-   Shader objects represent compiled GLSL code for a single **shader stage**.
+   Shader object represents compiled GLSL code for a single **shader stage**.
 
    |key|type|description|
    |-----|-----------|---------------------------------------------------------|
-   |:type|Integer|One of the **shader stage** constants: `GL20/GL_VERTEX_SHADER` or `GL20/GL_FRAGMENT_SHADER` etc...|
-   |:path|String|Path to the shader source file.|
+   |:shader/stage|Integer|One of the **shader stage** constants: `GL20/GL_VERTEX_SHADER`, `GL20/GL_FRAGMENT_SHADER` etc...|
+   |:shader/path|String|Path to the shader source file.|
 
    #### Uniforms:
    ```clojure
-   {:name \"varname\"
-    :location 1
-    :value nil}
+   {:uniform/name \"varname\"
+    :uniform/location 1
+    :uniform/value nil
+    :uniform/type}
    ```
-  ")
+   A uniform is a global Shader variable. These act as parameters that the user of a shader program can pass to that program.
 
-(defn program
-  "Creates a program datastructure."
-  []
-  {:id nil
-   :type :program
-   :uniforms {}
-   :shaders  []})
+   |key|type|description|
+   |-----|-----------|---------------------------------------------------------|
+   |:uniform/name|String|It corresponds to a variable name in a shader|
+   |:uniform/location|Integer|When a shader is compiled, each uniform receive a location number used to retrieve it and set its value|
+   |:uniform/value|Any|The value that will be pass to the shader's variable|
+   |:uniform/type|String|The GLSL data type of the value (see: https://www.khronos.org/opengl/wiki/Data_Type_(GLSL))|
+  "
+  (:require [clojure.spec.alpha :as s]
+            [clopengl.opengl.util.basic-specs :as _]))
 
-(defn +shader
-  "Creates a shader datastructure and place it in the provided program (if any)."
-  ([path stage]
-   {:path path
-    :type :shader
-    :stage stage})
-  ([program path stage]
-   (let [shader (+shader path stage)]
-     (update program :shaders conj shader))))
+(s/def :glsl/program (s/keys :req [:program/shaders :program/uniforms]
+                             :opt [:program/id]))
+(defonce blank-program {
+  :program/id nil
+  :program/uniforms {}
+  :program/shaders []
+})
 
-(defn +uniform
-  "Creates a uniform datastructure with or without value and store it in the provided programe (if any)."
-  ([uname vtype]
-   {:name uname
-    :type :uniform
-    :value nil
-    :vtype vtype
-    :location nil})
-  ([program uname vtype]
-   (let [uniform (+uniform uname vtype)]
-     (assoc-in program [:uniforms uname] uniform))))
 
-(defn uniform=
-  "Set program's uniform `uname` value"
-  [program uname value]
-  (assoc-in program [:uniforms uname :value] value))
+(s/def :glsl/shader (s/keys :req [:shader/path :shader/stage]))
+(defonce blank-shader {
+  :shader/path nil
+  :shader/stage nil
+})
 
-;; (def prg-default
-;;  (-> (program)
-;;      (+shader  "vertices/default.vert" GL20/GL_VERTEX_SHADER)
-;;      (+shader  "fragments/lightnings/default.frag" GL20/GL_FRAGMENT_SHADER)
-;;      (+uniform "view")
-;;      (+uniform "projection"))
+
+(s/def :glsl/uniform (s/keys :req [:uniform/name :uniform/type]
+                             :opt [:uniform/location :uniform/value]))
+(defonce blank-uniform {
+  :uniform/name nil
+  :uniform/location nil
+  :uniform/value nil
+  :uniform/type nil
+})
+
+
+(s/def :program/id (s/nilable :clopengl/id))
+(s/def :program/uniforms map?)
+(s/def :program/shaders vector?)
+(s/def :shader/path :clopengl/path)
+(s/def :shader/stage int?)
+(s/def :uniform/name string?)
+(s/def :uniform/location (s/nilable int?))
+(s/def :uniform/value (s/nilable any?))
+(s/def :uniform/type string?)

@@ -19,12 +19,12 @@
 
   (def window (window/create {:width 1280 :height 960 :title "My Game"}))
 
-  (let [programs {:default (:id (interface/data->opengl! new-prog/default-prog))
-                  :light-source (:id (interface/data->opengl! new-prog/light-source))}]
+  (let [programs {:default (:program/id (interface/data->opengl! :glsl/program new-prog/default-prog))
+                  :light-source (:program/id (interface/data->opengl! :glsl/program new-prog/light-source))}]
     (swap! (state/get-atom) assoc-in [:engine :shader-programs] programs))
 
   ;; Load shapes datas to GC and store render functions
-  ;; (def pandaki (vertices/setup (ply/parse-ply "pandaki2.ply") 10 (state/shader-program :default) (rand-positions 1 0.0 10.0)))
+  (def pandaki (vertices/setup (ply/parse-ply "pandaki2.ply") 10 (state/shader-program :default) (rand-positions 1 0.0 10.0)))
   ;;(def triangles (vertices/setup (shape/triangle true) 200 (state/shader-program :default) (rand-positions 1 0.0 10.0)))
   ;;(def cubes (vertices/setup (shape/cube true) 100 (state/shader-program :default) (rand-positions 1 0.0 10.0)))
   ;;(def ground (vertices/setup (shape/rectangle2D 100 75 :vertical) 1 (state/shader-program :default) (rand-positions 1 0.0 10.0)))
