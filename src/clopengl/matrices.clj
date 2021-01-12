@@ -1,7 +1,7 @@
-(ns clopengl.opengl.matrices
-  (:require [clopengl.opengl.data.3D-transformations :as data]
-            [clopengl.opengl.data.camera-transformations :as ct]
-            [clopengl.opengl.abstract.interface :as interface])
+(ns clopengl.matrices
+  (:require [clopengl.data.math.3D-transformations :as data]
+            [clopengl.data.math.camera-transformations :as ct]
+            [clopengl.interface :as interface])
   (:import (org.joml Matrix4f)
            (org.lwjgl BufferUtils)))
 

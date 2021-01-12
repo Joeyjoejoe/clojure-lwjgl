@@ -5,8 +5,8 @@
             [clopengl.engine.opengl.textures :as textures]
             [clojure.java.io :as io]
 	          [clopengl.engine.opengl.shaders.uniforms :as uniform]
-            [clopengl.opengl.abstract.interface :as interface]
-            [clopengl.opengl.matrices :as mx]
+            [clopengl.interface :as interface]
+            [clopengl.matrices :as mx]
             [clopengl.engine.state.global :as state])
   (:import (org.lwjgl.opengl GL11 GL13 GL20 GL30 GL31)))
 

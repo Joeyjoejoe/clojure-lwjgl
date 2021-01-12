@@ -8,8 +8,8 @@
             [clopengl.engine.opengl.buffers :as buffer]
             [clopengl.engine.state.global :as state]
             [clopengl.engine.opengl.shaders.shader :as shader]
-            [clopengl.opengl.abstract.interface :as interface]
-            [clopengl.opengl.program :as new-prog])
+            [clopengl.interface :as interface]
+            [clopengl.program :as new-prog])
   (:import (org.lwjgl.glfw GLFW))
   (:gen-class))
 

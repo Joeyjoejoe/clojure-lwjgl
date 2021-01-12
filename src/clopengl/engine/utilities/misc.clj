@@ -1,5 +1,5 @@
 (ns clopengl.engine.utilities.misc
-  (:require [clopengl.opengl.matrices :as mx])
+  (:require [clopengl.matrices :as mx])
   (:import (org.lwjgl.glfw GLFW)))
 
 ;; Picked from here: http://blog.jayfields.com/2011/01/clojure-select-keys-select-values-and.html

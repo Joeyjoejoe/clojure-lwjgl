@@ -73,6 +73,7 @@
   (into ;; Add your non-LWJGL dependencies here
    	'[[org.clojure/clojure "1.10.1"]
      [org.clojure/tools.logging "0.3.1"]
+     [org.clojure/core.async "1.3.610"]
      [org.joml/joml "1.10.0"]
      [net.mikera/vectorz-clj "0.47.0"]
 		 [thi.ng/math "0.2.1"]

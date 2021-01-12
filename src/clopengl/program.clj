@@ -1,7 +1,7 @@
-(ns clopengl.opengl.program
+(ns clopengl.program
   (:import (org.lwjgl.opengl GL20))
-  (:require [clopengl.opengl.data.glsl-objects :as data]
-            [clopengl.opengl.abstract.interface :as interface]
+  (:require [clopengl.data.glsl-objects :as data]
+            [clopengl.interface :as interface]
             [clojure.java.io :as io]))
 
 
