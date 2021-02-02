@@ -11,9 +11,16 @@
 (defn +shader
   "Creates a shader datastructure and place it in the provided program (if any)."
   ([path stage]
-    (-> data/blank-shader
+    (let [shader-source (-> path (io/resource) (io/file) (slurp))
+          u (re-seq #"uniform\s+(.+?)\s+(.+);" shader-source)
+          a (re-seq #"layout.+?(\d).+?in\s+(.+?)\s+(.+?);" shader-source)
+          uniforms (reduce #(assoc %1 (nth %2 2) (nth %2 1)) {} u)
+          attribs (reduce #(assoc %1 (nth %2 3) {:location (nth %2 1) :type (nth %2 2)}) {} a)]
+      (-> data/blank-shader
         (assoc :shader/path path)
-        (assoc :shader/stage stage)))
+        (assoc :shader/stage stage)
+        (assoc :shader/attribs attribs)
+        (assoc :shader/uniforms uniforms))))
   ([program path stage]
    (let [shader (+shader path stage)]
      (update program :program/shaders conj shader))))

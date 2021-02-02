@@ -8,6 +8,22 @@
 
 (defonce bare-entity
  {:id nil
-  :position {:initial [x y z] :3d-transform nil}
+  :position {:initial [] :3d-transform nil}
   :model nil
-  :program nil})
+  :program nil
+  :render nil})
+
+(defonce hero
+ (-> bare-entity
+    (+name "hero")
+    (+model "path/to/model/file")
+    (+program "program-name-or-id?")))
+
+(defonce hero
+ {:name "hero"
+  :model "path/to/model/file"
+  :program "program-name-or-id?"
+  :position []
+  :movement nil
+  :render nil
+  })
