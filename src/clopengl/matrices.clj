@@ -1,9 +1,8 @@
 (ns clopengl.matrices
   (:require [clopengl.data.math.3D-transformations :as data]
+            [clopengl.interpret.math.3D-transformations :as _]
             [clopengl.data.math.camera-transformations :as ct]
-            [clopengl.interface :as interface])
-  (:import (org.joml Matrix4f)
-           (org.lwjgl BufferUtils)))
+            [clopengl.interpret.math.camera-transformations :as __]))
 
 
 (defonce build-3d-transform data/blank-3d-transform)
@@ -51,45 +50,6 @@
               :else (update ms k + value))]
      (assoc t3d :matrix/scalation ss))))
 
-
-
-(defmethod interface/data->opengl! :matrix/translation
-  ([_ h]
-   (let [tx (:translate/x h)
-         ty (:translate/y h)
-         tz (:translate/z h)]
-     (-> (Matrix4f.)
-         (.translate tx ty tz))))
-  ([t h buff?]
-   (let [mat (interface/data->opengl! t h)]
-     (cond
-       (not buff?) mat
-       :else (let [buffer (BufferUtils/createFloatBuffer 16)]
-               (-> mat
-                   (.get buffer)))))))
-
-(defmethod interface/data->opengl! :3d/tranform
-  [_ h & _]
-  (let [buffer (BufferUtils/createFloatBuffer 16)
-        rx (Math/toRadians (or (get-in h [:matrix/rotation :rotate/x]) 0.0))
-        ry (Math/toRadians (or (get-in h [:matrix/rotation :rotate/y]) 0.0))
-        rz (Math/toRadians (or (get-in h [:matrix/rotation :rotate/z]) 0.0))
-        tx (or (get-in h [:matrix/translation :translate/x]) 0.0)
-        ty (or (get-in h [:matrix/translation :translate/y]) 0.0)
-        tz (or (get-in h [:matrix/translation :translate/z]) 0.0)
-        sx (or (get-in h [:matrix/scalation :scale/x]) 1.0)
-        sy (or (get-in h [:matrix/scalation :scale/y]) 1.0)
-        sz (or (get-in h [:matrix/scalation :scale/z]) 1.0)]
-    (-> (Matrix4f.)
-      (.translate tx ty tz)
-      (.rotateXYZ rx ry rz)
-      (.scale sx sy sz)
-      (.get buffer))
-  (assoc h :buffer buffer)))
-
-
-
-
 (defn perspective [fovy aspect z-near z-far]
   (-> ct/blank-perspective
       (assoc :perspective/fovy fovy)
@@ -102,26 +62,3 @@
       (assoc :look-at/eye eye)
       (assoc :look-at/center center)
       (assoc :look-at/up up)))
-
-(defmethod interface/data->opengl! :matrix/perspective
-  [_ h & _]
-  (let [buffer (BufferUtils/createFloatBuffer 16)
-        f  (:perspective/fovy h)
-        a  (:perspective/aspect h)
-        zn (:perspective/z-near h)
-        zf (:perspective/z-far h)]
-    (-> (Matrix4f.)
-        (.perspective f a zn zf)
-        (.get buffer))
-    (assoc h :buffer buffer)))
-
-(defmethod interface/data->opengl! :matrix/look-at
-  [_ h & _]
-  (let [buffer (BufferUtils/createFloatBuffer 16)
-        [ex ey ez] (:look-at/eye h)
-        [cx cy cz] (:look-at/center h)
-        [ux uy uz] (:look-at/up h)]
-    (-> (Matrix4f.)
-        (.lookAt ex ey ez (+ ex cx) (+ ey cy) (+ ez cz) ux uy uz)
-        (.get buffer))
-      (assoc h :buffer buffer)))

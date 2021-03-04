@@ -1,4 +1,4 @@
-(ns clopengl.interface
+(ns clopengl.interpret.interface
   "Interface definition for interpreting data."
   (:require [clojure.spec.alpha :as s]
             [clojure.pprint :as pp]))
