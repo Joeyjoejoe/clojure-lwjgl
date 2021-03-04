@@ -1,6 +1,6 @@
 (ns clopengl.engine.opengl.buffers
   (:use [clopengl.engine.utilities.misc])
-  (:require [clopengl.interface :as interface]
+  (:require [clopengl.interpret.interface :as interface]
             [clopengl.matrices :as mx])
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.opengl GL11 GL15 GL20 GL33)))

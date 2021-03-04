@@ -5,7 +5,7 @@
             [clopengl.engine.opengl.buffers :as buffer]
             [clopengl.engine.state.global :as state]
 	          [clopengl.engine.glfw.controls.mouse :as mouse]
-            [clopengl.interface :as interface]
+            [clopengl.interpret.interface :as interface]
             [clopengl.matrices :as mx])
   (:import (org.lwjgl BufferUtils)
            (org.lwjgl.glfw GLFW GLFWKeyCallback GLFWErrorCallback)
