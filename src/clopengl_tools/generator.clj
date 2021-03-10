@@ -10,8 +10,8 @@
 (defn report-exists [msg]
   (println (str "  " (color/red (char 10008)) (color/yellow "  exists ") (color/grey msg))))
 
-(defn -create-dirs [dirs t]
-  (doseq [p dirs]
+(defn -create-dirs [dirnames t]
+  (doseq [p (reductions #(str %1 "/" %2) dirnames)]
     (let [path (str root "/src/clopengl/" t "/" p)]
       (if (not (.exists (io/file path)))
         (do
@@ -66,9 +66,10 @@
   [s]
   (let [path   (-str->path s)
         new-ns (-str->ns s)
-        dirs   (reductions #(str %1 "/" %2) (butlast (clojure.string/split path #"/")))]
-  (-create-dirs dirs "data")
-  (-create-dirs dirs "interpret")
+        dirs (butlast (clojure.string/split path #"/"))]
+  (if (not (nil? dirs))
+    (do (-create-dirs dirs "data")
+        (-create-dirs dirs "interpret")))
   (-generate-data-file path new-ns)
   (-generate-interpret-file path new-ns)))
 
