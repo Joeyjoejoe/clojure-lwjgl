@@ -20,19 +20,15 @@
 
   (def window (window/create {:width 1280 :height 960 :title "My Game"}))
 
-  (let [programs {:default (:program/id (interface/data->opengl! :glsl/program new-prog/default-prog))
-                  :light-source (:program/id (interface/data->opengl! :glsl/program new-prog/light-source))}]
-    (swap! (state/get-atom) assoc-in [:engine :shader-programs] programs))
-
-  ;; Load shapes datas to GC and store render functions
-  (def pandaki (vertices/setup (ply/parse-ply "pandaki2.ply") 10 (state/shader-program :default) (rand-positions 1 0.0 10.0)))
-  ;;(def triangles (vertices/setup (shape/triangle true) 200 (state/shader-program :default) (rand-positions 1 0.0 10.0)))
-  ;;(def cubes (vertices/setup (shape/cube true) 100 (state/shader-program :default) (rand-positions 1 0.0 10.0)))
-  ;;(def ground (vertices/setup (shape/rectangle2D 100 75 :vertical) 1 (state/shader-program :default) (rand-positions 1 0.0 10.0)))
-  (def cube (vertices/setup (shape/cube-w-normals) 1 (state/shader-program :default) (rand-positions 1 0.0 10.0)))
-  (def lamp (vertices/setup (shape/cube true) 1 (state/shader-program :light-source) (rand-positions 1 0.0 0.0)))
-
-  (swap! (state/get-atom) assoc :render [cube lamp])
+  (let [programs  {:default (interface/data->opengl! :glsl/program new-prog/default-prog)
+                   :light-source (interface/data->opengl! :glsl/program new-prog/light-source)}
+        _         (swap! (state/get-atom) assoc-in [:engine :shader-programs] programs)
+        pandaki   (vertices/setup (ply/parse-ply "pandaki2.ply") 10 (:program/id (state/shader-program :default)) (rand-positions 1 0.0 10.0))
+        cube      (vertices/setup (shape/cube-w-normals) 1 (:program/id (state/shader-program :default)) (rand-positions 1 0.0 10.0))
+        triangles (vertices/setup (shape/triangle true) 200 (:program/id (state/shader-program :default)) (rand-positions 1 0.0 10.0))
+        ground    (vertices/setup (shape/rectangle2D 100 75 :vertical) 1 (:program/id (state/shader-program :default)) (rand-positions 1 0.0 10.0))
+        lamp      (vertices/setup (shape/cube true) 1 (:program/id (state/shader-program :light-source)) (rand-positions 1 0.0 0.0))]
+   (swap! (state/get-atom) assoc :render [cube lamp pandaki])
 
   ;;  Start game loop
   (loop [to-render-functions (state/get-data :render)
@@ -68,4 +64,4 @@
 
   ;; Quit game
   (GLFW/glfwDestroyWindow window)
-  (GLFW/glfwTerminate))
+  (GLFW/glfwTerminate)))
